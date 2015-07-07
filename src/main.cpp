@@ -5,7 +5,6 @@
 #include <omp.h>
 #include "opt_crs.h"
 #include "util.h"
-#define NUMBER_OF_SPMV 1000
 using namespace std;
 int main (int argc, char **argv) {
     srand(3);
@@ -45,23 +44,38 @@ int main (int argc, char **argv) {
         return 0;
     }
     cerr << "done." << endl;
+    printf("++++++++++++++++++++++++++++++++++++++++\n");
+    bool isDefinedArch = false;
+#ifdef CPU
+    printf("%25s\t%s\n", "Architecture", "CPU");
+    isDefinedArch = true;
+#endif
+#ifdef MIC
+    printf("%25s\t%s\n", "Architecture", "MIC");
+    isDefinedArch = true;
+#endif
+#ifdef GPU
+    printf("%25s\t%s\n", "Architecture", "GPU");
+    isDefinedArch = true;
+#endif
+    assert(isDefinedArch == true);
     bool isDefinedFormat = false;
 #ifdef OPT_CRS
-    printf("%25s\t%s\n", "Matrix format", "CRS");
+    printf("%25s\t%s\n", "MatrixFormat", "CRS");
     isDefinedFormat = true;
 #endif
 #ifdef OPT_COO
-    printf("%25s\t%s\n", "Matrix format", "COO");
+    printf("%25s\t%s\n", "MatrixFormat", "COO");
     isDefinedFormat = true;
 #endif
 #ifdef OPT_MKL
-    printf("%25s\t%s\n", "Matrix format", "MKL");
+    printf("%25s\t%s\n", "MatrixFormat", "MKL");
     isDefinedFormat = true;
 #endif
     assert(isDefinedFormat == true);
     printf("%25s\t%s\n", "Matrix", GetBasename(matFile).c_str());
-    printf("%25s\t%s\n", "Matrix Path", matFile.c_str());
-    printf("%25s\t%lf\n", "Performance (GFLOPS)", nNnz*2/elapsedTime/1e9);
+    printf("%25s\t%s\n", "MatrixPath", matFile.c_str());
+    printf("%25s\t%lf\n", "Performance(GFLOPS)", nNnz*2/elapsedTime/1e9);
     printf("%25s\t%d\n", "nRow", nRow);
     printf("%25s\t%d\n", "nCol", nCol);
     printf("%25s\t%d\n", "nNnz", nNnz);
@@ -72,5 +86,6 @@ int main (int argc, char **argv) {
         printf("%25s\t%d\n", "nThread", omp_get_num_threads());
     }
     */
+    printf("----------------------------------------\n");
     return 0;
 }

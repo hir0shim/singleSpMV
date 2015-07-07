@@ -1,3 +1,12 @@
-bin
+### Directoies ###
+bin/spmv*
 matrix/*.mtx
+matrix/generator
+matrix/visualizer
 obj/*.o.*
+log/*.tsv
+log/format
+
+
+### Others ###
+a.out
