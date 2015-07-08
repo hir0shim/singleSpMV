@@ -3,6 +3,7 @@ BINARY_DIR = bin
 OBJECT_DIR = obj
 LIBRARY_DIR = lib
 INCLUDE_DIR = include
+ASM_DIR=asm
 
 OPTION = -DOPT_MKL
 ALL_OPTION = $(OPTION) -DNUMBER_OF_SPMV=1000
@@ -17,6 +18,7 @@ spmv_sources = main.cpp util.cpp opt.cpp
 spmv_objects_cpu = $(addprefix $(OBJECT_DIR)/, $(spmv_sources:.cpp=.o.cpu))
 spmv_objects_mic = $(addprefix $(OBJECT_DIR)/, $(spmv_sources:.cpp=.o.mic))
 spmv_objects_gpu = $(addprefix $(OBJECT_DIR)/, $(spmv_sources:.cpp=.o.gpu))
+
 
 SPMV_CPU=$(BINARY_DIR)/spmv.cpu
 SPMV_MIC=$(BINARY_DIR)/spmv.mic

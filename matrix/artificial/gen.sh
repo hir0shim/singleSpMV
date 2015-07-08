@@ -3,7 +3,7 @@
 sizes=(512 1024 2048 4096 8192 16384)
 for i in ${sizes[@]}
 do
-    ./generator band $(($i/100)) > band-$i.mtx
+    ./generator band $i $(($i/100)) > band-$i.mtx
 done
 sizes=(512 1024 2048 4096 8192 16384)
 for i in ${sizes[@]}
@@ -18,5 +18,5 @@ done
 sizes=(512 1024 2048 4096 8192 16384)
 for i in ${sizes[@]}
 do
-    ./generator random $(($i)) > band-$i.mtx
+    ./generator random $i $i > random-$i.mtx
 done

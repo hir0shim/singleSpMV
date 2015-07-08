@@ -1,12 +1,19 @@
 ### Directoies ###
 bin/spmv*
-matrix/*.mtx
+
+matrix/artificial/*.mtx
+matrix/natural/*.mtx
 matrix/generator
 matrix/visualizer
+
 obj/*.o.*
+
 log/*.tsv
 log/format
 
+test/mypwd
+
+asm/*.o
 
 ### Others ###
 a.out

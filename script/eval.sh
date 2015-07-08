@@ -22,3 +22,12 @@ do
     srun -p KAREN mpirun-mic -m "$BINARY_DIR/spmv.mic $MATRIX_DIR/$matrix" >> $logfile
 done
 
+### GPU (FATE) ###
+export OMP_NUM_THREADS=4
+logfile=$LOG_DIR/gpu-`date +%y-%m-%d`.tsv && echo "" > $logfile
+for matrix in $matrices
+do
+    echo "GPU $matrix"
+    srun -p FATE $BINARY_DIR/spmv.cpu $MATRIX_DIR/$matrix >> $logfile
+done
+

@@ -79,13 +79,11 @@ int main (int argc, char **argv) {
     printf("%25s\t%d\n", "nRow", nRow);
     printf("%25s\t%d\n", "nCol", nCol);
     printf("%25s\t%d\n", "nNnz", nNnz);
-    /*
 #pragma omp parallel
     {
 #pragma omp master
         printf("%25s\t%d\n", "nThread", omp_get_num_threads());
     }
-    */
     printf("----------------------------------------\n");
     return 0;
 }

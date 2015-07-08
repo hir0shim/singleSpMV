@@ -53,15 +53,16 @@ M random_unbalance_matrix (int N) {
 M random_matrix (int N, int cnt) {
     assert(N*N >= cnt && "too many cnt");
     M m;
-    set<pair<int,int>> s;
+    set<P> s;
     for (int i = 0; i < cnt; i++) {
         int r = rand()%N;
         int c = rand()%N;
-        while (s.count(make_pair<int,int>(r, c))) {
+        while (s.count(P(r, c))) {
             r = rand()%N;
             c = rand()%N;
         }
-        s.insert(make_pair(r, c));
+        s.insert(P(r, c));
+        m.push_back(P(r, c));
     }
     return m;
 }
