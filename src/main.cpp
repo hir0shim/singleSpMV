@@ -2,8 +2,10 @@
 #include <cassert>
 #include <cstdio>
 #include <cstdlib>
+#include <cmath>
 #include <omp.h>
-#include "opt_crs.h"
+//#include <ittnotify.h> // VTune Amplifier
+#include "opt.h"
 #include "util.h"
 using namespace std;
 int main (int argc, char **argv) {
@@ -27,23 +29,52 @@ int main (int argc, char **argv) {
     cerr << "Optimizing ... ";
     OptimizeProblem(A, x, A_opt, x_opt);
     cerr << "done." << endl;
-    double elapsedTime = -GetTimeBySec();
+    int loop = 1;
     cerr << "Calculating SpMV ... ";
-    for (int i = 0; i < NUMBER_OF_SPMV; i++) {
-        SpMV(A_opt, x_opt, y);
+    {
+        double elapsedTime;
+        elapsedTime = -GetTimeBySec();
+        do {
+            for (int i = 0; i < loop; i++) {
+                SpMV(A_opt, x_opt, y);
+            }
+            loop *= 2;
+        } while (GetTimeBySec() + elapsedTime < 1.0);
     }
+
+    double minElapsedTime;
+    /*
+    __itt_domain *domain = __itt_domain_create("MySpMV.Region");
+    __itt_string_handle *handle = __itt_string_handle_create("MySpMV.Handle");
+    __itt_task_begin(domain, __itt_null, __itt_null, handle);
+    */
+    {
+        const int nTry = 10;
+        for (int t = 0; t < nTry; t++) {
+            double elapsedTime = -GetTimeBySec();
+            for (int i = 0; i < loop; i++) {
+                SpMV(A_opt, x_opt, y);
+            }
+            elapsedTime += GetTimeBySec();
+            elapsedTime /= loop;
+            minElapsedTime = t ? min(minElapsedTime, elapsedTime) : elapsedTime;
+        }
+    }
+    /*
+    __itt_task_end(domain);
+    */
     cerr << "done." << endl;
-    elapsedTime += GetTimeBySec();
-    elapsedTime /= NUMBER_OF_SPMV;
 
-//    ViewVec(y);
+    //    ViewVec(y);
 
+#ifdef VERIFY
     cerr << "Verifying ... ";
     if (!VerifyResult(A, x, y)) {
         printf("*** invalid result ***\n");
-        return 0;
     }
     cerr << "done." << endl;
+#endif
+
     printf("++++++++++++++++++++++++++++++++++++++++\n");
     bool isDefinedArch = false;
 #ifdef CPU
@@ -72,10 +103,14 @@ int main (int argc, char **argv) {
     printf("%25s\t%s\n", "MatrixFormat", "MKL");
     isDefinedFormat = true;
 #endif
+#ifdef OPT_CUSPARSE
+    printf("%25s\t%s\n", "MatrixFormat", "CUSPARSE");
+    isDefinedFormat = true;
+#endif
     assert(isDefinedFormat == true);
     printf("%25s\t%s\n", "Matrix", GetBasename(matFile).c_str());
     printf("%25s\t%s\n", "MatrixPath", matFile.c_str());
-    printf("%25s\t%lf\n", "Performance(GFLOPS)", nNnz*2/elapsedTime/1e9);
+    printf("%25s\t%lf\n", "Performance(GFLOPS)", nNnz*2/minElapsedTime/1e9);
     printf("%25s\t%d\n", "nRow", nRow);
     printf("%25s\t%d\n", "nCol", nCol);
     printf("%25s\t%d\n", "nNnz", nNnz);

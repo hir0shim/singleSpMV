@@ -31,7 +31,6 @@ void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
     double *xv = x.val;
     double *yv = y.val;
     int nRow = A.nRow;
-    int nCol = A.nCol;
     int nNnz = A.nNnz;
     int *ptr = A.ptr;
     int *idx = A.idx;

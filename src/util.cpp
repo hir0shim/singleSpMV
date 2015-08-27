@@ -75,10 +75,12 @@ bool VerifyResult (const SpMat &A, const Vec &x, const Vec &y) {
     for (int i = 0; i < A.nNnz; i++) {
         res[A.row_idx[i]] += A.val[i] * x.val[A.col_idx[i]];
     }
-    const double EPS = 1e-10;
     for (int i = 0; i < A.nRow; i++) {
-        if (fabs(res[i] - y.val[i]) > EPS) {
-            printf("Error: %lf != %lf\n", res[i], y.val[i]);
+        double relative_error = fabs(fabs(res[i] - y.val[i]) / res[i]);
+        double absolute_error = fabs(res[i]-y.val[i]);
+        const double EPS = 1e-6;
+        if (absolute_error > EPS && relative_error > EPS)  {
+            fprintf(stderr, "Error: %lf != %lf\n", res[i], y.val[i]);
             return false;
         }
     }
@@ -97,8 +99,7 @@ Vec CreateRandomVector (int size) {
     x.size = size;
     x.val = new double[size];
     for (int i = 0; i < size; i++) {
-        x.val[i] = 3;
-        //x.val[i] = double(rand()) / RAND_MAX;
+        x.val[i] = double(rand()) / RAND_MAX;
     }
     return x;
 }

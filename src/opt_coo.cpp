@@ -24,11 +24,15 @@ void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
 #pragma omp parallel
     {
 #pragma omp for
-    for (int i = 0; i < nRow; i++) yv[i] = 0;
+        for (int i = 0; i < nRow; i++) yv[i] = 0;
 #pragma omp for
-    for (int i = 0; i < nNnz; i++) {
-        yv[row_idx[i]] += val[i] * xv[col_idx[i]];
-    }
+        for (int i = 0; i < nNnz; i++) {
+            int r = row_idx[i];
+            int c = col_idx[i];
+            double v = val[i]*xv[c];
+#pragma omp atomic
+            yv[r] += v;
+        }
     }
 }
 

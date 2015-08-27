@@ -12,4 +12,7 @@
     #ifdef OPT_MKL
     #include "opt_mkl.cpp"
     #endif
+    #ifdef OPT_CUSPARSE
+    #include "opt_cusparse.cpp"
+    #endif
 #endif
