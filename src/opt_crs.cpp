@@ -39,7 +39,11 @@ void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
     for (int i = 0; i < nRow; i++) {
         yv[i] = 0;
         for (int j = ptr[i]; j < ptr[i+1]; j++) {
-            yv[i] += val[j] * xv[idx[j]];
+            int col = idx[j];
+            double lv = val[j];
+            double rv = xv[col];
+            double val = lv * rv;
+            yv[i] += val;
         }
     }
 }

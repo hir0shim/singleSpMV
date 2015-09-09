@@ -6,13 +6,14 @@ INCLUDE_DIR = include
 ASM_DIR=asm
 
 OPTION = -DVERIFY
-MIC_OPTION = $(OPTION) -DOPT_CRS
-CPU_OPTION = $(OPTION) -DOPT_CRS
+MIC_OPTION = $(OPTION) -DOPT_JDS
+CPU_OPTION = $(OPTION) -DOPT_JDS
 GPU_OPTION = $(OPTION) -DOPT_CUSPARSE
 
 CXX = icpc
 LDFLAGS = -L$(LIBRARY_DIR) -L$(OBJECT_DIR) 
-CXXFLAGS = -std=c++11 -ipo -Wall -g -O2 -fopenmp -I$(INCLUDE_DIR) 
+#CXXFLAGS = -std=c++11 -ipo -Wall -g -O2 -fopenmp -I$(INCLUDE_DIR) 
+CXXFLAGS = -std=c++11 -ipo -Wall -g -O2 -fopenmp 
 
 vpath %.cpp $(SOURCE_DIR)
 spmv_sources = main.cpp util.cpp opt.cpp 
@@ -43,10 +44,10 @@ $(SPMV_CPU) : $(spmv_objects_cpu)
 ########################################
 # SPMV MIC
 ########################################
-$(OBJECT_DIR)/%.o.mic : CXXFLAGS += -mmic -DMIC  $(MIC_OPTION)
+$(OBJECT_DIR)/%.o.mic : CXXFLAGS += -mmic -DMIC  $(MIC_OPTION) 
 $(OBJECT_DIR)/%.o.mic : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-$(SPMV_MIC) : CXXFLAGS += -mmic -mkl
+$(SPMV_MIC) : CXXFLAGS += -mmic -mkl 
 $(SPMV_MIC) : $(spmv_objects_mic)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
@@ -57,7 +58,7 @@ $(OBJECT_DIR)/%.o.gpu : CXXFLAGS += -xHOST -DGPU -I/usr/local/cuda-6.5/include $
 $(OBJECT_DIR)/%.o.gpu : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(SPMV_GPU) : CXXFLAGS += -L/usr/local/cuda-6.5/lib64 -lcusparse -lcudart
+$(SPMV_GPU) : CXXFLAGS += -L/usr/local/cuda-6.5/lib64 -lcusparse -lcudart 
 $(SPMV_GPU) : $(spmv_objects_gpu) 
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 

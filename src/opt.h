@@ -4,6 +4,12 @@
 #ifdef OPT_COO
 #include "opt_coo.h"
 #endif
+#ifdef OPT_ELL
+#include "opt_ell.h"
+#endif
+#ifdef OPT_JDS
+#include "opt_jds.h"
+#endif
 #ifdef OPT_MKL
 #include "opt_mkl.h"
 #endif

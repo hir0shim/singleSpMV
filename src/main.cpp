@@ -4,7 +4,9 @@
 #include <cstdlib>
 #include <cmath>
 #include <omp.h>
-//#include <ittnotify.h> // VTune Amplifier
+/*
+#include <ittnotify.h> // VTune Amplifier
+*/
 #include "opt.h"
 #include "util.h"
 using namespace std;
@@ -97,6 +99,14 @@ int main (int argc, char **argv) {
 #endif
 #ifdef OPT_COO
     printf("%25s\t%s\n", "MatrixFormat", "COO");
+    isDefinedFormat = true;
+#endif
+#ifdef OPT_ELL
+    printf("%25s\t%s\n", "MatrixFormat", "ELL");
+    isDefinedFormat = true;
+#endif
+#ifdef OPT_JDS
+    printf("%25s\t%s\n", "MatrixFormat", "JDS");
     isDefinedFormat = true;
 #endif
 #ifdef OPT_MKL
