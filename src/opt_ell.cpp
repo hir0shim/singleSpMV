@@ -57,7 +57,10 @@ void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
         for (int r = 0; r < nRow; r++) {
 #pragma ivdep
             for (int i = 0; i < K; i++) {
-                yv[r] += xv[col_idx[r][i]] * val[r][i];
+                int col = col_idx[r][i];
+                double lv = xv[col];
+                double rv = val[r][i];
+                yv[r] += lv * rv;
             }
         }
     }

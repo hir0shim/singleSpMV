@@ -48,6 +48,7 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     x_opt.size = x.size;
     x_opt.val = x.val;
 }
+extern "C" {
 void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
     double *xv = x.val;
     double *yv = y.val;
@@ -71,4 +72,4 @@ void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
     cusparseDcsrmv(cusparse, CUSPARSE_OPERATION_NON_TRANSPOSE, nRow, nCol, nNnz, &ALPHA, matDescr, cuda_val, cuda_ptr, cuda_idx, cuda_x, &BETA, cuda_y);
     CUDA_SAFE_CALL(cudaMemcpy((void *)yv, cuda_y, nRow * sizeof(double), cudaMemcpyDeviceToHost));
 }
-
+}

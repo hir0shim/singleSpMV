@@ -83,14 +83,10 @@ void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
     int *perm = A.perm;
     int *length = A.length;
     int maxLength = A.maxLength;
-#pragma omp parallel 
-{
-#pragma omp for
     for (int i = 0; i < nRow; i++) yv[i] = 0;
-#pragma omp for
+#pragma omp parallel for
     for (int r = 0; r < nRow; r++) {
         int row = perm[r];
-#pragma ivdep
         for (int i = 0; i < length[row]; i++) {
             int idx = ptr[i] + r;
             int col = col_idx[idx];
@@ -100,7 +96,6 @@ void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
             yv[row] += val;
         }
     }
-}
 }
 }
 

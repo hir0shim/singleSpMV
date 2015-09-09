@@ -32,5 +32,7 @@ struct VecOpt {
     }
 };
 void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_opt);
+extern "C" {
 void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y);
+}
 //void CUDA_SAFE_CALL (cudaError_t err) { }

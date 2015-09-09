@@ -27,6 +27,7 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     x_opt.val = x.val;
 
 }
+extern "C" {
 void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
     double *xv = x.val;
     double *yv = y.val;
@@ -46,6 +47,7 @@ void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
             yv[i] += val;
         }
     }
+}
 }
 
 
