@@ -92,6 +92,8 @@ int main (int argc, char **argv) {
     isDefinedArch = true;
 #endif
     assert(isDefinedArch == true);
+
+
     bool isDefinedFormat = false;
 #ifdef OPT_CRS
     printf("%25s\t%s\n", "MatrixFormat", "CRS");
@@ -107,6 +109,14 @@ int main (int argc, char **argv) {
 #endif
 #ifdef OPT_JDS
     printf("%25s\t%s\n", "MatrixFormat", "JDS");
+    isDefinedFormat = true;
+#endif
+#ifdef OPT_DIA
+    printf("%25s\t%s\n", "MatrixFormat", "DIA");
+    isDefinedFormat = true;
+#endif
+#ifdef OPT_SS
+    printf("%25s\t%s\n", "MatrixFormat", "SS");
     isDefinedFormat = true;
 #endif
 #ifdef OPT_MKL

@@ -10,6 +10,12 @@
 #ifdef OPT_JDS
 #include "opt_jds.h"
 #endif
+#ifdef OPT_DIA
+#include "opt_dia.h"
+#endif
+#ifdef OPT_SS
+#include "opt_ss.h"
+#endif
 #ifdef OPT_MKL
 #include "opt_mkl.h"
 #endif

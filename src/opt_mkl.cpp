@@ -2,9 +2,16 @@
 #include "opt_mkl.h"
 #include "util.h"
 void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_opt) {
+    x_opt.size = x.size;
+    x_opt.val = x.val;
+
     int nRow = A.nRow;
     int nCol = A.nCol;
     int nNnz = A.nNnz;
+
+    //------------------------------
+    // Format specific 
+    //------------------------------
     int *ptr = new int[nRow+1];
     int *idx = new int[nNnz];
     double *val = new double[nNnz];
@@ -23,27 +30,27 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     A_opt.ptr = ptr;
     A_opt.idx = idx;
     A_opt.val = val;
-
-    x_opt.size = x.size;
-    x_opt.val = x.val;
-
 }
 extern "C" {
-void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
-    double *xv = x.val;
-    double *yv = y.val;
-    int nRow = A.nRow;
-    int nCol = A.nCol;
-    int nNnz = A.nNnz;
-    int *ptr = A.ptr;
-    int *idx = A.idx;
-    double *val = A.val;
-    double ALPHA = 1;
-    double BETA = 0;
-    MKL_INT *ptr_b = static_cast<MKL_INT*>(ptr);
-    MKL_INT *ptr_e = ptr_b + 1;
-    char transa = 'N';
-    char *matdescra = "GLNC";
-    mkl_dcsrmv(&transa, &nRow, &nRow, &ALPHA, matdescra, val, idx, ptr_b, ptr_e, xv, &BETA, yv);
-}
+    void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
+        double *xv = x.val;
+        double *yv = y.val;
+        int nRow = A.nRow;
+        int nCol = A.nCol;
+        int nNnz = A.nNnz;
+
+        //------------------------------
+        // Format specific 
+        //------------------------------
+        int *ptr = A.ptr;
+        int *idx = A.idx;
+        double *val = A.val;
+        double ALPHA = 1;
+        double BETA = 0;
+        MKL_INT *ptr_b = static_cast<MKL_INT*>(ptr);
+        MKL_INT *ptr_e = ptr_b + 1;
+        char transa = 'N';
+        char *matdescra = "GLNC";
+        mkl_dcsrmv(&transa, &nRow, &nRow, &ALPHA, matdescra, val, idx, ptr_b, ptr_e, xv, &BETA, yv);
+    }
 }

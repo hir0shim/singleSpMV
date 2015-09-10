@@ -6,9 +6,16 @@
 #include "util.h"
 using namespace std;
 void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_opt) {
+    x_opt.size = x.size;
+    x_opt.val = x.val;
+
     int nRow = A.nRow;
     int nCol = A.nCol;
     int nNnz = A.nNnz;
+
+    //------------------------------
+    // Format specific 
+    //------------------------------
     int *ptr = new int[nRow+1];
     int *idx = new int[nNnz];
     double *val = new double[nNnz];
@@ -45,31 +52,33 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     A_opt.cuda_val = cuda_val;
     A_opt.cuda_x = cuda_x;
     A_opt.cuda_y = cuda_y;
-    x_opt.size = x.size;
-    x_opt.val = x.val;
 }
 extern "C" {
-void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
-    double *xv = x.val;
-    double *yv = y.val;
-    int nRow = A.nRow;
-    int nCol = A.nCol;
-    int nNnz = A.nNnz;
-    int *cuda_ptr = A.cuda_ptr;
-    int *cuda_idx = A.cuda_idx;
-    double *cuda_val = A.cuda_val;
-    double *cuda_x = A.cuda_x;
-    double *cuda_y = A.cuda_y;
-    CUDA_SAFE_CALL(cudaMemcpy((void *)cuda_x, xv, nCol * sizeof(double), cudaMemcpyHostToDevice));
-    cusparseHandle_t cusparse;
-    cusparseCreate(&cusparse);
-    cusparseMatDescr_t matDescr;
-    cusparseCreateMatDescr(&matDescr);
-    cusparseSetMatType(matDescr, CUSPARSE_MATRIX_TYPE_GENERAL);
-    cusparseSetMatIndexBase(matDescr, CUSPARSE_INDEX_BASE_ZERO);
-    const double ALPHA = 1;
-    const double BETA = 0;
-    cusparseDcsrmv(cusparse, CUSPARSE_OPERATION_NON_TRANSPOSE, nRow, nCol, nNnz, &ALPHA, matDescr, cuda_val, cuda_ptr, cuda_idx, cuda_x, &BETA, cuda_y);
-    CUDA_SAFE_CALL(cudaMemcpy((void *)yv, cuda_y, nRow * sizeof(double), cudaMemcpyDeviceToHost));
-}
+    void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
+        double *xv = x.val;
+        double *yv = y.val;
+        int nRow = A.nRow;
+        int nCol = A.nCol;
+        int nNnz = A.nNnz;
+
+        //------------------------------
+        // Format specific 
+        //------------------------------
+        int *cuda_ptr = A.cuda_ptr;
+        int *cuda_idx = A.cuda_idx;
+        double *cuda_val = A.cuda_val;
+        double *cuda_x = A.cuda_x;
+        double *cuda_y = A.cuda_y;
+        CUDA_SAFE_CALL(cudaMemcpy((void *)cuda_x, xv, nCol * sizeof(double), cudaMemcpyHostToDevice));
+        cusparseHandle_t cusparse;
+        cusparseCreate(&cusparse);
+        cusparseMatDescr_t matDescr;
+        cusparseCreateMatDescr(&matDescr);
+        cusparseSetMatType(matDescr, CUSPARSE_MATRIX_TYPE_GENERAL);
+        cusparseSetMatIndexBase(matDescr, CUSPARSE_INDEX_BASE_ZERO);
+        const double ALPHA = 1;
+        const double BETA = 0;
+        cusparseDcsrmv(cusparse, CUSPARSE_OPERATION_NON_TRANSPOSE, nRow, nCol, nNnz, &ALPHA, matDescr, cuda_val, cuda_ptr, cuda_idx, cuda_x, &BETA, cuda_y);
+        CUDA_SAFE_CALL(cudaMemcpy((void *)yv, cuda_y, nRow * sizeof(double), cudaMemcpyDeviceToHost));
+    }
 }

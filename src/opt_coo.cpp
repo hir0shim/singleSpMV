@@ -1,16 +1,22 @@
 #include "opt_coo.h"
 #include "util.h"
 void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_opt) {
-    A_opt.nRow = A.nRow;
-    A_opt.nCol = A.nCol;
-    A_opt.nNnz = A.nNnz;
-    A_opt.row_idx = A.row_idx;
-    A_opt.col_idx = A.col_idx;
-    A_opt.val = A.val;
-
     x_opt.size = x.size;
     x_opt.val = x.val;
 
+    int nRow = A.nRow;
+    int nCol = A.nCol;
+    int nNnz = A.nNnz;
+
+    //------------------------------
+    // Format specific 
+    //------------------------------
+    A_opt.nRow = nRow;
+    A_opt.nCol = nCol;
+    A_opt.nNnz = nNnz;
+    A_opt.row_idx = A.row_idx;
+    A_opt.col_idx = A.col_idx;
+    A_opt.val = A.val;
 }
 void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
     double *xv = x.val;
@@ -18,6 +24,10 @@ void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
     int nRow = A.nRow;
     int nCol = A.nCol;
     int nNnz = A.nNnz;
+
+    //------------------------------
+    // Format specific 
+    //------------------------------
     int *row_idx = A.row_idx;
     int *col_idx = A.col_idx;
     double *val = A.val;

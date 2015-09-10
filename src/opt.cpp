@@ -15,6 +15,12 @@
     #ifdef OPT_JDS
     #include "opt_jds.cpp"
     #endif
+    #ifdef OPT_DIA
+    #include "opt_dia.cpp"
+    #endif
+    #ifdef OPT_SS
+    #include "opt_ss.cpp"
+    #endif
     #ifdef OPT_MKL
     #include "opt_mkl.cpp"
     #endif

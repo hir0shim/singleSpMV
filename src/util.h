@@ -25,6 +25,17 @@ struct Vec {
     }
     */
 };
+
+struct Element {
+    int row, col;
+    double val;
+    Element () {}
+    Element (int r, int c, double v) : row(r), col(c), val(v) {}
+    inline bool operator < (const Element &e) const { 
+        if (row == e.row) return col < e.col;
+        return row < e.row;
+    }
+};
 void LoadSparseMatrix (SpMat &A, const string &matFile); 
 double GetTimeBySec ();
 bool VerifyResult (const SpMat &A, const Vec &x, const Vec &y);

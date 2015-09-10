@@ -5,24 +5,27 @@
 #include <utility>
 #include <cassert>
 #include <iostream>
-struct E {
-    int col;
-    double val;
-    E (int c, double v) : col(c), val(v) {}
-};
 void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_opt) {
+    x_opt.size = x.size;
+    x_opt.val = x.val;
+
     int nRow = A.nRow;
     int nCol = A.nCol;
     int nNnz = A.nNnz;
-    vector<vector<E>> G(nRow);
+
+    //------------------------------
+    // Format specific 
+    //------------------------------
+    vector<vector<Element>> G(nRow);
     {
         int *row_idx = A.row_idx;
         int *col_idx = A.col_idx;
         double *val = A.val;
         for (int i = 0; i < nNnz; i++) {
-            G[row_idx[i]].emplace_back(col_idx[i], val[i]);
+            G[row_idx[i]].emplace_back(row_idx[i], col_idx[i], val[i]);
         }
     }
+
     {
         int *perm = new int[nRow];
         int *col_idx = new int[nNnz];
@@ -67,36 +70,38 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
         A_opt.maxLength = maxLength;
     }
 
-    x_opt.size = x.size;
-    x_opt.val = x.val;
-
 }
 extern "C" {
-void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
-    double *xv = x.val;
-    double *yv = y.val;
-    int nRow = A.nRow;
-    int nNnz = A.nNnz;
-    int *ptr = A.ptr;
-    int *col_idx = A.col_idx;
-    double *val = A.val;
-    int *perm = A.perm;
-    int *length = A.length;
-    int maxLength = A.maxLength;
-    for (int i = 0; i < nRow; i++) yv[i] = 0;
+    void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
+        double *xv = x.val;
+        double *yv = y.val;
+        int nRow = A.nRow;
+        int nCol = A.nCol;
+        int nNnz = A.nNnz;
+
+        //------------------------------
+        // Format specific 
+        //------------------------------
+        int *ptr = A.ptr;
+        int *col_idx = A.col_idx;
+        double *val = A.val;
+        int *perm = A.perm;
+        int *length = A.length;
+        int maxLength = A.maxLength;
+        for (int i = 0; i < nRow; i++) yv[i] = 0;
 #pragma omp parallel for
-    for (int r = 0; r < nRow; r++) {
-        int row = perm[r];
-        for (int i = 0; i < length[row]; i++) {
-            int idx = ptr[i] + r;
-            int col = col_idx[idx];
-            double lv = val[idx];
-            double rv = xv[col];
-            double val = lv * rv;
-            yv[row] += val;
+        for (int r = 0; r < nRow; r++) {
+            int row = perm[r];
+            for (int i = 0; i < length[row]; i++) {
+                int idx = ptr[i] + r;
+                int col = col_idx[idx];
+                double lv = val[idx];
+                double rv = xv[col];
+                double val = lv * rv;
+                yv[row] += val;
+            }
         }
     }
-}
 }
 
 
