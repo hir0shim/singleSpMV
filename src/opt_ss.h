@@ -4,6 +4,16 @@ struct SpMatOpt {
     int nRow;
     int nCol;
     int nNnz;
+
+
+    int W;
+    int H;
+    int *row_ptr;
+    int **row_idx;
+    int **col_idx;
+    bool **flag;
+    double **val;
+    double **val_result;
 };
 struct VecOpt {
     int size;
