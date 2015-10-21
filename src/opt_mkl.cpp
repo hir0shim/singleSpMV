@@ -12,9 +12,9 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     //------------------------------
     // Format specific 
     //------------------------------
-    int *ptr = new int[nRow+1];
-    int *idx = new int[nNnz];
-    double *val = new double[nNnz];
+    int *ptr = (int *)mkl_malloc((nRow+1) * sizeof(int), ALIGNMENT);
+    int *idx = (int *)mkl_malloc(nNnz * sizeof(int), ALIGNMENT);
+    double *val =(double *)mkl_malloc(nNnz * sizeof(double), ALIGNMENT); 
     
     int p = 0;
     for (int i = 0; i < nNnz; i++) {

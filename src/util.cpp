@@ -8,6 +8,7 @@
 #include <cmath>
 #include <sys/time.h>
 #include <stdlib.h>
+#include <mm_malloc.h>
 #include "util.h"
 
 using namespace std;
@@ -87,7 +88,8 @@ void ViewVec (const Vec &v) {
 Vec CreateRandomVector (int size) {
     Vec x;
     x.size = size;
-    x.val = new double[size];
+    //x.val = new double[size];
+    x.val = (double *)_mm_malloc((size) * sizeof(double), ALIGNMENT);
     for (int i = 0; i < size; i++) {
         x.val[i] = double(rand()) / RAND_MAX;
     }

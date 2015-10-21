@@ -4,13 +4,13 @@ struct SpMatOpt {
     int nRow;
     int nCol;
     int nNnz;
-    int *ptr;
-    int *idx;
-    double *val;
+    __attribute__((aligned(ALIGNMENT))) int *ptr;
+    __attribute__((aligned(ALIGNMENT))) int *idx;
+    __attribute__((aligned(ALIGNMENT))) double *val;
 };
 struct VecOpt {
     int size;
-    double *val;
+    __attribute__((aligned(ALIGNMENT))) double *val;
 };
 void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_opt);
 extern "C" {

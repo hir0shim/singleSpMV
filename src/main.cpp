@@ -67,7 +67,7 @@ int main (int argc, char **argv) {
     */
     cerr << "done." << endl;
 
-    //    ViewVec(y);
+    ViewVec(y);
 
 #ifdef VERIFY
     cerr << "Verifying ... ";

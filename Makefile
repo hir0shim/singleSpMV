@@ -6,14 +6,14 @@ INCLUDE_DIR = include
 ASM_DIR=asm
 
 OPTION = -DVERIFY
-MIC_OPTION = $(OPTION) -DOPT_SS
-CPU_OPTION = $(OPTION) -DOPT_SS
-GPU_OPTION = $(OPTION) -DOPT_CUSPARSE
+MIC_OPTION = $(OPTION) -DOPT_MKL -DALIGNMENT=64
+CPU_OPTION = $(OPTION) -DOPT_CRS -DALIGNMENT=32 
+GPU_OPTION = $(OPTION) -DOPT_CUSPARSE -DALIGNMENT=32
 
 CXX = icpc
 LDFLAGS = -L$(LIBRARY_DIR) -L$(OBJECT_DIR) 
 #CXXFLAGS = -std=c++11 -ipo -Wall -g -O2 -fopenmp -I$(INCLUDE_DIR) 
-CXXFLAGS = -std=c++11 -ipo -Wall -g -O2 -fopenmp 
+CXXFLAGS = -std=c++11 -ipo -Wall -g -O0 -fopenmp  -fno-alias -ansi-alias
 
 vpath %.cpp $(SOURCE_DIR)
 spmv_sources = main.cpp util.cpp opt.cpp 
@@ -37,7 +37,7 @@ $(OBJECT_DIR)/%.o.cpu : CXXFLAGS += -xHOST -DCPU  $(CPU_OPTION)
 $(OBJECT_DIR)/%.o.cpu : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(SPMV_CPU) : CXXFLAGS += -mkl
+$(SPMV_CPU) : CXXFLAGS += -mkl 
 $(SPMV_CPU) : $(spmv_objects_cpu) 
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 

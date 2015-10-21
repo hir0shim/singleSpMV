@@ -5,6 +5,8 @@
 #include <utility>
 #include <cassert>
 #include <iostream>
+#include <immintrin.h>
+#include <mm_malloc.h>
 void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_opt) {
     x_opt.size = x.size;
     x_opt.val = x.val;
@@ -17,9 +19,9 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     // Format specific 
     //------------------------------
     {
-        int *ptr = new int[nRow+1];
-        int *idx = new int[nNnz];
-        double *val = new double[nNnz];
+        int *ptr = (int *)_mm_malloc((nRow+1) * sizeof(int), ALIGNMENT);
+        int *idx = (int *)_mm_malloc(nNnz * sizeof(int), ALIGNMENT);
+        double *val = (double *)_mm_malloc(nNnz * sizeof(double), ALIGNMENT); 
 
         int p = 0;
         for (int i = 0; i < nNnz; i++) {
@@ -52,16 +54,79 @@ extern "C" {
         int *ptr = A.ptr;
         int *idx = A.idx;
         double *val = A.val;
+        int W = ALIGNMENT / sizeof(double);
 #pragma omp parallel for
+#pragma vector nontemporal(yv)
         for (int i = 0; i < nRow; i++) {
             yv[i] = 0;
+            {{{
+#if defined CPU_SIMD
+            if (ptr[i+1] - ptr[i] > ALIGNMENT/sizeof(double)) {
+                int simd_begin = (ptr[i] & (~(W-1))) + ((ptr[i] & (W-1)) ? W:0);
+                int simd_end = ptr[i+1] - (ptr[i+1]&(W-1));
+                for (int j = ptr[i]; j < simd_begin; j++) {
+                    int col = idx[j];
+                    double lv = val[j];
+                    double rv = xv[col];
+                    double v = lv * rv;
+                    yv[i] += v;
+                }
+                double *yv_tmp = (double *)_mm_malloc(ALIGNMENT, ALIGNMENT);
+                for (int j = simd_begin; j < simd_end; j+=W) {
+                    assert(__int64(idx+j)%16==0);
+                    assert(__int64(val+j)%32==0);
+                    assert(__int64(yv_tmp)%32==0);
+                    __m128i col = _mm_load_si128((__m128i *)(idx+j));
+                    __m256d lv = _mm256_load_pd(val+j);
+                    __m256d rv = _mm256_i32gather_pd(xv, col, 8);
+                    __m256d v = _mm256_mul_pd(lv, rv);
+                       _mm256_store_pd(yv_tmp, v);
+                       for (int k = 0; k < ALIGNMENT / sizeof(double); k++) {
+                       yv[i] += yv_tmp[k];
+                       }
+                       /*
+                    double *yv_begin = (double *)((__int64(yv+i)) & ~(W-1));
+                    int yv_pos = (__int64(yv+i)) & (W-1);
+                    v = _mm256_hadd_pd(v, v);
+                    v = _mm256_hadd_pd(v, v);
+                    __m256i mask = _mm256_set_epi64x((unsigned __int64)(yv_pos==3), (unsigned __int64)(yv_pos==2), (unsigned __int64)(yv_pos==1), (unsigned __int64)(yv_pos==0));
+                    _mm256_maskstore_pd(yv_begin, mask, v);
+                    */
+
+                }
+                _mm_free(yv_tmp);
+                for (int j = simd_end; j < ptr[i+1]; j++) {
+                    int col = idx[j];
+                    double lv = val[j];
+                    double rv = xv[col];
+                    double v = lv * rv;
+                    yv[i] += v;
+                }
+            } else {
+                for (int j = ptr[i]; j < ptr[i+1]; j++) {
+                    int col = idx[j];
+                    double lv = val[j];
+                    double rv = xv[col];
+                    double v = lv * rv;
+                    yv[i] += v;
+                }
+            }
+#elif defined MIC_SIMD
+#else 
+              }}}
+
+            double yv_tmp = 0;
+#pragma simd 
+#pragma vector aligned
             for (int j = ptr[i]; j < ptr[i+1]; j++) {
                 int col = idx[j];
                 double lv = val[j];
                 double rv = xv[col];
-                double val = lv * rv;
-                yv[i] += val;
+                double v = lv * rv;
+                yv_tmp += v;
             }
+            yv[i] = yv_tmp;
+#endif
         }
     }
 }

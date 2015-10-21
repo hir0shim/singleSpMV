@@ -4,9 +4,9 @@ struct SpMatOpt {
     int nRow;
     int nCol;
     int nNnz;
-    int *ptr;
-    int *idx;
-    double *val;
+    __attribute__((aligned(ALIGNMENT))) int *ptr;
+    __attribute__((aligned(ALIGNMENT))) int *idx;
+    __attribute__((aligned(ALIGNMENT))) double *val;
 };
 struct VecOpt {
     int size;
