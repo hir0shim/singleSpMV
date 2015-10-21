@@ -13,7 +13,7 @@ log/format
 
 test/mypwd
 
-asm/*.o
 
+asm/
 ### Others ###
 a.out
