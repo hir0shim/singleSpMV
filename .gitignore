@@ -3,8 +3,8 @@ bin/spmv*
 
 matrix/artificial/*.mtx
 matrix/natural/*.mtx
-matrix/generator
 matrix/visualizer
+generator
 
 obj/*.o.*
 
@@ -15,5 +15,10 @@ test/mypwd
 
 
 asm/
+vtune/
+src/_*
+
+
 ### Others ###
 a.out
+out

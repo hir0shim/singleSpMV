@@ -1,0 +1,1327 @@
+
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/ASIC_680ks.mtx--------------
+ ( 682712, 682712 ) nnz = 2329176
+cpu sequential time = 5.969 ms. Bandwidth = 9.17676 GB/s. GFlops = 0.780424 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	ASIC_680ks.mtx
+               MatrixPath	../../../matrix/natural/ASIC_680ks.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 36394
+CSR->CSR5 malloc time = 2.990000 ms
+CSR->CSR5 tile_ptr time = 6.595000 ms
+CSR->CSR5 tile_desc time = 6.708000 ms
+CSR->CSR5 transpose time = 3.700000 ms
+omega = 4, sigma = 16. #partition = 36394
+CSR->CSR5 malloc time = 0.102000 ms
+CSR->CSR5 tile_ptr time = 0.488000 ms
+CSR->CSR5 tile_desc time = 6.737000 ms
+CSR->CSR5 transpose time = 3.230000 ms
+omega = 4, sigma = 16. #partition = 36394
+CSR->CSR5 malloc time = 0.077000 ms
+CSR->CSR5 tile_ptr time = 0.416000 ms
+CSR->CSR5 tile_desc time = 6.352000 ms
+CSR->CSR5 transpose time = 3.100000 ms
+omega = 4, sigma = 16. #partition = 36394
+CSR->CSR5 malloc time = 0.076000 ms
+CSR->CSR5 tile_ptr time = 0.375000 ms
+CSR->CSR5 tile_desc time = 6.038000 ms
+CSR->CSR5 transpose time = 2.974000 ms
+omega = 4, sigma = 16. #partition = 36394
+CSR->CSR5 malloc time = 0.074000 ms
+CSR->CSR5 tile_ptr time = 0.358000 ms
+CSR->CSR5 tile_desc time = 6.110000 ms
+CSR->CSR5 transpose time = 2.684000 ms
+omega = 4, sigma = 16. #partition = 36394
+CSR->CSR5 malloc time = 0.079000 ms
+CSR->CSR5 tile_ptr time = 0.349000 ms
+CSR->CSR5 tile_desc time = 5.917000 ms
+CSR->CSR5 transpose time = 2.599000 ms
+CSR->CSR5 time = 8.954 ms.
+CSR5-based SpMV time = 0.517196 ms. Bandwidth = 105.91 GB/s. GFlops = 9.00694 GFlops.
+      Performance(GFLOPS)	9.006937
+                     nRow	682712
+                     nCol	682712
+                     nNnz	2329176
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/Chebyshev4.mtx--------------
+ ( 68121, 68121 ) nnz = 5377761
+cpu sequential time = 7.117 ms. Bandwidth = 15.2273 GB/s. GFlops = 1.51124 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	Chebyshev4.mtx
+               MatrixPath	../../../matrix/natural/Chebyshev4.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 84028
+CSR->CSR5 malloc time = 3.358000 ms
+CSR->CSR5 tile_ptr time = 2.483000 ms
+CSR->CSR5 tile_desc time = 3.849000 ms
+CSR->CSR5 transpose time = 3.229000 ms
+omega = 4, sigma = 16. #partition = 84028
+CSR->CSR5 malloc time = 0.163000 ms
+CSR->CSR5 tile_ptr time = 0.461000 ms
+CSR->CSR5 tile_desc time = 4.049000 ms
+CSR->CSR5 transpose time = 3.083000 ms
+omega = 4, sigma = 16. #partition = 84028
+CSR->CSR5 malloc time = 0.139000 ms
+CSR->CSR5 tile_ptr time = 0.434000 ms
+CSR->CSR5 tile_desc time = 4.112000 ms
+CSR->CSR5 transpose time = 2.869000 ms
+omega = 4, sigma = 16. #partition = 84028
+CSR->CSR5 malloc time = 0.140000 ms
+CSR->CSR5 tile_ptr time = 0.415000 ms
+CSR->CSR5 tile_desc time = 4.167000 ms
+CSR->CSR5 transpose time = 2.919000 ms
+omega = 4, sigma = 16. #partition = 84028
+CSR->CSR5 malloc time = 0.140000 ms
+CSR->CSR5 tile_ptr time = 0.390000 ms
+CSR->CSR5 tile_desc time = 4.184000 ms
+CSR->CSR5 transpose time = 2.874000 ms
+omega = 4, sigma = 16. #partition = 84028
+CSR->CSR5 malloc time = 0.140000 ms
+CSR->CSR5 tile_ptr time = 0.372000 ms
+CSR->CSR5 tile_desc time = 4.075000 ms
+CSR->CSR5 transpose time = 2.893000 ms
+CSR->CSR5 time = 7.485 ms.
+CSR5-based SpMV time = 0.487294 ms. Bandwidth = 222.397 GB/s. GFlops = 22.0719 GFlops.
+      Performance(GFLOPS)	22.071936
+                     nRow	68121
+                     nCol	68121
+                     nNnz	5377761
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/Freescale1.mtx--------------
+ ( 3428755, 3428755 ) nnz = 18920347
+cpu sequential time = 33.949 ms. Bandwidth = 12.3583 GB/s. GFlops = 1.11463 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	Freescale1.mtx
+               MatrixPath	../../../matrix/natural/Freescale1.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 295631
+CSR->CSR5 malloc time = 5.024000 ms
+CSR->CSR5 tile_ptr time = 8.704000 ms
+CSR->CSR5 tile_desc time = 31.450000 ms
+CSR->CSR5 transpose time = 17.815000 ms
+omega = 4, sigma = 16. #partition = 295631
+CSR->CSR5 malloc time = 0.621000 ms
+CSR->CSR5 tile_ptr time = 2.309000 ms
+CSR->CSR5 tile_desc time = 32.386000 ms
+CSR->CSR5 transpose time = 18.789000 ms
+omega = 4, sigma = 16. #partition = 295631
+CSR->CSR5 malloc time = 0.624000 ms
+CSR->CSR5 tile_ptr time = 2.318000 ms
+CSR->CSR5 tile_desc time = 32.192000 ms
+CSR->CSR5 transpose time = 18.590000 ms
+omega = 4, sigma = 16. #partition = 295631
+CSR->CSR5 malloc time = 0.619000 ms
+CSR->CSR5 tile_ptr time = 2.310000 ms
+CSR->CSR5 tile_desc time = 32.302000 ms
+CSR->CSR5 transpose time = 18.858000 ms
+omega = 4, sigma = 16. #partition = 295631
+CSR->CSR5 malloc time = 0.616000 ms
+CSR->CSR5 tile_ptr time = 2.288000 ms
+CSR->CSR5 tile_desc time = 32.310000 ms
+CSR->CSR5 transpose time = 18.376000 ms
+omega = 4, sigma = 16. #partition = 295631
+CSR->CSR5 malloc time = 0.628000 ms
+CSR->CSR5 tile_ptr time = 2.241000 ms
+CSR->CSR5 tile_desc time = 31.989000 ms
+CSR->CSR5 transpose time = 18.747000 ms
+CSR->CSR5 time = 53.623 ms.
+CSR5-based SpMV time = 5.5473 ms. Bandwidth = 75.6318 GB/s. GFlops = 6.82146 GFlops.
+      Performance(GFLOPS)	6.821464
+                     nRow	3428755
+                     nCol	3428755
+                     nNnz	18920347
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/FullChip.mtx--------------
+ ( 2987012, 2987012 ) nnz = 26621990
+cpu sequential time = 46.741 ms. Bandwidth = 12.1581 GB/s. GFlops = 1.13913 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	FullChip.mtx
+               MatrixPath	../../../matrix/natural/FullChip.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 415969
+CSR->CSR5 malloc time = 5.994000 ms
+CSR->CSR5 tile_ptr time = 7.419000 ms
+CSR->CSR5 tile_desc time = 41.584000 ms
+CSR->CSR5 transpose time = 34.168000 ms
+omega = 4, sigma = 16. #partition = 415969
+CSR->CSR5 malloc time = 0.746000 ms
+CSR->CSR5 tile_ptr time = 3.093000 ms
+CSR->CSR5 tile_desc time = 39.854000 ms
+CSR->CSR5 transpose time = 31.973000 ms
+omega = 4, sigma = 16. #partition = 415969
+CSR->CSR5 malloc time = 0.750000 ms
+CSR->CSR5 tile_ptr time = 3.005000 ms
+CSR->CSR5 tile_desc time = 37.175000 ms
+CSR->CSR5 transpose time = 32.161000 ms
+omega = 4, sigma = 16. #partition = 415969
+CSR->CSR5 malloc time = 0.749000 ms
+CSR->CSR5 tile_ptr time = 3.020000 ms
+CSR->CSR5 tile_desc time = 37.473000 ms
+CSR->CSR5 transpose time = 31.828000 ms
+omega = 4, sigma = 16. #partition = 415969
+CSR->CSR5 malloc time = 0.743000 ms
+CSR->CSR5 tile_ptr time = 2.758000 ms
+CSR->CSR5 tile_desc time = 37.276000 ms
+CSR->CSR5 transpose time = 32.252000 ms
+omega = 4, sigma = 16. #partition = 415969
+CSR->CSR5 malloc time = 0.751000 ms
+CSR->CSR5 tile_ptr time = 2.784000 ms
+CSR->CSR5 tile_desc time = 38.844000 ms
+CSR->CSR5 transpose time = 32.604000 ms
+CSR->CSR5 time = 75.012 ms.
+CSR5-based SpMV time = 8.23651 ms. Bandwidth = 68.9957 GB/s. GFlops = 6.46438 GFlops.
+      Performance(GFLOPS)	6.464384
+                     nRow	2987012
+                     nCol	2987012
+                     nNnz	26621990
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/Hamrle3.mtx--------------
+ ( 1447360, 1447360 ) nnz = 5514242
+cpu sequential time = 10.261 ms. Bandwidth = 12.4406 GB/s. GFlops = 1.0748 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	Hamrle3.mtx
+               MatrixPath	../../../matrix/natural/Hamrle3.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 86161
+CSR->CSR5 malloc time = 3.348000 ms
+CSR->CSR5 tile_ptr time = 4.812000 ms
+CSR->CSR5 tile_desc time = 10.160000 ms
+CSR->CSR5 transpose time = 7.175000 ms
+omega = 4, sigma = 16. #partition = 86161
+CSR->CSR5 malloc time = 0.201000 ms
+CSR->CSR5 tile_ptr time = 0.903000 ms
+CSR->CSR5 tile_desc time = 9.203000 ms
+CSR->CSR5 transpose time = 6.349000 ms
+omega = 4, sigma = 16. #partition = 86161
+CSR->CSR5 malloc time = 0.189000 ms
+CSR->CSR5 tile_ptr time = 0.881000 ms
+CSR->CSR5 tile_desc time = 8.934000 ms
+CSR->CSR5 transpose time = 6.276000 ms
+omega = 4, sigma = 16. #partition = 86161
+CSR->CSR5 malloc time = 0.188000 ms
+CSR->CSR5 tile_ptr time = 0.865000 ms
+CSR->CSR5 tile_desc time = 9.089000 ms
+CSR->CSR5 transpose time = 6.429000 ms
+omega = 4, sigma = 16. #partition = 86161
+CSR->CSR5 malloc time = 0.188000 ms
+CSR->CSR5 tile_ptr time = 0.887000 ms
+CSR->CSR5 tile_desc time = 8.913000 ms
+CSR->CSR5 transpose time = 6.778000 ms
+omega = 4, sigma = 16. #partition = 86161
+CSR->CSR5 malloc time = 0.189000 ms
+CSR->CSR5 tile_ptr time = 0.857000 ms
+CSR->CSR5 tile_desc time = 8.542000 ms
+CSR->CSR5 transpose time = 6.727000 ms
+CSR->CSR5 time = 16.341 ms.
+CSR5-based SpMV time = 1.84944 ms. Bandwidth = 69.0226 GB/s. GFlops = 5.96314 GFlops.
+      Performance(GFLOPS)	5.963145
+                     nRow	1447360
+                     nCol	1447360
+                     nNnz	5514242
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/ML_Geer.mtx--------------
+ ( 1504002, 1504002 ) nnz = 110879972
+cpu sequential time = 122.727 ms. Bandwidth = 18.2164 GB/s. GFlops = 1.80694 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	ML_Geer.mtx
+               MatrixPath	../../../matrix/natural/ML_Geer.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 1732500
+CSR->CSR5 malloc time = 12.343000 ms
+CSR->CSR5 tile_ptr time = 14.806000 ms
+CSR->CSR5 tile_desc time = 139.397000 ms
+CSR->CSR5 transpose time = 105.396000 ms
+omega = 4, sigma = 16. #partition = 1732500
+CSR->CSR5 malloc time = 10.421000 ms
+CSR->CSR5 tile_ptr time = 9.362000 ms
+CSR->CSR5 tile_desc time = 133.441000 ms
+CSR->CSR5 transpose time = 89.868000 ms
+omega = 4, sigma = 16. #partition = 1732500
+CSR->CSR5 malloc time = 2.302000 ms
+CSR->CSR5 tile_ptr time = 9.384000 ms
+CSR->CSR5 tile_desc time = 132.429000 ms
+CSR->CSR5 transpose time = 89.648000 ms
+omega = 4, sigma = 16. #partition = 1732500
+CSR->CSR5 malloc time = 3.144000 ms
+CSR->CSR5 tile_ptr time = 9.349000 ms
+CSR->CSR5 tile_desc time = 142.676000 ms
+CSR->CSR5 transpose time = 102.540000 ms
+omega = 4, sigma = 16. #partition = 1732500
+CSR->CSR5 malloc time = 3.143000 ms
+CSR->CSR5 tile_ptr time = 9.351000 ms
+CSR->CSR5 tile_desc time = 148.937000 ms
+CSR->CSR5 transpose time = 106.406000 ms
+omega = 4, sigma = 16. #partition = 1732500
+CSR->CSR5 malloc time = 3.144000 ms
+CSR->CSR5 tile_ptr time = 9.367000 ms
+CSR->CSR5 tile_desc time = 154.804000 ms
+CSR->CSR5 transpose time = 106.254000 ms
+CSR->CSR5 time = 273.596 ms.
+CSR5-based SpMV time = 17.6452 ms. Bandwidth = 126.7 GB/s. GFlops = 12.5677 GFlops.
+      Performance(GFLOPS)	12.567720
+                     nRow	1504002
+                     nCol	1504002
+                     nNnz	110879972
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/PR02R.mtx--------------
+ ( 161070, 161070 ) nnz = 8185136
+cpu sequential time = 10.345 ms. Bandwidth = 16.0112 GB/s. GFlops = 1.58243 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	PR02R.mtx
+               MatrixPath	../../../matrix/natural/PR02R.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 127893
+CSR->CSR5 malloc time = 3.520000 ms
+CSR->CSR5 tile_ptr time = 4.699000 ms
+CSR->CSR5 tile_desc time = 12.216000 ms
+CSR->CSR5 transpose time = 9.277000 ms
+omega = 4, sigma = 16. #partition = 127893
+CSR->CSR5 malloc time = 0.287000 ms
+CSR->CSR5 tile_ptr time = 0.606000 ms
+CSR->CSR5 tile_desc time = 13.777000 ms
+CSR->CSR5 transpose time = 9.388000 ms
+omega = 4, sigma = 16. #partition = 127893
+CSR->CSR5 malloc time = 0.280000 ms
+CSR->CSR5 tile_ptr time = 0.604000 ms
+CSR->CSR5 tile_desc time = 11.646000 ms
+CSR->CSR5 transpose time = 9.416000 ms
+omega = 4, sigma = 16. #partition = 127893
+CSR->CSR5 malloc time = 0.282000 ms
+CSR->CSR5 tile_ptr time = 0.600000 ms
+CSR->CSR5 tile_desc time = 13.908000 ms
+CSR->CSR5 transpose time = 9.444000 ms
+omega = 4, sigma = 16. #partition = 127893
+CSR->CSR5 malloc time = 0.275000 ms
+CSR->CSR5 tile_ptr time = 0.606000 ms
+CSR->CSR5 tile_desc time = 12.422000 ms
+CSR->CSR5 transpose time = 9.498000 ms
+omega = 4, sigma = 16. #partition = 127893
+CSR->CSR5 malloc time = 0.281000 ms
+CSR->CSR5 tile_ptr time = 0.601000 ms
+CSR->CSR5 tile_desc time = 13.784000 ms
+CSR->CSR5 transpose time = 9.342000 ms
+CSR->CSR5 time = 24.029 ms.
+CSR5-based SpMV time = 1.95669 ms. Bandwidth = 84.6509 GB/s. GFlops = 8.36631 GFlops.
+      Performance(GFLOPS)	8.366308
+                     nRow	161070
+                     nCol	161070
+                     nNnz	8185136
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/RM07R.mtx--------------
+ ( 381689, 381689 ) nnz = 37464962
+cpu sequential time = 43.71 ms. Bandwidth = 17.2473 GB/s. GFlops = 1.71425 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	RM07R.mtx
+               MatrixPath	../../../matrix/natural/RM07R.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 585391
+CSR->CSR5 malloc time = 6.552000 ms
+CSR->CSR5 tile_ptr time = 6.739000 ms
+CSR->CSR5 tile_desc time = 32.370000 ms
+CSR->CSR5 transpose time = 21.707000 ms
+omega = 4, sigma = 16. #partition = 585391
+CSR->CSR5 malloc time = 3.961000 ms
+CSR->CSR5 tile_ptr time = 2.925000 ms
+CSR->CSR5 tile_desc time = 31.906000 ms
+CSR->CSR5 transpose time = 20.937000 ms
+omega = 4, sigma = 16. #partition = 585391
+CSR->CSR5 malloc time = 0.783000 ms
+CSR->CSR5 tile_ptr time = 2.840000 ms
+CSR->CSR5 tile_desc time = 33.181000 ms
+CSR->CSR5 transpose time = 21.067000 ms
+omega = 4, sigma = 16. #partition = 585391
+CSR->CSR5 malloc time = 0.779000 ms
+CSR->CSR5 tile_ptr time = 2.849000 ms
+CSR->CSR5 tile_desc time = 33.845000 ms
+CSR->CSR5 transpose time = 21.248000 ms
+omega = 4, sigma = 16. #partition = 585391
+CSR->CSR5 malloc time = 0.783000 ms
+CSR->CSR5 tile_ptr time = 2.849000 ms
+CSR->CSR5 tile_desc time = 34.235000 ms
+CSR->CSR5 transpose time = 21.141000 ms
+omega = 4, sigma = 16. #partition = 585391
+CSR->CSR5 malloc time = 0.782000 ms
+CSR->CSR5 tile_ptr time = 2.850000 ms
+CSR->CSR5 tile_desc time = 33.125000 ms
+CSR->CSR5 transpose time = 21.050000 ms
+CSR->CSR5 time = 57.827 ms.
+CSR5-based SpMV time = 6.5297 ms. Bandwidth = 115.454 GB/s. GFlops = 11.4752 GFlops.
+      Performance(GFLOPS)	11.475241
+                     nRow	381689
+                     nCol	381689
+                     nNnz	37464962
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/TSOPF_RS_b2383_c1.mtx--------------
+ ( 38120, 38120 ) nnz = 16171169
+cpu sequential time = 17.898 ms. Bandwidth = 18.0959 GB/s. GFlops = 1.80704 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	TSOPF_RS_b2383_c1.mtx
+               MatrixPath	../../../matrix/natural/TSOPF_RS_b2383_c1.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 252675
+CSR->CSR5 malloc time = 4.337000 ms
+CSR->CSR5 tile_ptr time = 4.725000 ms
+CSR->CSR5 tile_desc time = 6.967000 ms
+CSR->CSR5 transpose time = 2.425000 ms
+omega = 4, sigma = 16. #partition = 252675
+CSR->CSR5 malloc time = 1.879000 ms
+CSR->CSR5 tile_ptr time = 1.004000 ms
+CSR->CSR5 tile_desc time = 5.732000 ms
+CSR->CSR5 transpose time = 1.937000 ms
+omega = 4, sigma = 16. #partition = 252675
+CSR->CSR5 malloc time = 0.338000 ms
+CSR->CSR5 tile_ptr time = 0.962000 ms
+CSR->CSR5 tile_desc time = 6.273000 ms
+CSR->CSR5 transpose time = 1.983000 ms
+omega = 4, sigma = 16. #partition = 252675
+CSR->CSR5 malloc time = 0.341000 ms
+CSR->CSR5 tile_ptr time = 0.922000 ms
+CSR->CSR5 tile_desc time = 5.663000 ms
+CSR->CSR5 transpose time = 1.985000 ms
+omega = 4, sigma = 16. #partition = 252675
+CSR->CSR5 malloc time = 0.341000 ms
+CSR->CSR5 tile_ptr time = 0.912000 ms
+CSR->CSR5 tile_desc time = 5.394000 ms
+CSR->CSR5 transpose time = 1.947000 ms
+omega = 4, sigma = 16. #partition = 252675
+CSR->CSR5 malloc time = 0.338000 ms
+CSR->CSR5 tile_ptr time = 0.907000 ms
+CSR->CSR5 tile_desc time = 5.279000 ms
+CSR->CSR5 transpose time = 1.924000 ms
+CSR->CSR5 time = 8.455 ms.
+CSR5-based SpMV time = 3.03523 ms. Bandwidth = 106.707 GB/s. GFlops = 10.6556 GFlops.
+      Performance(GFLOPS)	10.655632
+                     nRow	38120
+                     nCol	38120
+                     nNnz	16171169
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/cage15.mtx--------------
+ ( 5154859, 5154859 ) nnz = 99199551
+cpu sequential time = 136.815 ms. Bandwidth = 14.9534 GB/s. GFlops = 1.45013 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	cage15.mtx
+               MatrixPath	../../../matrix/natural/cage15.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 1549993
+CSR->CSR5 malloc time = 11.523000 ms
+CSR->CSR5 tile_ptr time = 18.804000 ms
+CSR->CSR5 tile_desc time = 139.297000 ms
+CSR->CSR5 transpose time = 99.578000 ms
+omega = 4, sigma = 16. #partition = 1549993
+CSR->CSR5 malloc time = 7.340000 ms
+CSR->CSR5 tile_ptr time = 9.952000 ms
+CSR->CSR5 tile_desc time = 190.082000 ms
+CSR->CSR5 transpose time = 93.459000 ms
+omega = 4, sigma = 16. #partition = 1549993
+CSR->CSR5 malloc time = 2.071000 ms
+CSR->CSR5 tile_ptr time = 9.878000 ms
+CSR->CSR5 tile_desc time = 197.738000 ms
+CSR->CSR5 transpose time = 117.654000 ms
+omega = 4, sigma = 16. #partition = 1549993
+CSR->CSR5 malloc time = 2.815000 ms
+CSR->CSR5 tile_ptr time = 9.983000 ms
+CSR->CSR5 tile_desc time = 173.614000 ms
+CSR->CSR5 transpose time = 95.686000 ms
+omega = 4, sigma = 16. #partition = 1549993
+CSR->CSR5 malloc time = 2.818000 ms
+CSR->CSR5 tile_ptr time = 9.965000 ms
+CSR->CSR5 tile_desc time = 181.486000 ms
+CSR->CSR5 transpose time = 95.437000 ms
+omega = 4, sigma = 16. #partition = 1549993
+CSR->CSR5 malloc time = 2.818000 ms
+CSR->CSR5 tile_ptr time = 10.017000 ms
+CSR->CSR5 tile_desc time = 177.971000 ms
+CSR->CSR5 transpose time = 97.004000 ms
+CSR->CSR5 time = 287.838 ms.
+CSR5-based SpMV time = 19.7411 ms. Bandwidth = 103.634 GB/s. GFlops = 10.05 GFlops.
+      Performance(GFLOPS)	10.050031
+                     nRow	5154859
+                     nCol	5154859
+                     nNnz	99199551
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/circuit5M.mtx--------------
+ ( 5558326, 5558326 ) nnz = 59524291
+cpu sequential time = 83.419 ms. Bandwidth = 15.0707 GB/s. GFlops = 1.42712 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	circuit5M.mtx
+               MatrixPath	../../../matrix/natural/circuit5M.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 930068
+CSR->CSR5 malloc time = 8.994000 ms
+CSR->CSR5 tile_ptr time = 13.295000 ms
+CSR->CSR5 tile_desc time = 78.213000 ms
+CSR->CSR5 transpose time = 43.740000 ms
+omega = 4, sigma = 16. #partition = 930068
+CSR->CSR5 malloc time = 1.688000 ms
+CSR->CSR5 tile_ptr time = 6.838000 ms
+CSR->CSR5 tile_desc time = 79.749000 ms
+CSR->CSR5 transpose time = 44.828000 ms
+omega = 4, sigma = 16. #partition = 930068
+CSR->CSR5 malloc time = 1.680000 ms
+CSR->CSR5 tile_ptr time = 6.800000 ms
+CSR->CSR5 tile_desc time = 76.704000 ms
+CSR->CSR5 transpose time = 44.863000 ms
+omega = 4, sigma = 16. #partition = 930068
+CSR->CSR5 malloc time = 1.679000 ms
+CSR->CSR5 tile_ptr time = 6.811000 ms
+CSR->CSR5 tile_desc time = 76.992000 ms
+CSR->CSR5 transpose time = 45.330000 ms
+omega = 4, sigma = 16. #partition = 930068
+CSR->CSR5 malloc time = 1.683000 ms
+CSR->CSR5 tile_ptr time = 6.843000 ms
+CSR->CSR5 tile_desc time = 79.480000 ms
+CSR->CSR5 transpose time = 44.917000 ms
+omega = 4, sigma = 16. #partition = 930068
+CSR->CSR5 malloc time = 1.687000 ms
+CSR->CSR5 tile_ptr time = 6.796000 ms
+CSR->CSR5 tile_desc time = 77.556000 ms
+CSR->CSR5 transpose time = 45.999000 ms
+CSR->CSR5 time = 132.072 ms.
+CSR5-based SpMV time = 13.0931 ms. Bandwidth = 96.0189 GB/s. GFlops = 9.09246 GFlops.
+      Performance(GFLOPS)	9.092464
+                     nRow	5558326
+                     nCol	5558326
+                     nNnz	59524291
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/g7jac200sc.mtx--------------
+ ( 59310, 59310 ) nnz = 837936
+cpu sequential time = 0.908 ms. Bandwidth = 19.2406 GB/s. GFlops = 1.84567 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	g7jac200sc.mtx
+               MatrixPath	../../../matrix/natural/g7jac200sc.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 13093
+CSR->CSR5 malloc time = 2.192000 ms
+CSR->CSR5 tile_ptr time = 4.496000 ms
+CSR->CSR5 tile_desc time = 1.004000 ms
+CSR->CSR5 transpose time = 0.794000 ms
+omega = 4, sigma = 16. #partition = 13093
+CSR->CSR5 malloc time = 0.027000 ms
+CSR->CSR5 tile_ptr time = 0.067000 ms
+CSR->CSR5 tile_desc time = 1.132000 ms
+CSR->CSR5 transpose time = 0.837000 ms
+omega = 4, sigma = 16. #partition = 13093
+CSR->CSR5 malloc time = 0.021000 ms
+CSR->CSR5 tile_ptr time = 0.190000 ms
+CSR->CSR5 tile_desc time = 1.440000 ms
+CSR->CSR5 transpose time = 1.014000 ms
+omega = 4, sigma = 16. #partition = 13093
+CSR->CSR5 malloc time = 0.022000 ms
+CSR->CSR5 tile_ptr time = 0.067000 ms
+CSR->CSR5 tile_desc time = 1.495000 ms
+CSR->CSR5 transpose time = 0.924000 ms
+omega = 4, sigma = 16. #partition = 13093
+CSR->CSR5 malloc time = 0.022000 ms
+CSR->CSR5 tile_ptr time = 0.067000 ms
+CSR->CSR5 tile_desc time = 1.473000 ms
+CSR->CSR5 transpose time = 0.983000 ms
+omega = 4, sigma = 16. #partition = 13093
+CSR->CSR5 malloc time = 0.022000 ms
+CSR->CSR5 tile_ptr time = 0.066000 ms
+CSR->CSR5 tile_desc time = 1.490000 ms
+CSR->CSR5 transpose time = 0.961000 ms
+CSR->CSR5 time = 2.546 ms.
+CSR5-based SpMV time = 0.139929 ms. Bandwidth = 124.852 GB/s. GFlops = 11.9766 GFlops.
+      Performance(GFLOPS)	11.976588
+                     nRow	59310
+                     nCol	59310
+                     nNnz	837936
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/laminar_duct3D.mtx--------------
+ ( 67173, 67173 ) nnz = 3833077
+cpu sequential time = 4.829 ms. Bandwidth = 16.0422 GB/s. GFlops = 1.58752 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	laminar_duct3D.mtx
+               MatrixPath	../../../matrix/natural/laminar_duct3D.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 59892
+CSR->CSR5 malloc time = 2.595000 ms
+CSR->CSR5 tile_ptr time = 3.579000 ms
+CSR->CSR5 tile_desc time = 4.636000 ms
+CSR->CSR5 transpose time = 3.640000 ms
+omega = 4, sigma = 16. #partition = 59892
+CSR->CSR5 malloc time = 0.138000 ms
+CSR->CSR5 tile_ptr time = 0.258000 ms
+CSR->CSR5 tile_desc time = 5.308000 ms
+CSR->CSR5 transpose time = 3.640000 ms
+omega = 4, sigma = 16. #partition = 59892
+CSR->CSR5 malloc time = 0.111000 ms
+CSR->CSR5 tile_ptr time = 0.255000 ms
+CSR->CSR5 tile_desc time = 5.680000 ms
+CSR->CSR5 transpose time = 3.668000 ms
+omega = 4, sigma = 16. #partition = 59892
+CSR->CSR5 malloc time = 0.108000 ms
+CSR->CSR5 tile_ptr time = 0.255000 ms
+CSR->CSR5 tile_desc time = 5.634000 ms
+CSR->CSR5 transpose time = 3.604000 ms
+omega = 4, sigma = 16. #partition = 59892
+CSR->CSR5 malloc time = 0.108000 ms
+CSR->CSR5 tile_ptr time = 0.260000 ms
+CSR->CSR5 tile_desc time = 5.582000 ms
+CSR->CSR5 transpose time = 3.744000 ms
+omega = 4, sigma = 16. #partition = 59892
+CSR->CSR5 malloc time = 0.109000 ms
+CSR->CSR5 tile_ptr time = 0.255000 ms
+CSR->CSR5 tile_desc time = 5.423000 ms
+CSR->CSR5 transpose time = 3.730000 ms
+CSR->CSR5 time = 9.523 ms.
+CSR5-based SpMV time = 0.313817 ms. Bandwidth = 246.856 GB/s. GFlops = 24.4287 GFlops.
+      Performance(GFLOPS)	24.428740
+                     nRow	67173
+                     nCol	67173
+                     nNnz	3833077
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/lhr34.mtx--------------
+ ( 35152, 35152 ) nnz = 764014
+cpu sequential time = 0.708 ms. Bandwidth = 22.1781 GB/s. GFlops = 2.15823 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	lhr34.mtx
+               MatrixPath	../../../matrix/natural/lhr34.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 11938
+CSR->CSR5 malloc time = 2.060000 ms
+CSR->CSR5 tile_ptr time = 4.667000 ms
+CSR->CSR5 tile_desc time = 1.192000 ms
+CSR->CSR5 transpose time = 0.876000 ms
+omega = 4, sigma = 16. #partition = 11938
+CSR->CSR5 malloc time = 0.024000 ms
+CSR->CSR5 tile_ptr time = 0.056000 ms
+CSR->CSR5 tile_desc time = 1.260000 ms
+CSR->CSR5 transpose time = 0.877000 ms
+omega = 4, sigma = 16. #partition = 11938
+CSR->CSR5 malloc time = 0.019000 ms
+CSR->CSR5 tile_ptr time = 0.056000 ms
+CSR->CSR5 tile_desc time = 1.269000 ms
+CSR->CSR5 transpose time = 0.872000 ms
+omega = 4, sigma = 16. #partition = 11938
+CSR->CSR5 malloc time = 0.020000 ms
+CSR->CSR5 tile_ptr time = 0.055000 ms
+CSR->CSR5 tile_desc time = 1.136000 ms
+CSR->CSR5 transpose time = 0.870000 ms
+omega = 4, sigma = 16. #partition = 11938
+CSR->CSR5 malloc time = 0.019000 ms
+CSR->CSR5 tile_ptr time = 0.057000 ms
+CSR->CSR5 tile_desc time = 1.188000 ms
+CSR->CSR5 transpose time = 0.849000 ms
+omega = 4, sigma = 16. #partition = 11938
+CSR->CSR5 malloc time = 0.019000 ms
+CSR->CSR5 tile_ptr time = 0.056000 ms
+CSR->CSR5 tile_desc time = 1.108000 ms
+CSR->CSR5 transpose time = 0.832000 ms
+CSR->CSR5 time = 2.021 ms.
+CSR5-based SpMV time = 0.089488 ms. Bandwidth = 175.466 GB/s. GFlops = 17.0752 GFlops.
+      Performance(GFLOPS)	17.075228
+                     nRow	35152
+                     nCol	35152
+                     nNnz	764014
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/mac_econ_fwd500.mtx--------------
+ ( 206500, 206500 ) nnz = 1273389
+cpu sequential time = 1.728 ms. Bandwidth = 16.1723 GB/s. GFlops = 1.47383 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	mac_econ_fwd500.mtx
+               MatrixPath	../../../matrix/natural/mac_econ_fwd500.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 19897
+CSR->CSR5 malloc time = 2.115000 ms
+CSR->CSR5 tile_ptr time = 4.903000 ms
+CSR->CSR5 tile_desc time = 2.168000 ms
+CSR->CSR5 transpose time = 1.335000 ms
+omega = 4, sigma = 16. #partition = 19897
+CSR->CSR5 malloc time = 0.036000 ms
+CSR->CSR5 tile_ptr time = 0.120000 ms
+CSR->CSR5 tile_desc time = 2.121000 ms
+CSR->CSR5 transpose time = 1.364000 ms
+omega = 4, sigma = 16. #partition = 19897
+CSR->CSR5 malloc time = 0.035000 ms
+CSR->CSR5 tile_ptr time = 0.121000 ms
+CSR->CSR5 tile_desc time = 2.317000 ms
+CSR->CSR5 transpose time = 1.421000 ms
+omega = 4, sigma = 16. #partition = 19897
+CSR->CSR5 malloc time = 0.034000 ms
+CSR->CSR5 tile_ptr time = 0.121000 ms
+CSR->CSR5 tile_desc time = 2.289000 ms
+CSR->CSR5 transpose time = 1.293000 ms
+omega = 4, sigma = 16. #partition = 19897
+CSR->CSR5 malloc time = 0.034000 ms
+CSR->CSR5 tile_ptr time = 0.124000 ms
+CSR->CSR5 tile_desc time = 2.274000 ms
+CSR->CSR5 transpose time = 1.339000 ms
+omega = 4, sigma = 16. #partition = 19897
+CSR->CSR5 malloc time = 0.034000 ms
+CSR->CSR5 tile_ptr time = 0.118000 ms
+CSR->CSR5 tile_desc time = 2.278000 ms
+CSR->CSR5 transpose time = 1.356000 ms
+CSR->CSR5 time = 3.794 ms.
+CSR5-based SpMV time = 0.254189 ms. Bandwidth = 109.941 GB/s. GFlops = 10.0192 GFlops.
+      Performance(GFLOPS)	10.019230
+                     nRow	206500
+                     nCol	206500
+                     nNnz	1273389
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/ohne2.mtx--------------
+ ( 181343, 181343 ) nnz = 11063545
+cpu sequential time = 13.786 ms. Bandwidth = 16.2083 GB/s. GFlops = 1.60504 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	ohne2.mtx
+               MatrixPath	../../../matrix/natural/ohne2.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 172868
+CSR->CSR5 malloc time = 3.916000 ms
+CSR->CSR5 tile_ptr time = 3.747000 ms
+CSR->CSR5 tile_desc time = 13.236000 ms
+CSR->CSR5 transpose time = 11.562000 ms
+omega = 4, sigma = 16. #partition = 172868
+CSR->CSR5 malloc time = 1.001000 ms
+CSR->CSR5 tile_ptr time = 0.849000 ms
+CSR->CSR5 tile_desc time = 19.436000 ms
+CSR->CSR5 transpose time = 10.314000 ms
+omega = 4, sigma = 16. #partition = 172868
+CSR->CSR5 malloc time = 0.271000 ms
+CSR->CSR5 tile_ptr time = 0.848000 ms
+CSR->CSR5 tile_desc time = 17.228000 ms
+CSR->CSR5 transpose time = 10.271000 ms
+omega = 4, sigma = 16. #partition = 172868
+CSR->CSR5 malloc time = 0.275000 ms
+CSR->CSR5 tile_ptr time = 0.844000 ms
+CSR->CSR5 tile_desc time = 18.991000 ms
+CSR->CSR5 transpose time = 10.587000 ms
+omega = 4, sigma = 16. #partition = 172868
+CSR->CSR5 malloc time = 0.269000 ms
+CSR->CSR5 tile_ptr time = 0.851000 ms
+CSR->CSR5 tile_desc time = 17.217000 ms
+CSR->CSR5 transpose time = 10.686000 ms
+omega = 4, sigma = 16. #partition = 172868
+CSR->CSR5 malloc time = 0.271000 ms
+CSR->CSR5 tile_ptr time = 0.847000 ms
+CSR->CSR5 tile_desc time = 19.048000 ms
+CSR->CSR5 transpose time = 10.511000 ms
+CSR->CSR5 time = 30.7 ms.
+CSR5-based SpMV time = 2.05461 ms. Bandwidth = 108.754 GB/s. GFlops = 10.7695 GFlops.
+      Performance(GFLOPS)	10.769510
+                     nRow	181343
+                     nCol	181343
+                     nNnz	11063545
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/para-4.mtx--------------
+ ( 153226, 153226 ) nnz = 5326228
+cpu sequential time = 7.817 ms. Bandwidth = 13.8625 GB/s. GFlops = 1.36273 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	para-4.mtx
+               MatrixPath	../../../matrix/natural/para-4.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 83223
+CSR->CSR5 malloc time = 3.243000 ms
+CSR->CSR5 tile_ptr time = 4.009000 ms
+CSR->CSR5 tile_desc time = 9.097000 ms
+CSR->CSR5 transpose time = 10.609000 ms
+omega = 4, sigma = 16. #partition = 83223
+CSR->CSR5 malloc time = 0.149000 ms
+CSR->CSR5 tile_ptr time = 0.427000 ms
+CSR->CSR5 tile_desc time = 7.590000 ms
+CSR->CSR5 transpose time = 5.293000 ms
+omega = 4, sigma = 16. #partition = 83223
+CSR->CSR5 malloc time = 0.149000 ms
+CSR->CSR5 tile_ptr time = 0.420000 ms
+CSR->CSR5 tile_desc time = 8.046000 ms
+CSR->CSR5 transpose time = 5.419000 ms
+omega = 4, sigma = 16. #partition = 83223
+CSR->CSR5 malloc time = 0.149000 ms
+CSR->CSR5 tile_ptr time = 0.425000 ms
+CSR->CSR5 tile_desc time = 7.967000 ms
+CSR->CSR5 transpose time = 5.454000 ms
+omega = 4, sigma = 16. #partition = 83223
+CSR->CSR5 malloc time = 0.151000 ms
+CSR->CSR5 tile_ptr time = 0.416000 ms
+CSR->CSR5 tile_desc time = 7.793000 ms
+CSR->CSR5 transpose time = 5.401000 ms
+omega = 4, sigma = 16. #partition = 83223
+CSR->CSR5 malloc time = 0.149000 ms
+CSR->CSR5 tile_ptr time = 0.421000 ms
+CSR->CSR5 tile_desc time = 7.517000 ms
+CSR->CSR5 transpose time = 5.377000 ms
+CSR->CSR5 time = 13.565 ms.
+CSR5-based SpMV time = 0.799322 ms. Bandwidth = 135.569 GB/s. GFlops = 13.3269 GFlops.
+      Performance(GFLOPS)	13.326865
+                     nRow	153226
+                     nCol	153226
+                     nNnz	5326228
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/raefsky3.mtx--------------
+ ( 21200, 21200 ) nnz = 1488768
+cpu sequential time = 1.455 ms. Bandwidth = 20.639 GB/s. GFlops = 2.04642 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	raefsky3.mtx
+               MatrixPath	../../../matrix/natural/raefsky3.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 23262
+CSR->CSR5 malloc time = 2.345000 ms
+CSR->CSR5 tile_ptr time = 4.702000 ms
+CSR->CSR5 tile_desc time = 2.619000 ms
+CSR->CSR5 transpose time = 1.540000 ms
+omega = 4, sigma = 16. #partition = 23262
+CSR->CSR5 malloc time = 0.042000 ms
+CSR->CSR5 tile_ptr time = 0.105000 ms
+CSR->CSR5 tile_desc time = 2.832000 ms
+CSR->CSR5 transpose time = 1.448000 ms
+omega = 4, sigma = 16. #partition = 23262
+CSR->CSR5 malloc time = 0.040000 ms
+CSR->CSR5 tile_ptr time = 0.096000 ms
+CSR->CSR5 tile_desc time = 2.827000 ms
+CSR->CSR5 transpose time = 1.423000 ms
+omega = 4, sigma = 16. #partition = 23262
+CSR->CSR5 malloc time = 0.040000 ms
+CSR->CSR5 tile_ptr time = 0.096000 ms
+CSR->CSR5 tile_desc time = 2.832000 ms
+CSR->CSR5 transpose time = 1.500000 ms
+omega = 4, sigma = 16. #partition = 23262
+CSR->CSR5 malloc time = 0.041000 ms
+CSR->CSR5 tile_ptr time = 0.096000 ms
+CSR->CSR5 tile_desc time = 2.895000 ms
+CSR->CSR5 transpose time = 1.513000 ms
+omega = 4, sigma = 16. #partition = 23262
+CSR->CSR5 malloc time = 0.040000 ms
+CSR->CSR5 tile_ptr time = 0.097000 ms
+CSR->CSR5 tile_desc time = 2.525000 ms
+CSR->CSR5 transpose time = 1.426000 ms
+CSR->CSR5 time = 4.093 ms.
+CSR5-based SpMV time = 0.134152 ms. Bandwidth = 223.849 GB/s. GFlops = 22.1952 GFlops.
+      Performance(GFLOPS)	22.195241
+                     nRow	21200
+                     nCol	21200
+                     nNnz	1488768
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/rajat31.mtx--------------
+ ( 4690002, 4690002 ) nnz = 20316253
+cpu sequential time = 35.628 ms. Bandwidth = 12.9843 GB/s. GFlops = 1.14047 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	rajat31.mtx
+               MatrixPath	../../../matrix/natural/rajat31.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 317442
+CSR->CSR5 malloc time = 4.660000 ms
+CSR->CSR5 tile_ptr time = 10.837000 ms
+CSR->CSR5 tile_desc time = 33.153000 ms
+CSR->CSR5 transpose time = 22.597000 ms
+omega = 4, sigma = 16. #partition = 317442
+CSR->CSR5 malloc time = 0.657000 ms
+CSR->CSR5 tile_ptr time = 2.708000 ms
+CSR->CSR5 tile_desc time = 33.651000 ms
+CSR->CSR5 transpose time = 23.504000 ms
+omega = 4, sigma = 16. #partition = 317442
+CSR->CSR5 malloc time = 0.659000 ms
+CSR->CSR5 tile_ptr time = 2.740000 ms
+CSR->CSR5 tile_desc time = 33.203000 ms
+CSR->CSR5 transpose time = 22.992000 ms
+omega = 4, sigma = 16. #partition = 317442
+CSR->CSR5 malloc time = 0.664000 ms
+CSR->CSR5 tile_ptr time = 2.729000 ms
+CSR->CSR5 tile_desc time = 31.750000 ms
+CSR->CSR5 transpose time = 22.977000 ms
+omega = 4, sigma = 16. #partition = 317442
+CSR->CSR5 malloc time = 0.667000 ms
+CSR->CSR5 tile_ptr time = 2.709000 ms
+CSR->CSR5 tile_desc time = 32.581000 ms
+CSR->CSR5 transpose time = 22.779000 ms
+omega = 4, sigma = 16. #partition = 317442
+CSR->CSR5 malloc time = 0.666000 ms
+CSR->CSR5 tile_ptr time = 2.725000 ms
+CSR->CSR5 tile_desc time = 32.179000 ms
+CSR->CSR5 transpose time = 23.098000 ms
+CSR->CSR5 time = 58.687 ms.
+CSR5-based SpMV time = 6.38201 ms. Bandwidth = 72.4858 GB/s. GFlops = 6.36672 GFlops.
+      Performance(GFLOPS)	6.366723
+                     nRow	4690002
+                     nCol	4690002
+                     nNnz	20316253
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/sme3Dc.mtx--------------
+ ( 42930, 42930 ) nnz = 3148656
+cpu sequential time = 6.884 ms. Bandwidth = 9.22259 GB/s. GFlops = 0.914775 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	sme3Dc.mtx
+               MatrixPath	../../../matrix/natural/sme3Dc.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 49198
+CSR->CSR5 malloc time = 2.538000 ms
+CSR->CSR5 tile_ptr time = 3.766000 ms
+CSR->CSR5 tile_desc time = 3.710000 ms
+CSR->CSR5 transpose time = 3.229000 ms
+omega = 4, sigma = 16. #partition = 49198
+CSR->CSR5 malloc time = 0.101000 ms
+CSR->CSR5 tile_ptr time = 0.212000 ms
+CSR->CSR5 tile_desc time = 3.976000 ms
+CSR->CSR5 transpose time = 3.248000 ms
+omega = 4, sigma = 16. #partition = 49198
+CSR->CSR5 malloc time = 0.081000 ms
+CSR->CSR5 tile_ptr time = 0.213000 ms
+CSR->CSR5 tile_desc time = 3.965000 ms
+CSR->CSR5 transpose time = 3.241000 ms
+omega = 4, sigma = 16. #partition = 49198
+CSR->CSR5 malloc time = 0.081000 ms
+CSR->CSR5 tile_ptr time = 0.212000 ms
+CSR->CSR5 tile_desc time = 3.948000 ms
+CSR->CSR5 transpose time = 3.212000 ms
+omega = 4, sigma = 16. #partition = 49198
+CSR->CSR5 malloc time = 0.080000 ms
+CSR->CSR5 tile_ptr time = 0.211000 ms
+CSR->CSR5 tile_desc time = 3.989000 ms
+CSR->CSR5 transpose time = 3.238000 ms
+omega = 4, sigma = 16. #partition = 49198
+CSR->CSR5 malloc time = 0.081000 ms
+CSR->CSR5 tile_ptr time = 0.216000 ms
+CSR->CSR5 tile_desc time = 4.045000 ms
+CSR->CSR5 transpose time = 3.225000 ms
+CSR->CSR5 time = 7.572 ms.
+CSR5-based SpMV time = 0.430376 ms. Bandwidth = 147.518 GB/s. GFlops = 14.6321 GFlops.
+      Performance(GFLOPS)	14.632117
+                     nRow	42930
+                     nCol	42930
+                     nNnz	3148656
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/stomach.mtx--------------
+ ( 213360, 213360 ) nnz = 3021648
+cpu sequential time = 3.69 ms. Bandwidth = 17.0714 GB/s. GFlops = 1.63775 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	stomach.mtx
+               MatrixPath	../../../matrix/natural/stomach.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 47214
+CSR->CSR5 malloc time = 2.508000 ms
+CSR->CSR5 tile_ptr time = 8.191000 ms
+CSR->CSR5 tile_desc time = 4.023000 ms
+CSR->CSR5 transpose time = 3.083000 ms
+omega = 4, sigma = 16. #partition = 47214
+CSR->CSR5 malloc time = 0.100000 ms
+CSR->CSR5 tile_ptr time = 0.245000 ms
+CSR->CSR5 tile_desc time = 4.493000 ms
+CSR->CSR5 transpose time = 3.037000 ms
+omega = 4, sigma = 16. #partition = 47214
+CSR->CSR5 malloc time = 0.075000 ms
+CSR->CSR5 tile_ptr time = 0.259000 ms
+CSR->CSR5 tile_desc time = 4.527000 ms
+CSR->CSR5 transpose time = 3.054000 ms
+omega = 4, sigma = 16. #partition = 47214
+CSR->CSR5 malloc time = 0.074000 ms
+CSR->CSR5 tile_ptr time = 0.240000 ms
+CSR->CSR5 tile_desc time = 4.376000 ms
+CSR->CSR5 transpose time = 3.078000 ms
+omega = 4, sigma = 16. #partition = 47214
+CSR->CSR5 malloc time = 0.074000 ms
+CSR->CSR5 tile_ptr time = 0.239000 ms
+CSR->CSR5 tile_desc time = 4.483000 ms
+CSR->CSR5 transpose time = 3.053000 ms
+omega = 4, sigma = 16. #partition = 47214
+CSR->CSR5 malloc time = 0.074000 ms
+CSR->CSR5 tile_ptr time = 0.238000 ms
+CSR->CSR5 tile_desc time = 4.482000 ms
+CSR->CSR5 transpose time = 3.035000 ms
+CSR->CSR5 time = 7.835 ms.
+CSR5-based SpMV time = 0.346617 ms. Bandwidth = 181.737 GB/s. GFlops = 17.4351 GFlops.
+      Performance(GFLOPS)	17.435083
+                     nRow	213360
+                     nCol	213360
+                     nNnz	3021648
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/thermomech_dK.mtx--------------
+ ( 204316, 204316 ) nnz = 2846228
+cpu sequential time = 6.351 ms. Bandwidth = 9.34913 GB/s. GFlops = 0.896309 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	thermomech_dK.mtx
+               MatrixPath	../../../matrix/natural/thermomech_dK.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 44473
+CSR->CSR5 malloc time = 2.542000 ms
+CSR->CSR5 tile_ptr time = 4.493000 ms
+CSR->CSR5 tile_desc time = 4.936000 ms
+CSR->CSR5 transpose time = 2.704000 ms
+omega = 4, sigma = 16. #partition = 44473
+CSR->CSR5 malloc time = 0.090000 ms
+CSR->CSR5 tile_ptr time = 0.237000 ms
+CSR->CSR5 tile_desc time = 4.991000 ms
+CSR->CSR5 transpose time = 2.460000 ms
+omega = 4, sigma = 16. #partition = 44473
+CSR->CSR5 malloc time = 0.072000 ms
+CSR->CSR5 tile_ptr time = 0.231000 ms
+CSR->CSR5 tile_desc time = 4.893000 ms
+CSR->CSR5 transpose time = 2.514000 ms
+omega = 4, sigma = 16. #partition = 44473
+CSR->CSR5 malloc time = 0.071000 ms
+CSR->CSR5 tile_ptr time = 0.237000 ms
+CSR->CSR5 tile_desc time = 4.983000 ms
+CSR->CSR5 transpose time = 2.506000 ms
+omega = 4, sigma = 16. #partition = 44473
+CSR->CSR5 malloc time = 0.071000 ms
+CSR->CSR5 tile_ptr time = 0.232000 ms
+CSR->CSR5 tile_desc time = 4.966000 ms
+CSR->CSR5 transpose time = 2.581000 ms
+omega = 4, sigma = 16. #partition = 44473
+CSR->CSR5 malloc time = 0.071000 ms
+CSR->CSR5 tile_ptr time = 0.231000 ms
+CSR->CSR5 tile_desc time = 4.889000 ms
+CSR->CSR5 transpose time = 2.493000 ms
+CSR->CSR5 time = 7.72 ms.
+CSR5-based SpMV time = 0.441455 ms. Bandwidth = 134.501 GB/s. GFlops = 12.8948 GFlops.
+      Performance(GFLOPS)	12.894759
+                     nRow	204316
+                     nCol	204316
+                     nNnz	2846228
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/torso1.mtx--------------
+ ( 116158, 116158 ) nnz = 8516500
+cpu sequential time = 10.027 ms. Bandwidth = 17.1261 GB/s. GFlops = 1.69871 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	torso1.mtx
+               MatrixPath	../../../matrix/natural/torso1.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 133071
+CSR->CSR5 malloc time = 3.714000 ms
+CSR->CSR5 tile_ptr time = 2.752000 ms
+CSR->CSR5 tile_desc time = 4.711000 ms
+CSR->CSR5 transpose time = 1.683000 ms
+omega = 4, sigma = 16. #partition = 133071
+CSR->CSR5 malloc time = 1.348000 ms
+CSR->CSR5 tile_ptr time = 0.601000 ms
+CSR->CSR5 tile_desc time = 4.148000 ms
+CSR->CSR5 transpose time = 1.647000 ms
+omega = 4, sigma = 16. #partition = 133071
+CSR->CSR5 malloc time = 0.171000 ms
+CSR->CSR5 tile_ptr time = 0.566000 ms
+CSR->CSR5 tile_desc time = 3.639000 ms
+CSR->CSR5 transpose time = 1.654000 ms
+omega = 4, sigma = 16. #partition = 133071
+CSR->CSR5 malloc time = 0.175000 ms
+CSR->CSR5 tile_ptr time = 0.572000 ms
+CSR->CSR5 tile_desc time = 3.663000 ms
+CSR->CSR5 transpose time = 1.656000 ms
+omega = 4, sigma = 16. #partition = 133071
+CSR->CSR5 malloc time = 0.174000 ms
+CSR->CSR5 tile_ptr time = 0.565000 ms
+CSR->CSR5 tile_desc time = 3.662000 ms
+CSR->CSR5 transpose time = 1.645000 ms
+omega = 4, sigma = 16. #partition = 133071
+CSR->CSR5 malloc time = 0.169000 ms
+CSR->CSR5 tile_ptr time = 0.571000 ms
+CSR->CSR5 tile_desc time = 3.758000 ms
+CSR->CSR5 transpose time = 1.699000 ms
+CSR->CSR5 time = 6.202 ms.
+CSR5-based SpMV time = 2.71363 ms. Bandwidth = 63.282 GB/s. GFlops = 6.27683 GFlops.
+      Performance(GFLOPS)	6.276830
+                     nRow	116158
+                     nCol	116158
+                     nNnz	8516500
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/twotone.mtx--------------
+ ( 120750, 120750 ) nnz = 1224224
+cpu sequential time = 1.429 ms. Bandwidth = 18.148 GB/s. GFlops = 1.7134 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	twotone.mtx
+               MatrixPath	../../../matrix/natural/twotone.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 19129
+CSR->CSR5 malloc time = 2.086000 ms
+CSR->CSR5 tile_ptr time = 3.105000 ms
+CSR->CSR5 tile_desc time = 1.830000 ms
+CSR->CSR5 transpose time = 1.772000 ms
+omega = 4, sigma = 16. #partition = 19129
+CSR->CSR5 malloc time = 0.039000 ms
+CSR->CSR5 tile_ptr time = 0.102000 ms
+CSR->CSR5 tile_desc time = 2.005000 ms
+CSR->CSR5 transpose time = 1.503000 ms
+omega = 4, sigma = 16. #partition = 19129
+CSR->CSR5 malloc time = 0.031000 ms
+CSR->CSR5 tile_ptr time = 0.100000 ms
+CSR->CSR5 tile_desc time = 2.215000 ms
+CSR->CSR5 transpose time = 1.553000 ms
+omega = 4, sigma = 16. #partition = 19129
+CSR->CSR5 malloc time = 0.030000 ms
+CSR->CSR5 tile_ptr time = 0.100000 ms
+CSR->CSR5 tile_desc time = 1.948000 ms
+CSR->CSR5 transpose time = 1.472000 ms
+omega = 4, sigma = 16. #partition = 19129
+CSR->CSR5 malloc time = 0.031000 ms
+CSR->CSR5 tile_ptr time = 0.099000 ms
+CSR->CSR5 tile_desc time = 1.762000 ms
+CSR->CSR5 transpose time = 1.544000 ms
+omega = 4, sigma = 16. #partition = 19129
+CSR->CSR5 malloc time = 0.031000 ms
+CSR->CSR5 tile_ptr time = 0.099000 ms
+CSR->CSR5 tile_desc time = 1.995000 ms
+CSR->CSR5 transpose time = 1.593000 ms
+CSR->CSR5 time = 3.724 ms.
+CSR5-based SpMV time = 0.188102 ms. Bandwidth = 137.869 GB/s. GFlops = 13.0166 GFlops.
+      Performance(GFLOPS)	13.016597
+                     nRow	120750
+                     nCol	120750
+                     nNnz	1224224
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/webbase-1M.mtx--------------
+ ( 1000005, 1000005 ) nnz = 3105536
+cpu sequential time = 7.651 ms. Bandwidth = 9.68642 GB/s. GFlops = 0.811799 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	webbase-1M.mtx
+               MatrixPath	../../../matrix/natural/webbase-1M.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 48524
+CSR->CSR5 malloc time = 2.343000 ms
+CSR->CSR5 tile_ptr time = 4.828000 ms
+CSR->CSR5 tile_desc time = 6.721000 ms
+CSR->CSR5 transpose time = 3.204000 ms
+omega = 4, sigma = 16. #partition = 48524
+CSR->CSR5 malloc time = 0.104000 ms
+CSR->CSR5 tile_ptr time = 0.389000 ms
+CSR->CSR5 tile_desc time = 7.160000 ms
+CSR->CSR5 transpose time = 3.225000 ms
+omega = 4, sigma = 16. #partition = 48524
+CSR->CSR5 malloc time = 0.078000 ms
+CSR->CSR5 tile_ptr time = 0.383000 ms
+CSR->CSR5 tile_desc time = 7.009000 ms
+CSR->CSR5 transpose time = 3.162000 ms
+omega = 4, sigma = 16. #partition = 48524
+CSR->CSR5 malloc time = 0.077000 ms
+CSR->CSR5 tile_ptr time = 0.372000 ms
+CSR->CSR5 tile_desc time = 7.475000 ms
+CSR->CSR5 transpose time = 3.071000 ms
+omega = 4, sigma = 16. #partition = 48524
+CSR->CSR5 malloc time = 0.078000 ms
+CSR->CSR5 tile_ptr time = 0.372000 ms
+CSR->CSR5 tile_desc time = 7.269000 ms
+CSR->CSR5 transpose time = 3.059000 ms
+omega = 4, sigma = 16. #partition = 48524
+CSR->CSR5 malloc time = 0.078000 ms
+CSR->CSR5 tile_ptr time = 0.376000 ms
+CSR->CSR5 tile_desc time = 7.382000 ms
+CSR->CSR5 transpose time = 3.064000 ms
+CSR->CSR5 time = 10.905 ms.
+CSR5-based SpMV time = 0.47416 ms. Bandwidth = 156.299 GB/s. GFlops = 13.0991 GFlops.
+      Performance(GFLOPS)	13.099106
+                     nRow	1000005
+                     nCol	1000005
+                     nNnz	3105536
+----------------------------------------
+Check... PASS!
+------------------------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/xenon2.mtx--------------
+ ( 157464, 157464 ) nnz = 3866688
+cpu sequential time = 4.701 ms. Bandwidth = 16.8524 GB/s. GFlops = 1.64505 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	CPU
+                   Matrix	xenon2.mtx
+               MatrixPath	../../../matrix/natural/xenon2.mtx
+             MatrixFormat	CRS5
+omega = 4, sigma = 16. #partition = 60417
+CSR->CSR5 malloc time = 2.781000 ms
+CSR->CSR5 tile_ptr time = 3.157000 ms
+CSR->CSR5 tile_desc time = 5.348000 ms
+CSR->CSR5 transpose time = 5.555000 ms
+omega = 4, sigma = 16. #partition = 60417
+CSR->CSR5 malloc time = 0.144000 ms
+CSR->CSR5 tile_ptr time = 0.308000 ms
+CSR->CSR5 tile_desc time = 5.472000 ms
+CSR->CSR5 transpose time = 5.107000 ms
+omega = 4, sigma = 16. #partition = 60417
+CSR->CSR5 malloc time = 0.113000 ms
+CSR->CSR5 tile_ptr time = 0.306000 ms
+CSR->CSR5 tile_desc time = 5.409000 ms
+CSR->CSR5 transpose time = 5.330000 ms
+omega = 4, sigma = 16. #partition = 60417
+CSR->CSR5 malloc time = 0.111000 ms
+CSR->CSR5 tile_ptr time = 0.307000 ms
+CSR->CSR5 tile_desc time = 5.275000 ms
+CSR->CSR5 transpose time = 5.155000 ms
+omega = 4, sigma = 16. #partition = 60417
+CSR->CSR5 malloc time = 0.110000 ms
+CSR->CSR5 tile_ptr time = 0.301000 ms
+CSR->CSR5 tile_desc time = 5.476000 ms
+CSR->CSR5 transpose time = 5.102000 ms
+omega = 4, sigma = 16. #partition = 60417
+CSR->CSR5 malloc time = 0.111000 ms
+CSR->CSR5 tile_ptr time = 0.303000 ms
+CSR->CSR5 tile_desc time = 5.379000 ms
+CSR->CSR5 transpose time = 5.260000 ms
+CSR->CSR5 time = 11.061 ms.
+CSR5-based SpMV time = 0.431225 ms. Bandwidth = 183.717 GB/s. GFlops = 17.9335 GFlops.
+      Performance(GFLOPS)	17.933506
+                     nRow	157464
+                     nCol	157464
+                     nNnz	3866688
+----------------------------------------
+Check... PASS!
+------------------------------------------------------

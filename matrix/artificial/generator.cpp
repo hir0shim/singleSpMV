@@ -68,6 +68,7 @@ M random_matrix (int N, int cnt) {
 }
 
 void print_matrix (int N, M m) {
+    cout << "%%MatrixMarket matrix coordinate real general" << endl;
     cout << N << " " << N << " " << m.size() << endl;
     for (int i = 0; i < m.size(); i++) {
         cout << m[i].first+1 << " " << m[i].second+1 << " 1.0" << endl;

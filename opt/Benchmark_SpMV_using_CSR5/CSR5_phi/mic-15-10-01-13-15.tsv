@@ -1,0 +1,38 @@
+
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/ASIC_680ks.mtx--------------
+ ( 682712, 682712 ) nnz = 2329176
+cpu host-sequential time = 8.802 ms. Bandwidth = 6.22314 GB/s. GFlops = 0.529238 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	ASIC_680ks.mtx
+               MatrixPath	../../../matrix/natural/ASIC_680ks.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 2.048000 ms
+CSR->CSR5 tile_ptr time = 222.957000 ms
+CSR->CSR5 tile_desc time = 3.431000 ms
+CSR->CSR5 transpose time = 10.885000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 1.906000 ms
+CSR->CSR5 tile_ptr time = 0.400000 ms
+CSR->CSR5 tile_desc time = 3.670000 ms
+CSR->CSR5 transpose time = 2.658000 ms
+CSR->CSR5 time = 8.709000 ms.
+CSR5-based SpMV MIC time = 0.879238 ms. Bandwidth = 62.299478 GB/s. GFlops = 5.298170 GFlops.
+      Performance(GFLOPS)	5.298170
+                     nRow	682712
+                     nCol	682712
+                     nNnz	2329176
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/natural/Chebyshev4.mtx--------------
+ ( 68121, 68121 ) nnz = 5377761
+cpu host-sequential time = 7.733 ms. Bandwidth = 14.0143 GB/s. GFlops = 1.39086 GFlops.
+

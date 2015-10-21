@@ -1,0 +1,589 @@
+
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/band-1024.mtx--------------
+ ( 1024, 1024 ) nnz = 19366
+cpu host-sequential time = 0.022 ms. Bandwidth = 18.1642 GB/s. GFlops = 1.76055 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	band-1024.mtx
+               MatrixPath	../../../matrix/artificial/band-1024.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.450000 ms
+CSR->CSR5 tile_ptr time = 222.075000 ms
+CSR->CSR5 tile_desc time = 1.282000 ms
+CSR->CSR5 transpose time = 9.154000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.036000 ms
+CSR->CSR5 tile_ptr time = 0.069000 ms
+CSR->CSR5 tile_desc time = 0.091000 ms
+CSR->CSR5 transpose time = 0.529000 ms
+CSR->CSR5 time = 0.770000 ms.
+CSR5-based SpMV MIC time = 0.079739 ms. Bandwidth = 5.011500 GB/s. GFlops = 0.485735 GFlops.
+      Performance(GFLOPS)	0.485735
+                     nRow	1024
+                     nCol	1024
+                     nNnz	19366
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/band-16384.mtx--------------
+ ( 16384, 16384 ) nnz = 5298394
+cpu host-sequential time = 6.172 ms. Bandwidth = 17.201 GB/s. GFlops = 1.71691 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	band-16384.mtx
+               MatrixPath	../../../matrix/artificial/band-16384.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 3.711000 ms
+CSR->CSR5 tile_ptr time = 226.003000 ms
+CSR->CSR5 tile_desc time = 1.559000 ms
+CSR->CSR5 transpose time = 8.134000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 5.551000 ms
+CSR->CSR5 tile_ptr time = 0.643000 ms
+CSR->CSR5 tile_desc time = 1.902000 ms
+CSR->CSR5 transpose time = 2.684000 ms
+CSR->CSR5 time = 10.865000 ms.
+CSR5-based SpMV MIC time = 0.833781 ms. Bandwidth = 127.328989 GB/s. GFlops = 12.709318 GFlops.
+      Performance(GFLOPS)	12.709318
+                     nRow	16384
+                     nCol	16384
+                     nNnz	5298394
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/band-2048.mtx--------------
+ ( 2048, 2048 ) nnz = 79492
+cpu host-sequential time = 0.091 ms. Bandwidth = 17.7409 GB/s. GFlops = 1.74708 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	band-2048.mtx
+               MatrixPath	../../../matrix/artificial/band-2048.mtx
+             MatrixFormat	CRS5
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/band-4096.mtx--------------
+ ( 4096, 4096 ) nnz = 322024
+cpu host-sequential time = 0.325 ms. Bandwidth = 19.9681 GB/s. GFlops = 1.98169 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	band-4096.mtx
+               MatrixPath	../../../matrix/artificial/band-4096.mtx
+             MatrixFormat	CRS5
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/band-512.mtx--------------
+ ( 512, 512 ) nnz = 4588
+cpu host-sequential time = 0.008 ms. Bandwidth = 12.2385 GB/s. GFlops = 1.147 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	band-512.mtx
+               MatrixPath	../../../matrix/artificial/band-512.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.038000 ms
+CSR->CSR5 tile_ptr time = 259.633000 ms
+CSR->CSR5 tile_desc time = 1.737000 ms
+CSR->CSR5 transpose time = 7.162000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.031000 ms
+CSR->CSR5 tile_ptr time = 0.068000 ms
+CSR->CSR5 tile_desc time = 0.097000 ms
+CSR->CSR5 transpose time = 0.452000 ms
+CSR->CSR5 time = 0.688000 ms.
+CSR5-based SpMV MIC time = 0.068850 ms. Bandwidth = 1.422048 GB/s. GFlops = 0.133275 GFlops.
+      Performance(GFLOPS)	0.133275
+                     nRow	512
+                     nCol	512
+                     nNnz	4588
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/band-8192.mtx--------------
+ ( 8192, 8192 ) nnz = 1312432
+cpu host-sequential time = 1.769 ms. Bandwidth = 14.8937 GB/s. GFlops = 1.48381 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	band-8192.mtx
+               MatrixPath	../../../matrix/artificial/band-8192.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 1.020000 ms
+CSR->CSR5 tile_ptr time = 220.311000 ms
+CSR->CSR5 tile_desc time = 1.389000 ms
+CSR->CSR5 transpose time = 8.226000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 1.134000 ms
+CSR->CSR5 tile_ptr time = 0.149000 ms
+CSR->CSR5 tile_desc time = 1.442000 ms
+CSR->CSR5 transpose time = 2.237000 ms
+CSR->CSR5 time = 5.034000 ms.
+CSR5-based SpMV MIC time = 0.269857 ms. Bandwidth = 97.632998 GB/s. GFlops = 9.726870 GFlops.
+      Performance(GFLOPS)	9.726870
+                     nRow	8192
+                     nCol	8192
+                     nNnz	1312432
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/dense-1024.mtx--------------
+ ( 1024, 1024 ) nnz = 1048576
+cpu host-sequential time = 1.168 ms. Bandwidth = 17.9656 GB/s. GFlops = 1.79551 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	dense-1024.mtx
+               MatrixPath	../../../matrix/artificial/dense-1024.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 1.175000 ms
+CSR->CSR5 tile_ptr time = 231.638000 ms
+CSR->CSR5 tile_desc time = 1.260000 ms
+CSR->CSR5 transpose time = 5.498000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.923000 ms
+CSR->CSR5 tile_ptr time = 0.121000 ms
+CSR->CSR5 tile_desc time = 1.278000 ms
+CSR->CSR5 transpose time = 2.034000 ms
+CSR->CSR5 time = 4.423000 ms.
+CSR5-based SpMV MIC time = 0.183801 ms. Bandwidth = 114.165929 GB/s. GFlops = 11.409905 GFlops.
+      Performance(GFLOPS)	11.409905
+                     nRow	1024
+                     nCol	1024
+                     nNnz	1048576
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/dense-2048.mtx--------------
+ ( 2048, 2048 ) nnz = 4194304
+cpu host-sequential time = 4.946 ms. Bandwidth = 16.9654 GB/s. GFlops = 1.69604 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	dense-2048.mtx
+               MatrixPath	../../../matrix/artificial/dense-2048.mtx
+             MatrixFormat	CRS5
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/dense-4096.mtx--------------
+ ( 4096, 4096 ) nnz = 16777216
+cpu host-sequential time = 19.485 ms. Bandwidth = 17.2232 GB/s. GFlops = 1.72206 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	dense-4096.mtx
+               MatrixPath	../../../matrix/artificial/dense-4096.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 9.982000 ms
+CSR->CSR5 tile_ptr time = 224.331000 ms
+CSR->CSR5 tile_desc time = 1.586000 ms
+CSR->CSR5 transpose time = 9.500000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 10.298000 ms
+CSR->CSR5 tile_ptr time = 1.423000 ms
+CSR->CSR5 tile_desc time = 1.640000 ms
+CSR->CSR5 transpose time = 2.320000 ms
+CSR->CSR5 time = 15.771000 ms.
+CSR5-based SpMV MIC time = 1.937400 ms. Bandwidth = 173.218476 GB/s. GFlops = 17.319310 GFlops.
+      Performance(GFLOPS)	17.319310
+                     nRow	4096
+                     nCol	4096
+                     nNnz	16777216
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/dense-512.mtx--------------
+ ( 512, 512 ) nnz = 262144
+cpu host-sequential time = 0.241 ms. Bandwidth = 21.7802 GB/s. GFlops = 2.17547 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	dense-512.mtx
+               MatrixPath	../../../matrix/artificial/dense-512.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.617000 ms
+CSR->CSR5 tile_ptr time = 217.167000 ms
+CSR->CSR5 tile_desc time = 1.295000 ms
+CSR->CSR5 transpose time = 5.784000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.144000 ms
+CSR->CSR5 tile_ptr time = 0.138000 ms
+CSR->CSR5 tile_desc time = 0.393000 ms
+CSR->CSR5 transpose time = 0.689000 ms
+CSR->CSR5 time = 1.412000 ms.
+CSR5-based SpMV MIC time = 0.101280 ms. Bandwidth = 51.826896 GB/s. GFlops = 5.176619 GFlops.
+      Performance(GFLOPS)	5.176619
+                     nRow	512
+                     nCol	512
+                     nNnz	262144
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/random-1024.mtx--------------
+ ( 1024, 1024 ) nnz = 1024
+cpu host-sequential time = 0.014 ms. Bandwidth = 2.34086 GB/s. GFlops = 0.146286 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	random-1024.mtx
+               MatrixPath	../../../matrix/artificial/random-1024.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.068000 ms
+CSR->CSR5 tile_ptr time = 220.818000 ms
+CSR->CSR5 tile_desc time = 2.968000 ms
+CSR->CSR5 transpose time = 1.542000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.033000 ms
+CSR->CSR5 tile_ptr time = 0.070000 ms
+CSR->CSR5 tile_desc time = 0.242000 ms
+CSR->CSR5 transpose time = 0.430000 ms
+CSR->CSR5 time = 0.821000 ms.
+CSR5-based SpMV MIC time = 0.078416 ms. Bandwidth = 0.417925 GB/s. GFlops = 0.026117 GFlops.
+      Performance(GFLOPS)	0.026117
+                     nRow	1024
+                     nCol	1024
+                     nNnz	1024
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/random-16384.mtx--------------
+ ( 16384, 16384 ) nnz = 16384
+cpu host-sequential time = 0.235 ms. Bandwidth = 2.23103 GB/s. GFlops = 0.139438 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	random-16384.mtx
+               MatrixPath	../../../matrix/artificial/random-16384.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.478000 ms
+CSR->CSR5 tile_ptr time = 232.161000 ms
+CSR->CSR5 tile_desc time = 8.188000 ms
+CSR->CSR5 transpose time = 7.052000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.038000 ms
+CSR->CSR5 tile_ptr time = 0.077000 ms
+CSR->CSR5 tile_desc time = 0.308000 ms
+CSR->CSR5 transpose time = 0.588000 ms
+CSR->CSR5 time = 1.056000 ms.
+CSR5-based SpMV MIC time = 0.183572 ms. Bandwidth = 2.856056 GB/s. GFlops = 0.178502 GFlops.
+      Performance(GFLOPS)	0.178502
+                     nRow	16384
+                     nCol	16384
+                     nNnz	16384
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/random-2048.mtx--------------
+ ( 2048, 2048 ) nnz = 2048
+cpu host-sequential time = 0.029 ms. Bandwidth = 2.26 GB/s. GFlops = 0.141241 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	random-2048.mtx
+               MatrixPath	../../../matrix/artificial/random-2048.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.053000 ms
+CSR->CSR5 tile_ptr time = 222.121000 ms
+CSR->CSR5 tile_desc time = 2.797000 ms
+CSR->CSR5 transpose time = 2.079000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.032000 ms
+CSR->CSR5 tile_ptr time = 0.066000 ms
+CSR->CSR5 tile_desc time = 0.240000 ms
+CSR->CSR5 transpose time = 0.433000 ms
+CSR->CSR5 time = 0.818000 ms.
+CSR5-based SpMV MIC time = 0.082939 ms. Bandwidth = 0.790219 GB/s. GFlops = 0.049386 GFlops.
+      Performance(GFLOPS)	0.049386
+                     nRow	2048
+                     nCol	2048
+                     nNnz	2048
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/random-4096.mtx--------------
+ ( 4096, 4096 ) nnz = 4096
+cpu host-sequential time = 0.058 ms. Bandwidth = 2.25993 GB/s. GFlops = 0.141241 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	random-4096.mtx
+               MatrixPath	../../../matrix/artificial/random-4096.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.073000 ms
+CSR->CSR5 tile_ptr time = 299.629000 ms
+CSR->CSR5 tile_desc time = 3.961000 ms
+CSR->CSR5 transpose time = 2.482000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.033000 ms
+CSR->CSR5 tile_ptr time = 0.074000 ms
+CSR->CSR5 tile_desc time = 0.286000 ms
+CSR->CSR5 transpose time = 0.448000 ms
+CSR->CSR5 time = 0.889000 ms.
+CSR5-based SpMV MIC time = 0.102846 ms. Bandwidth = 1.274488 GB/s. GFlops = 0.079653 GFlops.
+      Performance(GFLOPS)	0.079653
+                     nRow	4096
+                     nCol	4096
+                     nNnz	4096
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/random-512.mtx--------------
+ ( 512, 512 ) nnz = 512
+cpu host-sequential time = 0.008 ms. Bandwidth = 2.0485 GB/s. GFlops = 0.128 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	random-512.mtx
+               MatrixPath	../../../matrix/artificial/random-512.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.049000 ms
+CSR->CSR5 tile_ptr time = 315.140000 ms
+CSR->CSR5 tile_desc time = 1.913000 ms
+CSR->CSR5 transpose time = 1.698000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.030000 ms
+CSR->CSR5 tile_ptr time = 0.069000 ms
+CSR->CSR5 tile_desc time = 0.204000 ms
+CSR->CSR5 transpose time = 0.449000 ms
+CSR->CSR5 time = 0.793000 ms.
+CSR5-based SpMV MIC time = 0.072884 ms. Bandwidth = 0.224850 GB/s. GFlops = 0.014050 GFlops.
+      Performance(GFLOPS)	0.014050
+                     nRow	512
+                     nCol	512
+                     nNnz	512
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/random-8192.mtx--------------
+ ( 8192, 8192 ) nnz = 8192
+cpu host-sequential time = 0.12 ms. Bandwidth = 2.18457 GB/s. GFlops = 0.136533 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	random-8192.mtx
+               MatrixPath	../../../matrix/artificial/random-8192.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.090000 ms
+CSR->CSR5 tile_ptr time = 292.908000 ms
+CSR->CSR5 tile_desc time = 4.174000 ms
+CSR->CSR5 transpose time = 3.304000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.034000 ms
+CSR->CSR5 tile_ptr time = 0.069000 ms
+CSR->CSR5 tile_desc time = 0.262000 ms
+CSR->CSR5 transpose time = 0.448000 ms
+CSR->CSR5 time = 0.860000 ms.
+CSR5-based SpMV MIC time = 0.128219 ms. Bandwidth = 2.044533 GB/s. GFlops = 0.127781 GFlops.
+      Performance(GFLOPS)	0.127781
+                     nRow	8192
+                     nCol	8192
+                     nNnz	8192
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/unbalance-1024.mtx--------------
+ ( 1024, 1024 ) nnz = 32768
+cpu host-sequential time = 0.034 ms. Bandwidth = 19.6368 GB/s. GFlops = 1.92753 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	unbalance-1024.mtx
+               MatrixPath	../../../matrix/artificial/unbalance-1024.mtx
+             MatrixFormat	CRS5
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/unbalance-16384.mtx--------------
+ ( 16384, 16384 ) nnz = 2097152
+cpu host-sequential time = 2.754 ms. Bandwidth = 15.3013 GB/s. GFlops = 1.52299 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	unbalance-16384.mtx
+               MatrixPath	../../../matrix/artificial/unbalance-16384.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 1.924000 ms
+CSR->CSR5 tile_ptr time = 227.425000 ms
+CSR->CSR5 tile_desc time = 1.556000 ms
+CSR->CSR5 transpose time = 7.460000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 1.726000 ms
+CSR->CSR5 tile_ptr time = 0.171000 ms
+CSR->CSR5 tile_desc time = 1.433000 ms
+CSR->CSR5 transpose time = 1.610000 ms
+CSR->CSR5 time = 5.008000 ms.
+CSR5-based SpMV MIC time = 0.994472 ms. Bandwidth = 42.373895 GB/s. GFlops = 4.217619 GFlops.
+      Performance(GFLOPS)	4.217619
+                     nRow	16384
+                     nCol	16384
+                     nNnz	2097152
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/unbalance-2048.mtx--------------
+ ( 2048, 2048 ) nnz = 94208
+cpu host-sequential time = 0.099 ms. Bandwidth = 19.2802 GB/s. GFlops = 1.90319 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	unbalance-2048.mtx
+               MatrixPath	../../../matrix/artificial/unbalance-2048.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.145000 ms
+CSR->CSR5 tile_ptr time = 227.753000 ms
+CSR->CSR5 tile_desc time = 1.355000 ms
+CSR->CSR5 transpose time = 8.759000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.067000 ms
+CSR->CSR5 tile_ptr time = 0.074000 ms
+CSR->CSR5 tile_desc time = 0.094000 ms
+CSR->CSR5 transpose time = 0.489000 ms
+CSR->CSR5 time = 0.772000 ms.
+CSR5-based SpMV MIC time = 0.150720 ms. Bandwidth = 12.664145 GB/s. GFlops = 1.250106 GFlops.
+      Performance(GFLOPS)	1.250106
+                     nRow	2048
+                     nCol	2048
+                     nNnz	94208
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/unbalance-4096.mtx--------------
+ ( 4096, 4096 ) nnz = 262144
+cpu host-sequential time = 0.26 ms. Bandwidth = 20.354 GB/s. GFlops = 2.01649 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	unbalance-4096.mtx
+               MatrixPath	../../../matrix/artificial/unbalance-4096.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.667000 ms
+CSR->CSR5 tile_ptr time = 225.808000 ms
+CSR->CSR5 tile_desc time = 1.345000 ms
+CSR->CSR5 transpose time = 5.292000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.144000 ms
+CSR->CSR5 tile_ptr time = 0.082000 ms
+CSR->CSR5 tile_desc time = 0.093000 ms
+CSR->CSR5 transpose time = 0.508000 ms
+CSR->CSR5 time = 0.874000 ms.
+CSR5-based SpMV MIC time = 0.238330 ms. Bandwidth = 22.204657 GB/s. GFlops = 2.199841 GFlops.
+      Performance(GFLOPS)	2.199841
+                     nRow	4096
+                     nCol	4096
+                     nNnz	262144
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/unbalance-512.mtx--------------
+ ( 512, 512 ) nnz = 11776
+cpu host-sequential time = 0.011 ms. Bandwidth = 21.9698 GB/s. GFlops = 2.14109 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	unbalance-512.mtx
+               MatrixPath	../../../matrix/artificial/unbalance-512.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.078000 ms
+CSR->CSR5 tile_ptr time = 220.709000 ms
+CSR->CSR5 tile_desc time = 1.223000 ms
+CSR->CSR5 transpose time = 8.664000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.034000 ms
+CSR->CSR5 tile_ptr time = 0.068000 ms
+CSR->CSR5 tile_desc time = 0.086000 ms
+CSR->CSR5 transpose time = 0.429000 ms
+CSR->CSR5 time = 0.661000 ms.
+CSR5-based SpMV MIC time = 0.082809 ms. Bandwidth = 2.918378 GB/s. GFlops = 0.284414 GFlops.
+      Performance(GFLOPS)	0.284414
+                     nRow	512
+                     nCol	512
+                     nNnz	11776
+----------------------------------------
+------------------------------------------------------
+PRECISION = 64-bit Double Precision
+------------------------------------------------------
+--------------../../../matrix/artificial/unbalance-8192.mtx--------------
+ ( 8192, 8192 ) nnz = 745472
+cpu host-sequential time = 0.759 ms. Bandwidth = 19.7731 GB/s. GFlops = 1.96435 GFlops.
+
+++++++++++++++++++++++++++++++++++++++++
+             Architecture	MIC
+                   Matrix	unbalance-8192.mtx
+               MatrixPath	../../../matrix/artificial/unbalance-8192.mtx
+             MatrixFormat	CRS5
+Check... PASS!
+------------------------------------------------------
+omp_get_max_threads = 236
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.622000 ms
+CSR->CSR5 tile_ptr time = 222.613000 ms
+CSR->CSR5 tile_desc time = 1.262000 ms
+CSR->CSR5 transpose time = 9.958000 ms
+omega = 8, sigma = 12. CSR->CSR5 malloc time = 0.699000 ms
+CSR->CSR5 tile_ptr time = 0.108000 ms
+CSR->CSR5 tile_desc time = 1.407000 ms
+CSR->CSR5 transpose time = 1.460000 ms
+CSR->CSR5 time = 3.732000 ms.
+CSR5-based SpMV MIC time = 0.450176 ms. Bandwidth = 33.337512 GB/s. GFlops = 3.311914 GFlops.
+      Performance(GFLOPS)	3.311914
+                     nRow	8192
+                     nCol	8192
+                     nNnz	745472
+----------------------------------------
