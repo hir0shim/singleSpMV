@@ -27,7 +27,7 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     {
         int K = 0;
         for (int i = 0; i < nRow; i++) {
-            K = max(K, G[i].size());
+            K = max<int>(K, G[i].size());
         }
         int *ptr = new int[A.nRow];
         memset(ptr, 0, sizeof(int)*A.nRow);
