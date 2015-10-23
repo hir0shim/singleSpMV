@@ -56,11 +56,9 @@ extern "C" {
         double *val = A.val;
         int W = ALIGNMENT / sizeof(double);
 #pragma omp parallel for
-#pragma vector nontemporal(yv)
         for (int i = 0; i < nRow; i++) {
             yv[i] = 0;
-            {{{
-#if defined CPU_SIMD
+#if defined(CPU) && defined(SIMD)
             if (ptr[i+1] - ptr[i] > ALIGNMENT/sizeof(double)) {
                 int simd_begin = (ptr[i] & (~(W-1))) + ((ptr[i] & (W-1)) ? W:0);
                 int simd_end = ptr[i+1] - (ptr[i+1]&(W-1));
@@ -80,19 +78,10 @@ extern "C" {
                     __m256d lv = _mm256_load_pd(val+j);
                     __m256d rv = _mm256_i32gather_pd(xv, col, 8);
                     __m256d v = _mm256_mul_pd(lv, rv);
-                       _mm256_store_pd(yv_tmp, v);
-                       for (int k = 0; k < ALIGNMENT / sizeof(double); k++) {
-                       yv[i] += yv_tmp[k];
-                       }
-                       /*
-                    double *yv_begin = (double *)((__int64(yv+i)) & ~(W-1));
-                    int yv_pos = (__int64(yv+i)) & (W-1);
-                    v = _mm256_hadd_pd(v, v);
-                    v = _mm256_hadd_pd(v, v);
-                    __m256i mask = _mm256_set_epi64x((unsigned __int64)(yv_pos==3), (unsigned __int64)(yv_pos==2), (unsigned __int64)(yv_pos==1), (unsigned __int64)(yv_pos==0));
-                    _mm256_maskstore_pd(yv_begin, mask, v);
-                    */
-
+                    _mm256_store_pd(yv_tmp, v);
+                    for (int k = 0; k < ALIGNMENT / sizeof(double); k++) {
+                        yv[i] += yv_tmp[k];
+                    }
                 }
                 _mm_free(yv_tmp);
                 for (int j = simd_end; j < ptr[i+1]; j++) {
@@ -111,13 +100,17 @@ extern "C" {
                     yv[i] += v;
                 }
             }
-#elif defined MIC_SIMD
+#elif defined(MIC) && defined(SIMD)
 #else 
-              }}}
-
+            for (int j = ptr[i]; j < ptr[i+1]; j++) {
+                int col = idx[j];
+                double lv = val[j];
+                double rv = xv[col];
+                double v = lv * rv;
+                yv[i] += v;
+            }
+            /*
             double yv_tmp = 0;
-#pragma simd 
-#pragma vector aligned
             for (int j = ptr[i]; j < ptr[i+1]; j++) {
                 int col = idx[j];
                 double lv = val[j];
@@ -126,6 +119,7 @@ extern "C" {
                 yv_tmp += v;
             }
             yv[i] = yv_tmp;
+            */
 #endif
         }
     }
