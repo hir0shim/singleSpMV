@@ -5,7 +5,7 @@ matrices=`ls $MATRIX_DIR/*.mtx | xargs -i basename {}`
 
 ### MIC (KAREN) ###
 cd $script_dir/../
-srun -p KAREN make clean
+#srun -p KAREN make clean
 srun -p KAREN make bin/spmv.mic
 export OMP_NUM_THREADS=240
 logfile=$LOG_DIR/mic-`date +%y-%m-%d-%H-%M`.tsv && echo "" > $logfile

@@ -33,8 +33,8 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
 }
 extern "C" {
     void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
-        double *xv = x.val;
-        double *yv = y.val;
+        double* restrict xv = x.val;
+        double* restrict yv = y.val;
         int nRow = A.nRow;
         int nCol = A.nCol;
         int nNnz = A.nNnz;
@@ -42,9 +42,9 @@ extern "C" {
         //------------------------------
         // Format specific 
         //------------------------------
-        int *ptr = A.ptr;
-        int *idx = A.idx;
-        double *val = A.val;
+        int* restrict ptr = A.ptr;
+        int* restrict idx = A.idx;
+        double* restrict val = A.val;
         double ALPHA = 1;
         double BETA = 0;
         MKL_INT *ptr_b = static_cast<MKL_INT*>(ptr);

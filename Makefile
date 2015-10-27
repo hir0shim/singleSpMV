@@ -6,14 +6,14 @@ INCLUDE_DIR = include
 ASM_DIR=asm
 
 OPTION = -DVERIFY
-MIC_OPTION = $(OPTION) -DOPT_MKL -DALIGNMENT=64 
-CPU_OPTION = $(OPTION) -DOPT_CRS -DALIGNMENT=32 
-GPU_OPTION = $(OPTION) -DOPT_CUSPARSE -DALIGNMENT=32
+MIC_OPTION = $(OPTION) -DMIC -DOPT_MKL -DALIGNMENT=64 
+CPU_OPTION = $(OPTION) -DCPU -DOPT_MKL -DALIGNMENT=32 
+GPU_OPTION = $(OPTION) -DGPU -DOPT_CUSPARSE -DALIGNMENT=32
 
 CXX = icpc
 LDFLAGS = -L$(LIBRARY_DIR) -L$(OBJECT_DIR) 
 #CXXFLAGS = -std=c++11 -ipo -Wall -g -O2 -fopenmp -I$(INCLUDE_DIR) 
-CXXFLAGS = -std=c++11 -ipo -Wall -g -O0 -fopenmp 
+CXXFLAGS = -std=c++11 -ipo -Wall -g -O3 -fopenmp -fno-inline -restrict
 
 vpath %.cpp $(SOURCE_DIR)
 spmv_sources = main.cpp util.cpp opt.cpp 
@@ -33,7 +33,7 @@ all: $(TARGETS)
 ########################################
 # SPMV CPU 
 ########################################
-$(OBJECT_DIR)/%.o.cpu : CXXFLAGS += -xHOST -DCPU  $(CPU_OPTION)
+$(OBJECT_DIR)/%.o.cpu : CXXFLAGS += -xHOST $(CPU_OPTION)
 $(OBJECT_DIR)/%.o.cpu : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 $(SPMV_CPU) : CXXFLAGS += -mkl 
@@ -43,7 +43,7 @@ $(SPMV_CPU) : $(spmv_objects_cpu)
 ########################################
 # SPMV MIC
 ########################################
-$(OBJECT_DIR)/%.o.mic : CXXFLAGS += -mmic -DMIC  $(MIC_OPTION) 
+$(OBJECT_DIR)/%.o.mic : CXXFLAGS += -mmic $(MIC_OPTION) 
 $(OBJECT_DIR)/%.o.mic : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 $(SPMV_MIC) : CXXFLAGS += -mmic -mkl 
@@ -53,7 +53,7 @@ $(SPMV_MIC) : $(spmv_objects_mic)
 ########################################
 # SPMV GPU 
 ########################################
-$(OBJECT_DIR)/%.o.gpu : CXXFLAGS += -xHOST -DGPU -I/usr/local/cuda-6.5/include $(GPU_OPTION)
+$(OBJECT_DIR)/%.o.gpu : CXXFLAGS += -xHOST -I/usr/local/cuda-6.5/include $(GPU_OPTION)
 $(OBJECT_DIR)/%.o.gpu : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
