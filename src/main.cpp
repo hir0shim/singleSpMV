@@ -39,6 +39,7 @@ int main (int argc, char **argv) {
     cerr << "Verifying ... ";
     if (!VerifyResult(A, x, y)) {
         printf("*** invalid result ***\n");
+        exit(1);
     }
     cerr << "done." << endl;
 #endif

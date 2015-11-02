@@ -31,13 +31,13 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     bool **flag_2d = (bool **)_mm_malloc(H*sizeof(bool*), ALIGNMENT);
 
     row_idx_2d[0] = (int *)_mm_malloc(H*W*sizeof(int), ALIGNMENT);
-    col_idx_2d[0] = (int *)_mm_malloc(H*W*sizeof(int)*2, ALIGNMENT);
+    col_idx_2d[0] = (int *)_mm_malloc(H*W*sizeof(int), ALIGNMENT);
     val_2d[0] = (double *)_mm_malloc(H*W*sizeof(double), ALIGNMENT);
     flag_2d[0] = (bool *)_mm_malloc(H*W*sizeof(bool), ALIGNMENT);
 
     for (int i = 1; i < H; i++) {
         row_idx_2d[i] = row_idx_2d[i-1] + W;
-        col_idx_2d[i] = col_idx_2d[i-1] + 2*W;
+        col_idx_2d[i] = col_idx_2d[i-1] + W;
         val_2d[i] = val_2d[i-1] + W;
         flag_2d[i] = flag_2d[i-1] + W;
     }
@@ -91,12 +91,18 @@ extern "C" {
 #pragma omp for schedule(static)
             for (int i = 0; i < H; i++) {
 #if defined(MIC) && defined(INTRINSICS)
-                const short mask = 0xff;
-                __m512i col = _mm512_mask_load_epi32(col, mask, col_idx[i]);
-                __m512d rv = _mm512_i32logather_pd(col, xv, sizeof(double));
+                __m512i col = _mm512_load_epi32(col_idx[i]);
                 __m512d lv = _mm512_load_pd(val[i]);
+                __m512d rv = _mm512_i32logather_pd(col, xv, sizeof(double));
                 __m512d v = _mm512_mul_pd(lv, rv);
-                _mm512_store_pd(val[i], v);
+                _mm512_storenrngo_pd(val[i], v);
+
+                col = _mm512_alignr_epi32(col, col, ALIGNMENT/sizeof(int)/2);
+                lv = _mm512_load_pd(val[i] + ALIGNMENT/sizeof(double));
+                rv = _mm512_i32logather_pd(col, xv, sizeof(double));
+                v = _mm512_mul_pd(lv, rv);
+                _mm512_storenrngo_pd(val[i] + ALIGNMENT/sizeof(double), v);
+
 #elif defined(CPU) && defined(INTRINSICS)
                 // TODO
 #else

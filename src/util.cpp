@@ -92,6 +92,7 @@ Vec CreateRandomVector (int size) {
     x.val = (double *)_mm_malloc((size) * sizeof(double), ALIGNMENT);
     for (int i = 0; i < size; i++) {
         x.val[i] = double(rand()) / RAND_MAX;
+        //x.val[i] = 10;
     }
     return x;
 }

@@ -5,7 +5,7 @@ matrices=`ls $MATRIX_DIR/*.mtx | xargs -i basename {}`
 
 ### CPU (NOEL) ###
 cd $script_dir/../
-#srun -p NOEL make clean 
+srun -p NOEL make clean 
 srun -p NOEL make bin/spmv.cpu
 export OMP_NUM_THREADS=24
 logfile=$LOG_DIR/cpu-`date +%y-%m-%d-%H-%M`.tsv && echo "" > $logfile
