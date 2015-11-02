@@ -22,3 +22,7 @@
 #ifdef OPT_CUSPARSE
 #include "opt_cusparse.h"
 #endif
+
+#ifdef OPT_CSS
+#include "opt_css.h"
+#endif

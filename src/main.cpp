@@ -31,6 +31,18 @@ int main (int argc, char **argv) {
     cerr << "Optimizing ... ";
     OptimizeProblem(A, x, A_opt, x_opt);
     cerr << "done." << endl;
+
+
+    SpMV(A_opt, x_opt, y);
+    //ViewVec(y);
+#ifdef VERIFY
+    cerr << "Verifying ... ";
+    if (!VerifyResult(A, x, y)) {
+        printf("*** invalid result ***\n");
+    }
+    cerr << "done." << endl;
+#endif
+
     int loop = 1;
     cerr << "Calculating SpMV ... ";
     {
@@ -67,15 +79,6 @@ int main (int argc, char **argv) {
     */
     cerr << "done." << endl;
 
-    //ViewVec(y);
-
-#ifdef VERIFY
-    cerr << "Verifying ... ";
-    if (!VerifyResult(A, x, y)) {
-        printf("*** invalid result ***\n");
-    }
-    cerr << "done." << endl;
-#endif
 
     printf("++++++++++++++++++++++++++++++++++++++++\n");
     bool isDefinedArch = false;
@@ -125,6 +128,10 @@ int main (int argc, char **argv) {
 #endif
 #ifdef OPT_CUSPARSE
     printf("%25s\t%s\n", "MatrixFormat", "CUSPARSE");
+    isDefinedFormat = true;
+#endif
+#ifdef OPT_CSS
+    printf("%25s\t%s\n", "MatrixFormat", "CSS");
     isDefinedFormat = true;
 #endif
     assert(isDefinedFormat == true);

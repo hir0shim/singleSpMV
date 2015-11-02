@@ -56,17 +56,15 @@ extern "C" {
         double* restrict val = A.val;
 #pragma omp parallel for
         for (int i = 0; i < nRow; i++) {
-            yv[i] = 0;
+            double yv_tmp = 0;
             for (int j = ptr[i]; j < ptr[i+1]; j++) {
                 int col = idx[j];
                 double lv = val[j];
                 double rv = xv[col];
                 double v = lv * rv;
-                yv[i] += v;
+                yv_tmp += v;
             }
+            yv[i] = yv_tmp;
         }
     }
 }
-
-
-
