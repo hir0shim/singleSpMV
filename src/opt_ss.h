@@ -5,15 +5,13 @@ struct SpMatOpt {
     int nCol;
     int nNnz;
 
-
-    int W;
+    const int W = ALIGNMENT / sizeof(double);
     int H;
     int *row_ptr;
     int **row_idx;
     int **col_idx;
     bool **flag;
     double **val;
-    double **val_result;
 };
 struct VecOpt {
     int size;
