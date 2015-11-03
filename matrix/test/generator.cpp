@@ -6,6 +6,7 @@
 #include <cstring>
 #include <cstdio>
 #include <cmath>
+#include<cstdlib>
 using namespace std;
 typedef pair<int,int> P;
 typedef vector<P> M;
@@ -41,7 +42,7 @@ M unbalance_matrix (int N) {
 
 M random_unbalance_matrix (int N) {
     M m;
-    for (int i = 0; i < sqrt(N); i++) {
+    for (int i = 0; i < N; i++) {
         int r = rand() % N;
         for (int j = 0; j < N; j++) {
             m.push_back(P(r, j));
@@ -71,11 +72,12 @@ void print_matrix (int N, M m) {
     cout << "%%MatrixMarket matrix coordinate real general" << endl;
     cout << N << " " << N << " " << m.size() << endl;
     for (int i = 0; i < m.size(); i++) {
-        cout << m[i].first+1 << " " << m[i].second+1 << " 1.0" << endl;
+        cout << m[i].first+1 << " " << m[i].second+1 << " " << double(rand())/RAND_MAX  << endl;
     }
 }
 
 int main (int argc, char* argv[]) {
+    srand(time(NULL));
     int N = 10;
     int param = 10;
     if (argc <= 1) {

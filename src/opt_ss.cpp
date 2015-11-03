@@ -5,6 +5,7 @@
 #include <utility>
 #include <cassert>
 #include <iostream>
+#include <cmath>
 #include <immintrin.h>
 void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_opt) {
     x_opt.size = x.size;
@@ -17,7 +18,7 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     //------------------------------
     // Format specific 
     //------------------------------
-    
+
     int *row_idx = A.row_idx;
     int *col_idx = A.col_idx;
     double *val = A.val;
@@ -46,12 +47,6 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     }
     row_ptr[0] = 0;
     int cur_row = 0;
-    int dist = 0;
-    int prev_row = -1;
-    /*
-    int segment_index = ;
-    int segment_dist = 0;
-    */
     for (int i = 0; i < H; i++) {
         for (int j = 0; j < W; j++) {
             int p = i*W + j;
@@ -61,13 +56,6 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
                 val_2d[i][j] = val[p];
                 int r = row_idx[p];
                 while (cur_row <= r) { row_ptr[cur_row++] = p; }
-                if (prev_row != r) {
-                    prev_row = r;
-                    dist = 0;
-                }
-                index_2d[i][j] = dist % W;
-                dist++;
-
             } else {
                 row_idx_2d[i][j] = nRow;
                 col_idx_2d[i][j] = 0;
@@ -77,6 +65,64 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
         }
     }
     while (cur_row <= nRow) row_ptr[cur_row++] = nNnz;
+
+
+    //------------------------------
+    // Segment index
+    //------------------------------
+    //cout << "H:" << H << " W:" << W << " " << endl;
+    int *segment_index = (int *)_mm_malloc(H*sizeof(int), ALIGNMENT);
+    segment_index[0] = 0;
+    for (int i = 1; i < H; i++) {
+        bool same = true; // row idx of the segment i are same or not.
+        if (row_idx_2d[i-1][0] == row_idx_2d[i][0]) {
+            for (int j = 1; j < W; j++) {
+                if (row_idx_2d[i][j-1] != row_idx_2d[i][j]) same = false;
+            }
+        } else {
+            same = false;
+        }
+        if (same) {
+            segment_index[i] = segment_index[i-1] + 1;
+            //cout << i << " " << segment_index[i] << endl;
+        } else {
+            segment_index[i] = 0;
+        }
+    }
+    int max_index = *max_element(segment_index, segment_index + H);
+    /*
+       int segment_dist = 0;
+       int prev_row = 0;
+       for (int i = 0; i < H; i++) {
+       bool cont = true;
+       segment_index[i] = segment_dist;
+       for (int j = 0; j < W; j++) {
+       int p = i*W + j;
+       if (p < nNnz) {
+       int r = row_idx[p];
+       if (prev_row != r) {
+       cont = false;
+       prev_row = r;
+       segment_dist = 0;
+       }
+       } 
+       }
+       segment_index[i] = min(segment_index[i], segment_dist);
+       if (cont) segment_dist++;
+       }
+       int max_index = *max_element(segment_index, segment_index + H);
+       */
+    for (int i = 0; i < H; i++) {
+        if (segment_index[i] > 0) {
+            for (int j = 1; j < W; j++) {
+                assert(row_idx_2d[i][j] == row_idx_2d[i][j-1]);
+            }
+            for (int j = 0; j < W; j++) {
+                assert(row_idx_2d[i][j] == row_idx_2d[i-1][j]);
+            }
+        }
+    }
+
     A_opt.nRow = nRow;
     A_opt.nCol = nCol;
     A_opt.nNnz = nNnz;
@@ -86,6 +132,9 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     A_opt.col_idx = col_idx_2d;
     A_opt.flag = flag_2d;
     A_opt.val = val_2d;
+    A_opt.segment_index = segment_index;
+    A_opt.max_index = 1 << int(ceil(log2(max_index+1)));
+
 }
 extern "C" {
     void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
@@ -103,55 +152,105 @@ extern "C" {
         int** restrict col_idx = A.col_idx;
         double** restrict val = A.val;
         int* restrict row_ptr = A.row_ptr;
-#pragma omp parallel
-        {
-#pragma omp for schedule(static)
-            for (int i = 0; i < H; i++) {
+        int* restrict segment_index = A.segment_index;
+        int max_index = A.max_index;
+#pragma omp parallel for schedule(static)
+        for (int i = 0; i < H; i++) {
             //------------------------------
             // Mul
             //------------------------------
 #if defined(MIC) && defined(INTRINSICS)
-                __m512i col = _mm512_load_epi32(col_idx[i]);
-                __m512d lv = _mm512_load_pd(val[i]);
-                __m512d rv = _mm512_i32logather_pd(col, xv, sizeof(double));
-                __m512d v = _mm512_mul_pd(lv, rv);
-                _mm512_storenrngo_pd(val[i], v);
+            __m512i col = _mm512_load_epi32(col_idx[i]);
+            __m512d lv = _mm512_load_pd(val[i]);
+            __m512d rv = _mm512_i32logather_pd(col, xv, sizeof(double));
+            __m512d v = _mm512_mul_pd(lv, rv);
+            _mm512_storenrngo_pd(val[i], v);
 
-                col = _mm512_alignr_epi32(col, col, ALIGNMENT/sizeof(int)/2);
-                lv = _mm512_load_pd(val[i] + ALIGNMENT/sizeof(double));
-                rv = _mm512_i32logather_pd(col, xv, sizeof(double));
-                v = _mm512_mul_pd(lv, rv);
-                _mm512_storenrngo_pd(val[i] + ALIGNMENT/sizeof(double), v);
+            col = _mm512_alignr_epi32(col, col, ALIGNMENT/sizeof(int)/2);
+            lv = _mm512_load_pd(val[i] + ALIGNMENT/sizeof(double));
+            rv = _mm512_i32logather_pd(col, xv, sizeof(double));
+            v = _mm512_mul_pd(lv, rv);
+            _mm512_storenrngo_pd(val[i] + ALIGNMENT/sizeof(double), v);
 
-#elif defined(CPU) && defined(INTRINSICS)
-                // TODO
+#elif defined(CPU) && defined(INTRINSICS) 
+            // TODO
+            asset(false);
 #else
-                double* restrict val_tmp = val[i];
-                for (int j = 0; j < W; j++) {
-                    int col = col_idx[i][j];
-                    double rv = xv[col];
-                    val_tmp[j] *= rv;
-                }
-#endif
+            double* restrict val_tmp = val[i];
+            for (int j = 0; j < W; j++) {
+                int col = col_idx[i][j];
+                double rv = xv[col];
+                val_tmp[j] *= rv;
             }
-            //------------------------------
-            // Sum
-            //------------------------------
-#pragma omp for
-            for (int i = 0; i < nRow; i++) {
-                yv[i] = 0;
-/*
-#if defined(MIC) && defined(INTRINSICS)
-#elif defined(CPU) && defined(INTRINSICS)
-                // TODO
-#else
-*/
-                for (int j = row_ptr[i]; j < row_ptr[i+1]; j++) {
-                    yv[i] += *(val[0] + j);
-                }
 #endif
+        }
+        //------------------------------
+        // Sum
+        //------------------------------
+#if defined(MIC) && defined(INTRINSICS)
+        // TODO
+        asset(false);
+#elif defined(CPU) && defined(INTRINSICS)
+        // TODO
+        asset(false);
+#else 
+        int counter = max_index>>1;
+        while (counter > 0) {
+            for (int i = 0; i < H; i++) {
+                if (counter <= segment_index[i] && segment_index[i] < counter*2) {
+                    for (int j = 0; j < W; j++) {
+                        val[i-counter][j] += val[i][j];
+                        val[i][j] = 0;
+                    }
+                }
+            }
+            counter >>= 1;
+        }
+        /*
+        for (int i = 0; i < H; i++) {
+            if (segment_index[i] != 0) {
+                cout << "----------------------------" << endl;
+                cout << i << " : " << segment_index[i] << " " << max_index << endl;
+                for (int j = 0; j < W; j++) {
+                    if (abs(val[i][j]) > 1e-8) {
+                        cout << j << " " << val[i][j] <<endl;
+                    }
+                }
             }
         }
+        */
+        for (int i = 0; i < nRow; i++) {
+            double yv_tmp = 0;
+            int begin = row_ptr[i];
+            int end = row_ptr[i+1];
+            // upper
+            while (begin % W != 0 && begin < end) {
+                yv_tmp += *(val[0] + begin);
+                begin++;
+            }
+            // lower
+            while (end % W != 0 && begin < end) {
+                yv_tmp += *(val[0] + end - 1);
+                end--;
+            }
+            // center
+            if (begin != end) {
+                for (int j = 0; j < W; j++) {
+                    yv_tmp += *(val[0] + begin + j);
+                }
+            }
+            yv[i] = yv_tmp;
+        }
+        /*
+        //#pragma omp for
+        for (int i = 0; i < nRow; i++) {
+        yv[i] = 0;
+        for (int j = row_ptr[i]; j < row_ptr[i+1]; j++) {
+        yv[i] += *(val[0] + j);
+        }
+        }
+        */
+#endif
     }
 }
 
