@@ -70,7 +70,6 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     //------------------------------
     // Segment index
     //------------------------------
-    //cout << "H:" << H << " W:" << W << " " << endl;
     int *segment_index = (int *)_mm_malloc(H*sizeof(int), ALIGNMENT);
     segment_index[0] = 0;
     for (int i = 1; i < H; i++) {
@@ -84,34 +83,11 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
         }
         if (same) {
             segment_index[i] = segment_index[i-1] + 1;
-            //cout << i << " " << segment_index[i] << endl;
         } else {
             segment_index[i] = 0;
         }
     }
     int max_index = *max_element(segment_index, segment_index + H);
-    /*
-       int segment_dist = 0;
-       int prev_row = 0;
-       for (int i = 0; i < H; i++) {
-       bool cont = true;
-       segment_index[i] = segment_dist;
-       for (int j = 0; j < W; j++) {
-       int p = i*W + j;
-       if (p < nNnz) {
-       int r = row_idx[p];
-       if (prev_row != r) {
-       cont = false;
-       prev_row = r;
-       segment_dist = 0;
-       }
-       } 
-       }
-       segment_index[i] = min(segment_index[i], segment_dist);
-       if (cont) segment_dist++;
-       }
-       int max_index = *max_element(segment_index, segment_index + H);
-       */
     for (int i = 0; i < H; i++) {
         if (segment_index[i] > 0) {
             for (int j = 1; j < W; j++) {
@@ -173,8 +149,7 @@ extern "C" {
             _mm512_storenrngo_pd(val[i] + ALIGNMENT/sizeof(double), v);
 
 #elif defined(CPU) && defined(INTRINSICS) 
-            // TODO
-            asset(false);
+            asset(false); // TODO
 #else
             double* restrict val_tmp = val[i];
             for (int j = 0; j < W; j++) {
@@ -184,16 +159,16 @@ extern "C" {
             }
 #endif
         }
+
         //------------------------------
         // Sum
         //------------------------------
 #if defined(MIC) && defined(INTRINSICS)
-        // TODO
-        asset(false);
+        asset(false); // TODO
 #elif defined(CPU) && defined(INTRINSICS)
-        // TODO
-        asset(false);
+        asset(false); // TODO
 #else 
+        // reduction
         int counter = max_index>>1;
         while (counter > 0) {
             for (int i = 0; i < H; i++) {
@@ -206,19 +181,6 @@ extern "C" {
             }
             counter >>= 1;
         }
-        /*
-        for (int i = 0; i < H; i++) {
-            if (segment_index[i] != 0) {
-                cout << "----------------------------" << endl;
-                cout << i << " : " << segment_index[i] << " " << max_index << endl;
-                for (int j = 0; j < W; j++) {
-                    if (abs(val[i][j]) > 1e-8) {
-                        cout << j << " " << val[i][j] <<endl;
-                    }
-                }
-            }
-        }
-        */
         for (int i = 0; i < nRow; i++) {
             double yv_tmp = 0;
             int begin = row_ptr[i];
