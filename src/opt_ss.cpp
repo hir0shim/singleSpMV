@@ -29,20 +29,29 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     int **col_idx_2d = (int **)_mm_malloc(H*sizeof(int*), ALIGNMENT);
     double **val_2d = (double **)_mm_malloc(H*sizeof(double*), ALIGNMENT);
     bool **flag_2d = (bool **)_mm_malloc(H*sizeof(bool*), ALIGNMENT);
+    int **index_2d = (int **)_mm_malloc(H*sizeof(int*), ALIGNMENT);
 
     row_idx_2d[0] = (int *)_mm_malloc(H*W*sizeof(int), ALIGNMENT);
     col_idx_2d[0] = (int *)_mm_malloc(H*W*sizeof(int), ALIGNMENT);
     val_2d[0] = (double *)_mm_malloc(H*W*sizeof(double), ALIGNMENT);
     flag_2d[0] = (bool *)_mm_malloc(H*W*sizeof(bool), ALIGNMENT);
+    index_2d[0] = (int *)_mm_malloc(H*W*sizeof(int), ALIGNMENT);
 
     for (int i = 1; i < H; i++) {
         row_idx_2d[i] = row_idx_2d[i-1] + W;
         col_idx_2d[i] = col_idx_2d[i-1] + W;
         val_2d[i] = val_2d[i-1] + W;
         flag_2d[i] = flag_2d[i-1] + W;
+        index_2d[i] = index_2d[i-1] + W;
     }
     row_ptr[0] = 0;
     int cur_row = 0;
+    int dist = 0;
+    int prev_row = -1;
+    /*
+    int segment_index = ;
+    int segment_dist = 0;
+    */
     for (int i = 0; i < H; i++) {
         for (int j = 0; j < W; j++) {
             int p = i*W + j;
@@ -52,10 +61,18 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
                 val_2d[i][j] = val[p];
                 int r = row_idx[p];
                 while (cur_row <= r) { row_ptr[cur_row++] = p; }
+                if (prev_row != r) {
+                    prev_row = r;
+                    dist = 0;
+                }
+                index_2d[i][j] = dist % W;
+                dist++;
+
             } else {
                 row_idx_2d[i][j] = nRow;
                 col_idx_2d[i][j] = 0;
                 val_2d[i][j] = 0;
+                index_2d[i][j] = 0;
             }
         }
     }
@@ -90,6 +107,9 @@ extern "C" {
         {
 #pragma omp for schedule(static)
             for (int i = 0; i < H; i++) {
+            //------------------------------
+            // Mul
+            //------------------------------
 #if defined(MIC) && defined(INTRINSICS)
                 __m512i col = _mm512_load_epi32(col_idx[i]);
                 __m512d lv = _mm512_load_pd(val[i]);
@@ -107,7 +127,6 @@ extern "C" {
                 // TODO
 #else
                 double* restrict val_tmp = val[i];
-#pragma vector aligned
                 for (int j = 0; j < W; j++) {
                     int col = col_idx[i][j];
                     double rv = xv[col];
@@ -115,12 +134,22 @@ extern "C" {
                 }
 #endif
             }
+            //------------------------------
+            // Sum
+            //------------------------------
 #pragma omp for
             for (int i = 0; i < nRow; i++) {
                 yv[i] = 0;
+/*
+#if defined(MIC) && defined(INTRINSICS)
+#elif defined(CPU) && defined(INTRINSICS)
+                // TODO
+#else
+*/
                 for (int j = row_ptr[i]; j < row_ptr[i+1]; j++) {
                     yv[i] += *(val[0] + j);
                 }
+#endif
             }
         }
     }

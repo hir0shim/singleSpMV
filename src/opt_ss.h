@@ -12,6 +12,8 @@ struct SpMatOpt {
     int **col_idx;
     bool **flag;
     double **val;
+    int **index;
+    int *segment_index;
 };
 struct VecOpt {
     int size;
