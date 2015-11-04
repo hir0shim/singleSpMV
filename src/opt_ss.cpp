@@ -102,8 +102,8 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
 
     int nStep = int(ceil(log2(max_index+1)));
     int counter = 1 << nStep;
-    int **sum_segs = new int*[nStep];
-    int *sum_segs_count = new int[nStep];
+    int **sum_segs = (int **)_mm_malloc(nStep*sizeof(int), ALIGNMENT);
+    int *sum_segs_count = (int *)_mm_malloc(nStep*sizeof(int), ALIGNMENT);
     for (int i = 0; i < nStep; i++) {
         counter >>= 1;
         int nSeg = 0;
@@ -113,7 +113,7 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
             }
         }
         sum_segs_count[i] = nSeg;
-        sum_segs[i] = new int[nSeg];
+        sum_segs[i] = (int *)_mm_malloc(nSeg*sizeof(int), ALIGNMENT);
         int idx = 0;
         for (int j = 0; j < H; j++) {
             if (counter <= segment_index[j] && segment_index[j] < counter*2) {
@@ -160,12 +160,12 @@ extern "C" {
         int nStep = A.nStep;
         int** restrict sum_segs = A.sum_segs;
         int* restrict sum_segs_count = A.sum_segs_count;
-#pragma omp parallel for schedule(static)
-        for (int i = 0; i < H; i++) {
-            //------------------------------
-            // Mul
-            //------------------------------
+        //------------------------------
+        // Mul
+        //------------------------------
 #if defined(MIC) && defined(INTRINSICS)
+        #pragma omp parallel for schedule(static)
+        for (int i = 0; i < H; i++) {
             __m512i col = _mm512_load_epi32(col_idx[i]);
             __m512d lv = _mm512_load_pd(val[i]);
             __m512d rv = _mm512_i32logather_pd(col, xv, sizeof(double));
@@ -177,49 +177,32 @@ extern "C" {
             rv = _mm512_i32logather_pd(col, xv, sizeof(double));
             v = _mm512_mul_pd(lv, rv);
             _mm512_storenrngo_pd(val[i] + ALIGNMENT/sizeof(double), v);
-
+        }
 #elif defined(CPU) && defined(INTRINSICS) 
             assert(false); // TODO
 #else
+        #pragma omp parallel for schedule(static)
+        for (int i = 0; i < H; i++) {
             double* restrict val_tmp = val[i];
             for (int j = 0; j < W; j++) {
                 int col = col_idx[i][j];
                 double rv = xv[col];
                 val_tmp[j] *= rv;
             }
-#endif
         }
-
+#endif
         //------------------------------
         // Summation
         //------------------------------
-        /*
 #if defined(MIC) && defined(INTRINSICS)
-        asset(false); // TODO
+
 #elif defined(CPU) && defined(INTRINSICS)
-        asset(false); // TODO
-#else 
-*/
-        // reduction
-        /*
-        int counter = 1 << nStep-1;
-        while (counter > 0) {
-#pragma omp parallel for
-            for (int i = 0; i < H; i++) {
-                if (counter <= segment_index[i] && segment_index[i] < counter*2) {
-                    for (int j = 0; j < W; j++) {
-                        val[i-counter][j] += val[i][j];
-                        val[i][j] = 0;
-                    }
-                }
-            }
-            counter >>= 1;
-        }
-        */
+        assert(false); // TODO
+#else
         int counter = 1<<nStep;
         for (int s = 0; s < nStep; s++) {
             counter >>= 1;
-#pragma omp parallel for
+            #pragma omp parallel for
             for (int i = 0; i < sum_segs_count[s]; i++) {
                 int h = sum_segs[s][i];
                 for (int j = 0; j < W; j++) {
@@ -229,7 +212,7 @@ extern "C" {
             }
         }
 
-#pragma omp parallel for
+        #pragma omp parallel for
         for (int i = 0; i < nRow; i++) {
             double yv_tmp = 0;
             int begin = row_ptr[i];
@@ -260,16 +243,7 @@ extern "C" {
             }
             yv[i] = yv_tmp;
         }
-        /*
-        //#pragma omp for
-        for (int i = 0; i < nRow; i++) {
-        yv[i] = 0;
-        for (int j = row_ptr[i]; j < row_ptr[i+1]; j++) {
-        yv[i] += *(val[0] + j);
-        }
-        }
-        */
-//#endif
+#endif
     }
 }
 
