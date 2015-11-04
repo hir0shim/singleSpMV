@@ -99,6 +99,30 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
         }
     }
 
+
+    int nStep = int(ceil(log2(max_index+1)));
+    int counter = 1 << nStep;
+    int **sum_segs = new int*[nStep];
+    int *sum_segs_count = new int[nStep];
+    for (int i = 0; i < nStep; i++) {
+        counter >>= 1;
+        int nSeg = 0;
+        for (int j = 0; j < H; j++) {
+            if (counter <= segment_index[j] && segment_index[i] < counter*2) {
+                nSeg++;
+            }
+        }
+        sum_segs_count[i] = nSeg;
+        sum_segs[i] = new int[nSeg];
+        int idx = 0;
+        for (int j = 0; j < H; j++) {
+            if (counter <= segment_index[j] && segment_index[i] < counter*2) {
+                sum_segs[i][idx++] = j;
+            }
+        }
+        assert(idx == nSeg);
+    }
+
     A_opt.nRow = nRow;
     A_opt.nCol = nCol;
     A_opt.nNnz = nNnz;
@@ -109,7 +133,11 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     A_opt.flag = flag_2d;
     A_opt.val = val_2d;
     A_opt.segment_index = segment_index;
-    A_opt.max_index = 1 << int(ceil(log2(max_index+1)));
+
+    A_opt.nStep = nStep;
+    A_opt.sum_segs = sum_segs;
+    A_opt.sum_segs_count = sum_segs_count;
+
 
 }
 extern "C" {
@@ -129,7 +157,9 @@ extern "C" {
         double** restrict val = A.val;
         int* restrict row_ptr = A.row_ptr;
         int* restrict segment_index = A.segment_index;
-        int max_index = A.max_index;
+        int nStep = A.nStep;
+        int** restrict sum_segs = A.sum_segs;
+        int* restrict sum_segs_count = A.sum_segs_count;
 #pragma omp parallel for schedule(static)
         for (int i = 0; i < H; i++) {
             //------------------------------
@@ -171,7 +201,8 @@ extern "C" {
 #else 
 */
         // reduction
-        int counter = max_index>>1;
+        /*
+        int counter = 1 << nStep-1;
         while (counter > 0) {
 #pragma omp parallel for
             for (int i = 0; i < H; i++) {
@@ -184,31 +215,18 @@ extern "C" {
             }
             counter >>= 1;
         }
-        /*
-#pragma omp parallel for
-        for (int i = 0; i < nRow; i++) {
-            double yv_tmp = 0;
-            int begin = row_ptr[i];
-            int end = row_ptr[i+1];
-            // upper
-            while (begin % W != 0 && begin < end) {
-                yv_tmp += *(val[0] + begin);
-                begin++;
-            }
-            // lower
-            while (end % W != 0 && begin < end) {
-                yv_tmp += *(val[0] + end - 1);
-                end--;
-            }
-            // center
-            if (begin != end) {
+        */
+        int counter = 1<<nStep;
+        for (int s = 0; s < nStep; s++) {
+            counter >>= 1;
+            for (int i = 0; i < sum_segs_count[s]; i++) {
                 for (int j = 0; j < W; j++) {
-                    yv_tmp += *(val[0] + begin + j);
+                    int h = sum_segs[s][i];
+                    val[h-counter][j] += val[h][j];
+                    val[h][j] = 0;
                 }
             }
-            yv[i] = yv_tmp;
         }
-        */
 
 #pragma omp parallel for
         for (int i = 0; i < nRow; i++) {

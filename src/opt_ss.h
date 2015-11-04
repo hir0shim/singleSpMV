@@ -16,7 +16,14 @@ struct SpMatOpt {
     // for fast reduce
     int **index;
     int *segment_index;
-    int max_index;
+    //int max_index;
+
+    // for fast reduce part 2
+    int nStep;
+    int **sum_segs;
+    int *sum_segs_count;
+
+
 };
 struct VecOpt {
     int size;
