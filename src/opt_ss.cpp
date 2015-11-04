@@ -108,7 +108,7 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
         counter >>= 1;
         int nSeg = 0;
         for (int j = 0; j < H; j++) {
-            if (counter <= segment_index[j] && segment_index[i] < counter*2) {
+            if (counter <= segment_index[j] && segment_index[j] < counter*2) {
                 nSeg++;
             }
         }
@@ -116,7 +116,7 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
         sum_segs[i] = new int[nSeg];
         int idx = 0;
         for (int j = 0; j < H; j++) {
-            if (counter <= segment_index[j] && segment_index[i] < counter*2) {
+            if (counter <= segment_index[j] && segment_index[j] < counter*2) {
                 sum_segs[i][idx++] = j;
             }
         }
@@ -179,7 +179,7 @@ extern "C" {
             _mm512_storenrngo_pd(val[i] + ALIGNMENT/sizeof(double), v);
 
 #elif defined(CPU) && defined(INTRINSICS) 
-            asset(false); // TODO
+            assert(false); // TODO
 #else
             double* restrict val_tmp = val[i];
             for (int j = 0; j < W; j++) {
@@ -219,9 +219,10 @@ extern "C" {
         int counter = 1<<nStep;
         for (int s = 0; s < nStep; s++) {
             counter >>= 1;
+#pragma omp parallel for
             for (int i = 0; i < sum_segs_count[s]; i++) {
+                int h = sum_segs[s][i];
                 for (int j = 0; j < W; j++) {
-                    int h = sum_segs[s][i];
                     val[h-counter][j] += val[h][j];
                     val[h][j] = 0;
                 }
