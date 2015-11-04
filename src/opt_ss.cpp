@@ -184,6 +184,7 @@ extern "C" {
             }
             counter >>= 1;
         }
+        /*
 #pragma omp parallel for
         for (int i = 0; i < nRow; i++) {
             double yv_tmp = 0;
@@ -203,6 +204,39 @@ extern "C" {
             if (begin != end) {
                 for (int j = 0; j < W; j++) {
                     yv_tmp += *(val[0] + begin + j);
+                }
+            }
+            yv[i] = yv_tmp;
+        }
+        */
+
+#pragma omp parallel for
+        for (int i = 0; i < nRow; i++) {
+            double yv_tmp = 0;
+            int begin = row_ptr[i];
+            int end = row_ptr[i+1];
+            int begin_seg = begin / W;
+            int end_seg = end / W;
+            if (begin_seg == end_seg) {
+                for (int j = begin; j < end; j++) {
+                    yv_tmp += *(val[0] + j);
+                }
+            } else {
+                // upper
+                for (int j = begin; (j & W-1) != 0; j++) {
+                    yv_tmp += *(val[0] + j);
+                    begin++;
+                }
+                // lower
+                for (int j = end; (j & W-1) != 0; j--) {
+                    yv_tmp += *(val[0] + j - 1);
+                    end--;
+                }
+                // center
+                if (begin != end) {
+                    for (int j = 0; j < W; j++) {
+                        yv_tmp += *(val[0] + begin + j);
+                    }
                 }
             }
             yv[i] = yv_tmp;
