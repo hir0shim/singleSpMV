@@ -161,16 +161,19 @@ extern "C" {
         }
 
         //------------------------------
-        // Sum
+        // Summation
         //------------------------------
+        /*
 #if defined(MIC) && defined(INTRINSICS)
         asset(false); // TODO
 #elif defined(CPU) && defined(INTRINSICS)
         asset(false); // TODO
 #else 
+*/
         // reduction
         int counter = max_index>>1;
         while (counter > 0) {
+#pragma omp parallel for
             for (int i = 0; i < H; i++) {
                 if (counter <= segment_index[i] && segment_index[i] < counter*2) {
                     for (int j = 0; j < W; j++) {
@@ -181,6 +184,7 @@ extern "C" {
             }
             counter >>= 1;
         }
+#pragma omp parallel for
         for (int i = 0; i < nRow; i++) {
             double yv_tmp = 0;
             int begin = row_ptr[i];
@@ -212,7 +216,7 @@ extern "C" {
         }
         }
         */
-#endif
+//#endif
     }
 }
 
