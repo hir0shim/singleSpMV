@@ -5,12 +5,12 @@ struct SpMatOpt {
     int nCol;
     int nNnz;
 
-    const int W = ALIGNMENT / sizeof(double) * 2;
+    //const int W = ALIGNMENT / sizeof(double) * 2;
+    const int W = ALIGNMENT / sizeof(double);
     int H;
     int *row_ptr;
     int **row_idx;
-    int **col_idx;
-    bool **flag;
+    int64_t **col_idx;
     double **val;
 
     // for fast reduce

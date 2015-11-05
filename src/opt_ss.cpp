@@ -27,22 +27,19 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     int H = nNnz / W + (nNnz % W != 0);
     int *row_ptr = (int *)_mm_malloc((nRow+1)*sizeof(int), ALIGNMENT);
     int **row_idx_2d = (int **)_mm_malloc(H*sizeof(int*), ALIGNMENT);
-    int **col_idx_2d = (int **)_mm_malloc(H*sizeof(int*), ALIGNMENT);
+    int64_t **col_idx_2d = (int64_t **)_mm_malloc(H*sizeof(int64_t*), ALIGNMENT);
     double **val_2d = (double **)_mm_malloc(H*sizeof(double*), ALIGNMENT);
-    bool **flag_2d = (bool **)_mm_malloc(H*sizeof(bool*), ALIGNMENT);
     int **index_2d = (int **)_mm_malloc(H*sizeof(int*), ALIGNMENT);
 
     row_idx_2d[0] = (int *)_mm_malloc(H*W*sizeof(int), ALIGNMENT);
-    col_idx_2d[0] = (int *)_mm_malloc(H*W*sizeof(int), ALIGNMENT);
+    col_idx_2d[0] = (int64_t *)_mm_malloc(H*W*sizeof(int64_t), ALIGNMENT);
     val_2d[0] = (double *)_mm_malloc(H*W*sizeof(double), ALIGNMENT);
-    flag_2d[0] = (bool *)_mm_malloc(H*W*sizeof(bool), ALIGNMENT);
     index_2d[0] = (int *)_mm_malloc(H*W*sizeof(int), ALIGNMENT);
 
     for (int i = 1; i < H; i++) {
         row_idx_2d[i] = row_idx_2d[i-1] + W;
         col_idx_2d[i] = col_idx_2d[i-1] + W;
         val_2d[i] = val_2d[i-1] + W;
-        flag_2d[i] = flag_2d[i-1] + W;
         index_2d[i] = index_2d[i-1] + W;
     }
     row_ptr[0] = 0;
@@ -130,7 +127,6 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     A_opt.row_ptr = row_ptr;
     A_opt.row_idx = row_idx_2d;
     A_opt.col_idx = col_idx_2d;
-    A_opt.flag = flag_2d;
     A_opt.val = val_2d;
     A_opt.segment_index = segment_index;
 
@@ -153,7 +149,7 @@ extern "C" {
         //------------------------------
         const int H = A.H;
         const int W = A.W;
-        int** restrict col_idx = A.col_idx;
+        int64_t** restrict col_idx = A.col_idx;
         double** restrict val = A.val;
         int* restrict row_ptr = A.row_ptr;
         int* restrict segment_index = A.segment_index;
@@ -164,15 +160,21 @@ extern "C" {
         // Mul
         //------------------------------
 #if defined(MIC) && defined(INTRINSICS)
-        #pragma omp parallel for schedule(static)
+#pragma omp parallel for schedule(static)
         for (int i = 0; i < H; i++) {
             // Original Code
-            /* 
-            for (int j = 0; j < W; j++) {
-                val[i][j] *= xv[col_idx[i][j]];
-            }
-            */
+            /*
+           for (int j = 0; j < W; j++) {
+               val[i][j] *= xv[col_idx[i][j]];
+           }
+           */
 
+            __m512i col = _mm512_load_epi64(col_idx[i]);
+            __m512d lv = _mm512_load_pd(val[i]);
+            __m512d rv = _mm512_i64gather_pd(col, xv, sizeof(double));
+            __m512d v = _mm512_mul_pd(lv, rv);
+            _mm512_storenrngo_pd(val[i], v);
+            /* 
             __m512i col = _mm512_load_epi32(col_idx[i]);
             __m512d lv = _mm512_load_pd(val[i]);
             __m512d rv = _mm512_i32logather_pd(col, xv, sizeof(double));
@@ -184,12 +186,12 @@ extern "C" {
             rv = _mm512_i32logather_pd(col, xv, sizeof(double));
             v = _mm512_mul_pd(lv, rv);
             _mm512_storenrngo_pd(val[i] + ALIGNMENT/sizeof(double), v);
-
+               */
         }
 #elif defined(CPU) && defined(INTRINSICS) 
-            assert(false); // TODO
+        assert(false); // TODO
 #else
-        #pragma omp parallel for schedule(static)
+#pragma omp parallel for schedule(static)
         for (int i = 0; i < H; i++) {
             double* restrict val_tmp = val[i];
             for (int j = 0; j < W; j++) {
@@ -204,31 +206,34 @@ extern "C" {
         //------------------------------
 #if defined(MIC) && defined(INTRINSICS)
         int counter = 1<<nStep;
-#pragma omp parallel
-        {
-            for (int s = 0; s < nStep; s++) {
-#pragma omp single
-                counter >>= 1;
-#pragma omp for
-                for (int i = 0; i < sum_segs_count[s]; i++) {
-                    // Original Code
-                    /*
-                       int h = sum_segs[s][i];
-                       for (int j = 0; j < W; j++) {
-                       val[h-counter][j] += val[h][j];
-                       }
-                       */
-                    int h = sum_segs[s][i];
-                    __m512d src = _mm512_load_pd(val[h]);
-                    __m512d dst = _mm512_load_pd(val[h-counter]);
-                    dst = _mm512_add_pd(src, dst);
-                    _mm512_storenrngo_pd(val[h-counter], dst);
+        for (int s = 0; s < nStep; s++) {
+            counter >>= 1;
+#pragma omp parallel for
+            for (int i = 0; i < sum_segs_count[s]; i++) {
+                // Original Code
+                /*
+                   int h = sum_segs[s][i];
+                   for (int j = 0; j < W; j++) {
+                   val[h-counter][j] += val[h][j];
+                   }
+                   */
+                int h = sum_segs[s][i];
+                __m512d dst = _mm512_load_pd(val[h-counter]);
+                __m512d src = _mm512_load_pd(val[h]);
+                dst = _mm512_add_pd(src, dst);
+                _mm512_storenrngo_pd(val[h-counter], dst);
+                /*
+                int h = sum_segs[s][i];
+                __m512d src = _mm512_load_pd(val[h]);
+                __m512d dst = _mm512_load_pd(val[h-counter]);
+                dst = _mm512_add_pd(src, dst);
+                _mm512_storenrngo_pd(val[h-counter], dst);
 
-                    src = _mm512_load_pd(val[h] + ALIGNMENT/sizeof(double));
-                    dst = _mm512_load_pd(val[h-counter] + ALIGNMENT/sizeof(double));
-                    dst = _mm512_add_pd(src, dst);
-                    _mm512_storenrngo_pd(val[h-counter] + ALIGNMENT/sizeof(double), dst);
-                }
+                src = _mm512_load_pd(val[h] + ALIGNMENT/sizeof(double));
+                dst = _mm512_load_pd(val[h-counter] + ALIGNMENT/sizeof(double));
+                dst = _mm512_add_pd(src, dst);
+                _mm512_storenrngo_pd(val[h-counter] + ALIGNMENT/sizeof(double), dst);
+               */
             }
         }
 
