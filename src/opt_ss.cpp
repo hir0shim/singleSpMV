@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cmath>
 #include <immintrin.h>
+vector<int> g_step_count;
 void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_opt) {
     x_opt.size = x.size;
     x_opt.val = x.val;
@@ -119,6 +120,9 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
         }
         assert(idx == nSeg);
     }
+    g_step_count.resize(nStep);
+    for (int i = 0; i < nStep; i++) 
+        g_step_count[i] = sum_segs_count[i];
 
     A_opt.nRow = nRow;
     A_opt.nCol = nCol;
@@ -156,88 +160,48 @@ extern "C" {
         int nStep = A.nStep;
         int** restrict sum_segs = A.sum_segs;
         int* restrict sum_segs_count = A.sum_segs_count;
-        //------------------------------
-        // Mul
-        //------------------------------
-#if defined(MIC) && defined(INTRINSICS)
-#pragma omp parallel for schedule(static)
-        for (int i = 0; i < H; i++) {
-            // Original Code
-            /*
-           for (int j = 0; j < W; j++) {
-               val[i][j] *= xv[col_idx[i][j]];
-           }
-           */
 
+#if defined(SIMPLE) 
+        // Mul
+        #pragma omp parallel for 
+        for (int i = 0; i < H; i++) {
+            for (int j = 0; j < W; j++) {
+                val[i][j] *= xv[col_idx[i][j]];
+            }
+        }
+        // Sum
+        #pragma omp parallel for
+        for (int i = 0; i < nRow; i++) {
+            yv[i] = 0;
+            for (int j = row_ptr[i]; j < row_ptr[i+1]; j++) {
+                yv[i] += *(val[0] + j);
+            }
+        }
+
+#elif defined(MIC) && defined(INTRINSICS)
+        // Mul
+        #pragma omp parallel for schedule(static)
+        for (int i = 0; i < H; i++) {
             __m512i col = _mm512_load_epi64(col_idx[i]);
             __m512d lv = _mm512_load_pd(val[i]);
             __m512d rv = _mm512_i64gather_pd(col, xv, sizeof(double));
             __m512d v = _mm512_mul_pd(lv, rv);
             _mm512_storenrngo_pd(val[i], v);
-            /* 
-            __m512i col = _mm512_load_epi32(col_idx[i]);
-            __m512d lv = _mm512_load_pd(val[i]);
-            __m512d rv = _mm512_i32logather_pd(col, xv, sizeof(double));
-            __m512d v = _mm512_mul_pd(lv, rv);
-            _mm512_storenrngo_pd(val[i], v);
-
-            col = _mm512_alignr_epi32(col, col, ALIGNMENT/sizeof(int)/2);
-            lv = _mm512_load_pd(val[i] + ALIGNMENT/sizeof(double));
-            rv = _mm512_i32logather_pd(col, xv, sizeof(double));
-            v = _mm512_mul_pd(lv, rv);
-            _mm512_storenrngo_pd(val[i] + ALIGNMENT/sizeof(double), v);
-               */
         }
-#elif defined(CPU) && defined(INTRINSICS) 
-        assert(false); // TODO
-#else
-#pragma omp parallel for schedule(static)
-        for (int i = 0; i < H; i++) {
-            double* restrict val_tmp = val[i];
-            for (int j = 0; j < W; j++) {
-                int col = col_idx[i][j];
-                double rv = xv[col];
-                val_tmp[j] *= rv;
-            }
-        }
-#endif
-        //------------------------------
-        // Summation
-        //------------------------------
-#if defined(MIC) && defined(INTRINSICS)
+        // Sum
         int counter = 1<<nStep;
         for (int s = 0; s < nStep; s++) {
             counter >>= 1;
-#pragma omp parallel for
+            #pragma omp parallel for
             for (int i = 0; i < sum_segs_count[s]; i++) {
-                // Original Code
-                /*
-                   int h = sum_segs[s][i];
-                   for (int j = 0; j < W; j++) {
-                   val[h-counter][j] += val[h][j];
-                   }
-                   */
                 int h = sum_segs[s][i];
                 __m512d dst = _mm512_load_pd(val[h-counter]);
                 __m512d src = _mm512_load_pd(val[h]);
                 dst = _mm512_add_pd(src, dst);
                 _mm512_storenrngo_pd(val[h-counter], dst);
-                /*
-                int h = sum_segs[s][i];
-                __m512d src = _mm512_load_pd(val[h]);
-                __m512d dst = _mm512_load_pd(val[h-counter]);
-                dst = _mm512_add_pd(src, dst);
-                _mm512_storenrngo_pd(val[h-counter], dst);
-
-                src = _mm512_load_pd(val[h] + ALIGNMENT/sizeof(double));
-                dst = _mm512_load_pd(val[h-counter] + ALIGNMENT/sizeof(double));
-                dst = _mm512_add_pd(src, dst);
-                _mm512_storenrngo_pd(val[h-counter] + ALIGNMENT/sizeof(double), dst);
-               */
             }
         }
-
-#pragma omp parallel for
+        #pragma omp parallel for
         for (int i = 0; i < nRow; i++) {
             double yv_tmp = 0;
             int begin = row_ptr[i];
@@ -268,13 +232,87 @@ extern "C" {
             }
             yv[i] = yv_tmp;
         }
-#elif defined(CPU) && defined(INTRINSICS)
-        assert(false); // TODO
-#else
+
+#elif defined(CPU) && defined(INTRINSICS) 
+        // Mul
+        #pragma omp parallel for schedule(static)
+        for (int i = 0; i < H; i++) {
+            double* restrict val_tmp = val[i];
+            __m256i col = _mm256_load_si256((__m256i *)col_idx[i]);
+            __m256d rv = _mm256_i64gather_pd(xv, col, sizeof(double));
+            __m256d lv = _mm256_load_pd(val[i]);
+            __m256d v = _mm256_mul_pd(lv, rv);
+            _mm256_stream_pd(val[i], v);
+            /*
+            for (int j = 0; j < W; j++) {
+                int col = col_idx[i][j];
+                double rv = xv[col];
+                val_tmp[j] *= rv;
+            }
+            */
+        }
+        // Sum
         int counter = 1<<nStep;
         for (int s = 0; s < nStep; s++) {
             counter >>= 1;
-#pragma omp parallel for
+            #pragma omp parallel for
+            for (int i = 0; i < sum_segs_count[s]; i++) {
+                int h = sum_segs[s][i];
+                __m256d dst = _mm256_load_pd(val[h-counter]);
+                __m256d src = _mm256_load_pd(val[h]);
+                dst = _mm256_add_pd(src, dst);
+                _mm256_stream_pd(val[h-counter], dst);
+                //_mm256_store_pd(val[h-counter], dst);
+            }
+        }
+
+        #pragma omp parallel for
+        for (int i = 0; i < nRow; i++) {
+            double yv_tmp = 0;
+            int begin = row_ptr[i];
+            int end = row_ptr[i+1];
+            int begin_seg = begin / W;
+            int end_seg = end / W;
+            if (begin_seg == end_seg) {
+                for (int j = begin; j < end; j++) {
+                    yv_tmp += *(val[0] + j);
+                }
+            } else {
+                // upper
+                for (int j = begin; (j & W-1) != 0; j++) {
+                    yv_tmp += *(val[0] + j);
+                    begin++;
+                }
+                // lower
+                for (int j = end; (j & W-1) != 0; j--) {
+                    yv_tmp += *(val[0] + j - 1);
+                    end--;
+                }
+                // center
+                if (begin != end) {
+                    for (int j = 0; j < W; j++) {
+                        yv_tmp += *(val[0] + begin + j);
+                    }
+                }
+            }
+            yv[i] = yv_tmp;
+        }
+#else 
+        // Mul
+        #pragma omp parallel for schedule(static)
+        for (int i = 0; i < H; i++) {
+            double* restrict val_tmp = val[i];
+            for (int j = 0; j < W; j++) {
+                int col = col_idx[i][j];
+                double rv = xv[col];
+                val_tmp[j] *= rv;
+            }
+        }
+        // Sum
+        int counter = 1<<nStep;
+        for (int s = 0; s < nStep; s++) {
+            counter >>= 1;
+            #pragma omp parallel for
             for (int i = 0; i < sum_segs_count[s]; i++) {
                 int h = sum_segs[s][i];
                 for (int j = 0; j < W; j++) {
@@ -283,7 +321,7 @@ extern "C" {
             }
         }
 
-#pragma omp parallel for
+        #pragma omp parallel for
         for (int i = 0; i < nRow; i++) {
             double yv_tmp = 0;
             int begin = row_ptr[i];
