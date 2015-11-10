@@ -210,10 +210,10 @@ extern "C" {
             int end_seg = end / W;
             if (begin_seg == end_seg) {
                 assert(W == 8);
-                asset(false);
+                assert(false);
                 // [begin&W,end&W)
                 int mask = ((1<<(end&W))-1) & ~(1<<(begin&W)-1);
-                __m512d v = _mm512_mask_load_pd(v, mask, val[0]+j);
+                __m512d v = _mm512_mask_load_pd(v, mask, val[0] + (begin&~(W-1)));
                 double sum = _mm512_reduce_add_pd(v);
                 yv_tmp += sum;
                 /*
