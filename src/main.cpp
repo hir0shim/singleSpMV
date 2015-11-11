@@ -4,7 +4,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
+#ifdef _OPENMP
 #include <omp.h>
+#endif
 /*
 #include <ittnotify.h> // VTune Amplifier
 */
@@ -148,8 +150,10 @@ int main (int argc, char **argv) {
     printf("%25s\t%d\n", "nNnz", nNnz);
 #pragma omp parallel
     {
+#ifdef _OPENMP
 #pragma omp master
         printf("%25s\t%d\n", "nThread", omp_get_num_threads());
+#endif
     }
     printf("----------------------------------------\n");
     return 0;
