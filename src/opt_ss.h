@@ -14,6 +14,7 @@ struct SpMatOpt {
     double **val;
 
     // for fast reduce
+    int nSeg;
     int **index;
     int *segment_index;
     //int max_index;

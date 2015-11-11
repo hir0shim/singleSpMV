@@ -214,6 +214,10 @@ extern "C" {
             int begin_bit = 1<<(begin&(W-1));
             int end_bit = 1<<(end&(W-1));
             if (begin_seg == end_seg) {
+                if (begin == end) {
+                    yv[i] = 0;
+                    continue;
+                }
                 int mask = (end_bit-1) & ~(begin_bit-1);
                 __m512d v = _mm512_mask_load_pd(v, mask, val[begin_seg]);
                 double sum = _mm512_mask_reduce_add_pd(mask, v);
