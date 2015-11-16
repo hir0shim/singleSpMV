@@ -2,6 +2,7 @@
 #include <string>
 using namespace std;
 
+
 // COO foramt
 struct SpMat {
     int nRow, nCol, nNnz;
@@ -52,3 +53,11 @@ void ViewVec (const Vec &v);
             exit(err); \
         } \
     } while(0)
+
+
+
+#ifdef INDEX_64
+typedef int64_t idx_t;
+#elif INDEX_32
+typedef int idx_t;
+#endif

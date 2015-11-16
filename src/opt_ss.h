@@ -10,7 +10,7 @@ struct SpMatOpt {
     int H;
     int *row_ptr;
     int **row_idx;
-    int64_t **col_idx;
+    idx_t **col_idx;
     double **val;
 
     // for fast reduce

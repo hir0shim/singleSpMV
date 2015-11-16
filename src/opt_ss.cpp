@@ -28,12 +28,12 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     int H = nNnz / W + (nNnz % W != 0);
     int *row_ptr = (int *)_mm_malloc((nRow+1)*sizeof(int), ALIGNMENT);
     int **row_idx_2d = (int **)_mm_malloc(H*sizeof(int*), ALIGNMENT);
-    int64_t **col_idx_2d = (int64_t **)_mm_malloc(H*sizeof(int64_t*), ALIGNMENT);
+    idx_t **col_idx_2d = (idx_t **)_mm_malloc(H*sizeof(idx_t*), ALIGNMENT);
     double **val_2d = (double **)_mm_malloc(H*sizeof(double*), ALIGNMENT);
     int **index_2d = (int **)_mm_malloc(H*sizeof(int*), ALIGNMENT);
 
     row_idx_2d[0] = (int *)_mm_malloc(H*W*sizeof(int), ALIGNMENT);
-    col_idx_2d[0] = (int64_t *)_mm_malloc(H*W*sizeof(int64_t), ALIGNMENT);
+    col_idx_2d[0] = (idx_t *)_mm_malloc(H*W*sizeof(idx_t), ALIGNMENT);
     val_2d[0] = (double *)_mm_malloc(H*W*sizeof(double), ALIGNMENT);
     index_2d[0] = (int *)_mm_malloc(H*W*sizeof(int), ALIGNMENT);
 
@@ -152,8 +152,9 @@ extern "C" {
         // Format specific 
         //------------------------------
         const int H = A.H;
-        const int W = A.W;
-        int64_t** restrict col_idx = A.col_idx;
+        // const int W = A.W;
+        const int W = ALIGNMENT/sizeof(double);
+        idx_t** restrict col_idx = A.col_idx;
         double** restrict val = A.val;
         int* restrict row_ptr = A.row_ptr;
         int* restrict segment_index = A.segment_index;
@@ -188,11 +189,11 @@ extern "C" {
             __m512d v = _mm512_mul_pd(lv, rv);
             _mm512_storenrngo_pd(val[i], v);
         }
-        // Sum
+        // Sum 1
         int counter = 1<<nStep;
         for (int s = 0; s < nStep; s++) {
             counter >>= 1;
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for
             for (int i = 0; i < sum_segs_count[s]; i++) {
                 int h = sum_segs[s][i];
                 __m512d src = _mm512_load_pd(val[h]);
