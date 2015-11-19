@@ -35,9 +35,9 @@ int main(int argc, char** argv) {
         xv[i] = rand();
     }
 
+#pragma omp parallel for collapse(2)
     for (int b = 0; b < nBlock; b++) {
         for (int i = 0; i < H[b]; i++) {
-#pragma omp parallel for
             for (int j = 0; j < W; j++) {
                 val[b][i][j] *= xv[col_idx[b][i][j]];
             }

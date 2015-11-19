@@ -152,7 +152,7 @@ extern "C" {
         // Format specific 
         //------------------------------
         const int H = A.H;
-        // const int W = A.W;
+        //const int W = A.W;
         const int W = ALIGNMENT/sizeof(double);
         idx_t** restrict col_idx = A.col_idx;
         double** restrict val = A.val;

@@ -48,9 +48,16 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     idx_t ***col_idx_2d = (idx_t***)_mm_malloc(nBlock*sizeof(idx_t**), ALIGNMENT);
     double ***val_2d = (double***)_mm_malloc(nBlock*sizeof(double**), ALIGNMENT);
 
-    int total = 0;
+    int totalH = 0;
     for (int b = 0; b < nBlock; b++) {
-        total += blocks[b].val.size();
+        int block_nNnz = blocks[b].val.size();
+        H[b] = block_nNnz/W + (block_nNnz%W?1:0);
+        totalH += H[b];
+    }
+    double* val_ptr = (double*)_mm_malloc(totalH*W*sizeof(double), ALIGNMENT);
+    idx_t* col_idx_ptr = (idx_t*)_mm_malloc(totalH*W*sizeof(idx_t), ALIGNMENT);
+
+    for (int b = 0; b < nBlock; b++) {
         int block_nNnz = blocks[b].val.size();
         H[b] = block_nNnz/W + (block_nNnz%W?1:0);
         row_ptr[b] = (int*)_mm_malloc((nRow+1)*sizeof(int), ALIGNMENT);
@@ -58,12 +65,16 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
         val_2d[b] = (double**)_mm_malloc(H[b]*sizeof(double*), ALIGNMENT);
 
         int N = H[b] * W;
+        /*
         col_idx_2d[b][0] = (idx_t*)_mm_malloc(N*sizeof(idx_t), ALIGNMENT);
         val_2d[b][0] = (double*)_mm_malloc(N*sizeof(double), ALIGNMENT);
+        */
 
-        for (int i = 1; i < H[b]; i++) {
-            col_idx_2d[b][i] = col_idx_2d[b][i-1] + W;
-            val_2d[b][i] = val_2d[b][i-1] + W;
+        for (int i = 0; i < H[b]; i++) {
+            col_idx_2d[b][i] = col_idx_ptr;
+            val_2d[b][i] = val_ptr;
+            col_idx_ptr += W;
+            val_ptr += W;
         }
 
         row_ptr[b][0] = 0;
@@ -95,6 +106,7 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     A_opt.col_idx = col_idx_2d;
     A_opt.val = val_2d;
     A_opt.B = B;
+    A_opt.totalH = totalH;
 }
 extern "C" {
     void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
@@ -114,18 +126,24 @@ extern "C" {
         idx_t*** restrict col_idx = A.col_idx;
         double*** restrict val = A.val;
         int** restrict row_ptr = A.row_ptr;
+        int totalH = A.totalH;
 
-
-        // collapse doesn't work
+// #pragma omp parallel for collapse // Segmentation fault
 #pragma omp parallel for
+        for (int i = 0; i < totalH; i++) {
+            for (int j = 0; j < W; j++) {
+                *(val[0][0]+i*W+j) *= xv[*(col_idx[0][0]+i*W+j)];
+            }
+        }
+        /*
         for (int b = 0; b < nBlock; b++) {
-#pragma omp parallel for
             for (int i = 0; i < H[b]; i++) {
                 for (int j = 0; j < W; j++) {
                     val[b][i][j] *= xv[col_idx[b][i][j]];
                 }
             }
         }
+        */
 
 #pragma omp parallel for
         for (int i = 0; i < nRow; i++) yv[i] = 0;

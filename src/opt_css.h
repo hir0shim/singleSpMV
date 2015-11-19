@@ -14,6 +14,9 @@ struct SpMatOpt {
     int **row_ptr; // [block][row]
     idx_t ***col_idx; // [block][vi][vj]
     double ***val;
+
+    // for collapse
+    int totalH;
 };
 struct VecOpt {
     int size;
