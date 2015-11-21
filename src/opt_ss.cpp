@@ -19,7 +19,9 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     //------------------------------
     // Format specific 
     //------------------------------
-
+#ifdef PADDING
+    const int pad = ALIGNMENT / sizeof(double) * 3;
+#endif
     int *row_idx = A.row_idx;
     int *col_idx = A.col_idx;
     double *val = A.val;
@@ -34,13 +36,21 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
 
     row_idx_2d[0] = (int *)_mm_malloc(H*W*sizeof(int), ALIGNMENT);
     col_idx_2d[0] = (idx_t *)_mm_malloc(H*W*sizeof(idx_t), ALIGNMENT);
+#ifdef PADDING
+    val_2d[0] = (double *)_mm_malloc(H*(W+pad)*sizeof(double), ALIGNMENT);
+#else
     val_2d[0] = (double *)_mm_malloc(H*W*sizeof(double), ALIGNMENT);
+#endif
     index_2d[0] = (int *)_mm_malloc(H*W*sizeof(int), ALIGNMENT);
 
     for (int i = 1; i < H; i++) {
         row_idx_2d[i] = row_idx_2d[i-1] + W;
         col_idx_2d[i] = col_idx_2d[i-1] + W;
+#ifdef PADDING
+        val_2d[i] = val_2d[i-1] + W + pad;
+#else
         val_2d[i] = val_2d[i-1] + W;
+#endif
         index_2d[i] = index_2d[i-1] + W;
     }
     row_ptr[0] = 0;
@@ -121,8 +131,9 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
         assert(idx == nSeg);
     }
     g_step_count.resize(nStep);
-    for (int i = 0; i < nStep; i++) 
+    for (int i = 0; i < nStep; i++) {
         g_step_count[i] = sum_segs_count[i];
+    }
 
     A_opt.nRow = nRow;
     A_opt.nCol = nCol;
@@ -152,8 +163,8 @@ extern "C" {
         // Format specific 
         //------------------------------
         const int H = A.H;
-        //const int W = A.W;
-        const int W = ALIGNMENT/sizeof(double);
+        const int W = A.W;
+        //const int W = ALIGNMENT/sizeof(double);
         idx_t** restrict col_idx = A.col_idx;
         double** restrict val = A.val;
         int* restrict row_ptr = A.row_ptr;
@@ -163,6 +174,7 @@ extern "C" {
         int* restrict sum_segs_count = A.sum_segs_count;
 
 #if defined(SIMPLE) 
+        //{{{
         // Mul
 #pragma omp parallel for 
         for (int i = 0; i < H; i++) {
@@ -178,8 +190,9 @@ extern "C" {
                 yv[i] += *(val[0] + j);
             }
         }
-
+        //}}}
 #elif defined(MIC) && defined(INTRINSICS)
+        //{{{
         // Mul
 #pragma omp parallel for schedule(static)
         for (int i = 0; i < H; i++) {
@@ -249,8 +262,9 @@ extern "C" {
             }
             yv[i] = yv_tmp;
         }
-
+        //}}}
 #elif defined(CPU) && defined(INTRINSICS) 
+        //{{{
         // Mul
 #pragma omp parallel for schedule(static)
         for (int i = 0; i < H; i++) {
@@ -307,7 +321,9 @@ extern "C" {
             }
             yv[i] = yv_tmp;
         }
+        //}}}
 #else 
+        //{{{
         // Mul
 #pragma omp parallel for schedule(static)
         for (int i = 0; i < H; i++) {
@@ -340,28 +356,48 @@ extern "C" {
             int end_seg = end / W;
             if (begin_seg == end_seg) {
                 for (int j = begin; j < end; j++) {
+#ifdef PADDING
+                    yv_tmp += val[begin_seg][j&(W-1)];
+#else
                     yv_tmp += *(val[0] + j);
+#endif
                 }
             } else {
                 // upper
                 for (int j = begin; (j & W-1) != 0; j++) {
+#ifdef PADDING
+                    yv_tmp += val[begin_seg][j&(W-1)];
+#else
                     yv_tmp += *(val[0] + j);
+#endif
                     begin++;
                 }
                 // lower
                 for (int j = end; (j & W-1) != 0; j--) {
+#ifdef PADDING
+                    yv_tmp += val[end_seg][(j&(W-1))-1];
+#else
                     yv_tmp += *(val[0] + j - 1);
+#endif
                     end--;
                 }
                 // center
+#ifdef PADDING
+                begin_seg = begin / W;
+#endif
                 if (begin != end) {
                     for (int j = 0; j < W; j++) {
+#ifdef PADDING
+                        yv_tmp += val[begin_seg][j&(W-1)];
+#else
                         yv_tmp += *(val[0] + begin + j);
+#endif
                     }
                 }
             }
             yv[i] = yv_tmp;
         }
+        //}}}
 #endif
     }
 }

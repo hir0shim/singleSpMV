@@ -5,8 +5,8 @@ struct SpMatOpt {
     int nCol;
     int nNnz;
 
-    //const int W = ALIGNMENT / sizeof(double) * 2;
-    const int W = ALIGNMENT / sizeof(double);
+    const int W = ALIGNMENT / sizeof(double) * 16;
+    //const int W = ALIGNMENT / sizeof(double);
     int H;
     int *row_ptr;
     int **row_idx;
