@@ -1,12 +1,12 @@
 #pragma once
 #include "util.h"
+#include "constant.h"
 struct SpMatOpt {
     int nRow;
     int nCol;
     int nNnz;
 
-    const int W = ALIGNMENT / sizeof(double) * 16;
-    //const int W = ALIGNMENT / sizeof(double);
+    const int W = SEGMENT_WIDTH;
     int H;
     int *row_ptr;
     int **row_idx;

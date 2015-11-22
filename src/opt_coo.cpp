@@ -28,9 +28,9 @@ void SpMV (const SpMatOpt &A, const VecOpt &x, Vec &y) {
     //------------------------------
     // Format specific 
     //------------------------------
-    int *row_idx = A.row_idx;
-    int *col_idx = A.col_idx;
-    double *val = A.val;
+    int* restrict row_idx = A.row_idx;
+    int* restrict col_idx = A.col_idx;
+    double* restrict val = A.val;
 #pragma omp parallel
     {
 #pragma omp for

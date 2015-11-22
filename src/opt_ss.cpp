@@ -1,5 +1,6 @@
 #include "opt_ss.h"
 #include "util.h"
+#include "constant.h"
 #include <algorithm>
 #include <vector>
 #include <utility>
@@ -20,7 +21,7 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     // Format specific 
     //------------------------------
 #ifdef PADDING
-    const int pad = ALIGNMENT / sizeof(double) * 3;
+    const int pad = PADDING_SIZE;
 #endif
     int *row_idx = A.row_idx;
     int *col_idx = A.col_idx;
@@ -163,8 +164,7 @@ extern "C" {
         // Format specific 
         //------------------------------
         const int H = A.H;
-        const int W = A.W;
-        //const int W = ALIGNMENT/sizeof(double);
+        const int W = SEGMENT_WIDTH;
         idx_t** restrict col_idx = A.col_idx;
         double** restrict val = A.val;
         int* restrict row_ptr = A.row_ptr;
@@ -322,7 +322,7 @@ extern "C" {
             yv[i] = yv_tmp;
         }
         //}}}
-#else 
+#elif defined(OPTIMIZED)
         //{{{
         // Mul
 #pragma omp parallel for schedule(static)

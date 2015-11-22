@@ -1,6 +1,6 @@
-
 #include "opt_css.h"
 #include "util.h"
+#include "constant.h"
 #include <algorithm>
 #include <vector>
 #include <utility>
@@ -28,8 +28,7 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     int *col_idx = A.col_idx;
     double *val = A.val;
 
-    int W = A_opt.W;
-    //int B = A_opt.B;
+    int W = SEGMENT_WIDTH;
     int B = ceil((double)nCol / N_BLOCK);
 
     int nBlock = nCol/B + (nCol%B?1:0);
@@ -119,23 +118,17 @@ extern "C" {
         //------------------------------
         // Format specific 
         //------------------------------
-        const int W = ALIGNMENT / sizeof(double); // A.W;
+        const int W = SEGMENT_WIDTH; //ALIGNMENT / sizeof(double); 
         int B = A.B;
         int nBlock = A.nBlock;
         int* restrict H = A.H;
         idx_t*** restrict col_idx = A.col_idx;
         double*** restrict val = A.val;
         int** restrict row_ptr = A.row_ptr;
-        int totalH = A.totalH;
 
-// #pragma omp parallel for collapse // Segmentation fault
+#ifdef SIMPLE
+        //{{{
 #pragma omp parallel for
-        for (int i = 0; i < totalH; i++) {
-            for (int j = 0; j < W; j++) {
-                *(val[0][0]+i*W+j) *= xv[*(col_idx[0][0]+i*W+j)];
-            }
-        }
-        /*
         for (int b = 0; b < nBlock; b++) {
             for (int i = 0; i < H[b]; i++) {
                 for (int j = 0; j < W; j++) {
@@ -143,7 +136,6 @@ extern "C" {
                 }
             }
         }
-        */
 
 #pragma omp parallel for
         for (int i = 0; i < nRow; i++) yv[i] = 0;
@@ -156,6 +148,19 @@ extern "C" {
             }
         }
     }
+    //}}}
+#elif OPTIMIZED
+    //{{{
+    int totalH = A.totalH;
+    for (int i = 0; i < totalH; i++) {
+        for (int j = 0; j < W; j++) {
+            *(val[0][0]+i*W+j) *= xv[*(col_idx[0][0]+i*W+j)];
+        }
+    }
+    // TODO:Summation
+    //}}}
+#endif
+
 }
 
 
