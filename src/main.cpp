@@ -124,8 +124,10 @@ int main (int argc, char **argv) {
 #ifdef OPT_SS
     printf("%25s\t%s\n", "MatrixFormat", "SS");
     extern vector<int> g_step_count;
+    extern vector<double> g_step_time;
     for (int i = 0; i < g_step_count.size(); i++) {
-        printf("%22s-%02d\t%d\n", "Step", i, g_step_count[i]);
+        printf("%22s-%02d\t%d\n", "StepCount", i, g_step_count[i]);
+        printf("%22s-%02d\t%lf\n", "StepTime", i, g_step_time[i]);
     }
     isDefinedFormat = true;
 #endif

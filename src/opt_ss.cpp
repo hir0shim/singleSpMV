@@ -9,6 +9,7 @@
 #include <cmath>
 #include <immintrin.h>
 vector<int> g_step_count;
+vector<double> g_step_time;
 void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_opt) {
     x_opt.size = x.size;
     x_opt.val = x.val;
@@ -135,6 +136,7 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     for (int i = 0; i < nStep; i++) {
         g_step_count[i] = sum_segs_count[i];
     }
+    g_step_time.resize(nStep);
 
     A_opt.nRow = nRow;
     A_opt.nCol = nCol;
@@ -337,6 +339,7 @@ extern "C" {
         // Sum
         int counter = 1<<nStep;
         for (int s = 0; s < nStep; s++) {
+            g_step_time[s] -= GetTimeBySec();
             counter >>= 1;
 #pragma omp parallel for
             for (int i = 0; i < sum_segs_count[s]; i++) {
@@ -344,7 +347,6 @@ extern "C" {
                 for (int j = 0; j < W; j++) {
                     val[h-counter][j] += val[h][j];
                 }
-            }
         }
 
 #pragma omp parallel for
