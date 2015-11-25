@@ -16,7 +16,7 @@ log/*.tsv*
 format
 
 script/bak/
-script/batch/
+script/batch/*.sh
 
 ### Others ###
 a.out
