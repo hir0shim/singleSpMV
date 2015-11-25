@@ -1,6 +1,6 @@
 #pragma once
 #include "util.h"
-#include "constant.h"
+#include "param.h"
 struct SpMatOpt {
     int nRow;
     int nCol;

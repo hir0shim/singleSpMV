@@ -12,7 +12,7 @@
 */
 #include "opt.h"
 #include "util.h"
-#include "constant.h"
+#include "param.h"
 using namespace std;
 int main (int argc, char **argv) {
     srand(3);

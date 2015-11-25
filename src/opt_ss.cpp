@@ -1,6 +1,6 @@
 #include "opt_ss.h"
 #include "util.h"
-#include "constant.h"
+#include "param.h"
 #include <algorithm>
 #include <vector>
 #include <utility>
