@@ -12,6 +12,7 @@
 */
 #include "opt.h"
 #include "util.h"
+#include "constant.h"
 using namespace std;
 int main (int argc, char **argv) {
     srand(3);
@@ -127,8 +128,14 @@ int main (int argc, char **argv) {
     extern vector<double> g_step_time;
     for (int i = 0; i < g_step_count.size(); i++) {
         printf("%22s-%02d\t%d\n", "StepCount", i, g_step_count[i]);
+#ifdef MEASURE_STEP_TIME
         printf("%22s-%02d\t%lf\n", "StepTime", i, g_step_time[i]);
+#endif
     }
+    printf("%25s\t%d\n", "SEGMENT_WIDTH(byte)", int(SEGMENT_WIDTH*sizeof(double)));
+#ifdef PADDING
+        printf("%25s\t%d\n", "PADDING_WIDTH(byte)", int(PADDING_SIZE*sizeof(double)));
+#endif
     isDefinedFormat = true;
 #endif
 #ifdef OPT_MKL

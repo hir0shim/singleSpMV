@@ -10,6 +10,6 @@ logfile=$LOG_DIR/mic-`date +%y-%m-%d-%H-%M`.tsv && echo "" > $logfile
 for ((i=1; i <= 100000; i*=4)) do
     echo "MIC $i"
     srun -p KAREN make clean
-    srun -p KAREN make bin/spmv.mic CMDLINE_OPTION=-DN_BLOCK=$i
+    srun -p KAREN make bin/spmv.mic OPTION=-DN_BLOCK=$i
     srun -p KAREN mpirun-mic -m "$BINARY_DIR/spmv.mic $MATRIX_DIR/cage15.mtx" >> $logfile
 done

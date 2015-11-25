@@ -339,7 +339,9 @@ extern "C" {
         // Sum
         int counter = 1<<nStep;
         for (int s = 0; s < nStep; s++) {
+#ifdef MEASURE_STEP_TIME
             g_step_time[s] -= GetTimeBySec();
+#endif
             counter >>= 1;
 #pragma omp parallel for
             for (int i = 0; i < sum_segs_count[s]; i++) {
@@ -347,6 +349,10 @@ extern "C" {
                 for (int j = 0; j < W; j++) {
                     val[h-counter][j] += val[h][j];
                 }
+            }
+#ifdef MEASURE_STEP_TIME
+            g_step_time[s] += GetTimeBySec();
+#endif
         }
 
 #pragma omp parallel for
