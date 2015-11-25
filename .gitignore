@@ -20,6 +20,7 @@ vtune/
 src/_*
 bak/
 
+script/todo.csv
 
 ### Others ###
 a.out
