@@ -1,5 +1,5 @@
 script_dir=$(cd $(dirname $BASH_SOURCE); pwd)
-todo=`cat $script_dir/todo.csv`
+todo=`cat $script_dir/todo.csv | grep -v -e '^\s*#' -e '^\s*$'`
 source $script_dir/env.sh
 cd $script_dir/../
 IFS=$'\n'

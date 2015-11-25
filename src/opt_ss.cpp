@@ -206,6 +206,7 @@ extern "C" {
             }
         }
         // Sum
+#ifdef SKIP_UNUSED_SUM
         int counter = 1<<nStep;
         for (int s = 0; s < nStep; s++) {
 #ifdef MEASURE_STEP_TIME
@@ -223,6 +224,26 @@ extern "C" {
             g_step_time[s] += GetTimeBySec();
 #endif
         }
+#else //NO SKIP_UNUSED_SUM
+        int counter = 1<<nStep;
+        for (int s = 0; s < nStep; s++) {
+#ifdef MEASURE_STEP_TIME
+            g_step_time[s] -= GetTimeBySec();
+#endif
+            counter >>= 1;
+            for (int i = 0; i < H; i++) {
+                if (counter <= segment_index[i] && segment_index[i] < counter*2) {
+                    for (int j = 0; j < W; j++) {
+                        val[i-counter][j] += val[i][j];
+                        val[i][j] = 0;
+                    }
+                }
+            }
+#ifdef MEASURE_STEP_TIME
+            g_step_time[s] += GetTimeBySec();
+#endif
+        }
+#endif // SKIP_UNUSED_SUM
 
 #pragma omp parallel for
         for (int i = 0; i < nRow; i++) {
