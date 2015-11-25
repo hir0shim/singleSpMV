@@ -1,5 +1,5 @@
 script_dir=$(cd $(dirname $BASH_SOURCE); pwd)
-todo=`cat $script_dir/todo.csv | sort -r`
+todo=`cat $script_dir/todo.csv`
 source $script_dir/env.sh
 matrices=`ls $MATRIX_DIR/*.mtx | xargs -i basename {}`
 cd $script_dir/../
