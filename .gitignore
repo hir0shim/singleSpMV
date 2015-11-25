@@ -15,6 +15,9 @@ generator
 log/*.tsv*
 format
 
+script/bak/
+script/batch/
+
 ### Others ###
 a.out
 out

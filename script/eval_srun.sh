@@ -12,13 +12,12 @@ do
 
     logfile=$LOG_DIR/$arch-$prefix.tsv
     params="arch=$arch prefix=$prefix option=$option logfile=$logfile"
-    if [ -f $logfile ]; then
+    ln -s $logfile $logfile.lock
+    if [ $? -eq 1 ]; then
         echo -e "Skip : \n\t $params";
         continue
     fi
     touch $logfile
-    logfile_tmp=$logfile-$RANDOM
-    touch $logfile_tmp
     echo -e "Do : \n\t $params"
 
     ### CPU ### 
@@ -28,7 +27,8 @@ do
         for matrix in $matrices
         do
             echo "CPU $matrix"
-            srun -p NOEL $BINARY_DIR/$prefix-spmv.cpu $MATRIX_DIR/$matrix >> $logfile_tmp
+            srun -p NOEL $BINARY_DIR/$prefix-spmv.cpu $MATRIX_DIR/$matrix >> $logfile
+            break
         done
     ### MIC ### 
     elif [ $arch = "mic" ]; then
@@ -37,14 +37,14 @@ do
         for matrix in $matrices
         do
             echo "MIC $matrix"
-            srun -p KAREN mpirun-mic -m "$BINARY_DIR/$prefix-spmv.mic $MATRIX_DIR/$matrix" >> $logfile_tmp
+            srun -p KAREN mpirun-mic -m "$BINARY_DIR/$prefix-spmv.mic $MATRIX_DIR/$matrix" >> $logfile
+            break
         done
     else 
         echo "Invalid arch : $arch"
         exit 1
     fi
 
-    mv $logfile_tmp $logfile
 done
 
 
