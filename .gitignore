@@ -1,26 +1,19 @@
 ### Directoies ###
-bin/spmv*
+
 bin/
+obj/
+asm/
+vtune/
+bak/
 
 matrix/artificial/*.mtx
 matrix/natural/*.mtx
-matrix/visualizer
+visualizer
 generator
 
-obj/*.o.*
 
-log/*.tsv
-log/format
-
-test/mypwd
-
-
-asm/
-vtune/
-src/_*
-bak/
-
-script/todo.csv
+log/*.tsv*
+format
 
 ### Others ###
 a.out
