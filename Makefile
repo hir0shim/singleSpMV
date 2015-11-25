@@ -1,3 +1,4 @@
+PREFIX = test
 SOURCE_DIR = src
 BINARY_DIR = bin
 OBJECT_DIR = obj
@@ -5,18 +6,18 @@ LIBRARY_DIR = lib
 INCLUDE_DIR = include
 ASM_DIR=asm
 
-OPTION = -DCOEF_SEGMENT_WIDTH=1 #-DPADDING -DCOEF_PADDING_SIZE=0
-# CPU,MIC,GPU,VERIFY,OPT_[CRS,MKL,CUSPARSE,JDS,ELL,COO,SS,CSS],ALIGNMENT,INDEX_[32,64]
 
-# -- BEGIN Params ---
+# -- Params list ---
 # COMMON  : [INDEX_32,INDEX_64]
 # OPT_SS  : [SIMPLE,OPTIMIZED] PADDING COEF_SEGMENT_WIDTH MEASURE_STEP_TIME 
 # OPT_CSS : [SIMPLE,OPTIMIZED] PADDING N_BLOCK 
-# --- END Params ---
 
-MIC_OPTION += $(OPTION) -DMIC -DVERIFY -DOPT_SS -DOPTIMIZED -DINDEX_32 -DALIGNMENT=64 
-CPU_OPTION += $(OPTION) -DCPU -DVERIFY -DOPT_SS -DOPTIMIZED -DINDEX_32 -DALIGNMENT=32 -xCORE-AVX2
-GPU_OPTION += $(OPTION) -DGPU -DVERIFY -DOPT_CUSPARSE -DALIGNMENT=32
+OPTION = -DOPT_SS -DOPTIMIZED -DCOEF_SEGMENT_WIDTH=1 #-DPADDING -DCOEF_PADDING_SIZE=0
+
+# CPU,MIC,GPU,VERIFY,OPT_[CRS,MKL,CUSPARSE,JDS,ELL,COO,SS,CSS],ALIGNMENT,INDEX_[32,64]
+MIC_OPTION = $(OPTION) -DMIC -DVERIFY -DINDEX_32 -DALIGNMENT=64 
+CPU_OPTION = $(OPTION) -DCPU -DVERIFY -DINDEX_32 -DALIGNMENT=32 -xCORE-AVX2
+GPU_OPTION = $(OPTION) -DGPU -DVERIFY -DOPT_CUSPARSE -DINDEX_32 -DALIGNMENT=32
 
 CXX = icpc
 LDFLAGS = -L$(LIBRARY_DIR) -L$(OBJECT_DIR) 
@@ -25,23 +26,27 @@ CXXFLAGS = -std=c++11 -ipo -Wall -restrict -O3 -fopenmp -fno-inline -g
 vpath %.cpp $(SOURCE_DIR)
 spmv_sources = main.cpp util.cpp opt.cpp 
 
-spmv_objects_cpu = $(addprefix $(OBJECT_DIR)/, $(spmv_sources:.cpp=.o.cpu))
-spmv_objects_mic = $(addprefix $(OBJECT_DIR)/, $(spmv_sources:.cpp=.o.mic))
-spmv_objects_gpu = $(addprefix $(OBJECT_DIR)/, $(spmv_sources:.cpp=.o.gpu))
+spmv_objects_cpu = $(addprefix $(OBJECT_DIR)/, $(spmv_sources:.cpp=.$(PREFIX).o.cpu))
+spmv_objects_mic = $(addprefix $(OBJECT_DIR)/, $(spmv_sources:.cpp=.$(PREFIX).o.mic))
+spmv_objects_gpu = $(addprefix $(OBJECT_DIR)/, $(spmv_sources:.cpp=.$(PREFIX).o.gpu))
 
 
-SPMV_CPU=$(BINARY_DIR)/spmv.cpu
-SPMV_MIC=$(BINARY_DIR)/spmv.mic
-SPMV_GPU=$(BINARY_DIR)/spmv.gpu
+SPMV_CPU=$(BINARY_DIR)/$(PREFIX)-spmv.cpu
+SPMV_MIC=$(BINARY_DIR)/$(PREFIX)-spmv.mic
+# SPMV_GPU=$(BINARY_DIR)/$(PREFIX)-spmv.gpu
 TARGETS=$(SPMV_CPU) $(SPMV_MIC) $(SPMV_GPU)
 
 all: $(TARGETS)
+cpu: $(SPMV_CPU)
+mic: $(SPMV_MIC)
+gpu: $(SPMV_GPU)
+
 
 ########################################
 # SPMV CPU 
 ########################################
 $(OBJECT_DIR)/%.o.cpu : CXXFLAGS += $(CPU_OPTION)
-$(OBJECT_DIR)/%.o.cpu : %.cpp
+$(OBJECT_DIR)/%.$(PREFIX).o.cpu : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 $(SPMV_CPU) : CXXFLAGS += -mkl 
 $(SPMV_CPU) : $(spmv_objects_cpu) 
@@ -51,7 +56,7 @@ $(SPMV_CPU) : $(spmv_objects_cpu)
 # SPMV MIC
 ########################################
 $(OBJECT_DIR)/%.o.mic : CXXFLAGS += -mmic $(MIC_OPTION) 
-$(OBJECT_DIR)/%.o.mic : %.cpp
+$(OBJECT_DIR)/%.$(PREFIX).o.mic : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 $(SPMV_MIC) : CXXFLAGS += -mmic -mkl 
 $(SPMV_MIC) : $(spmv_objects_mic)
@@ -61,7 +66,7 @@ $(SPMV_MIC) : $(spmv_objects_mic)
 # SPMV GPU 
 ########################################
 $(OBJECT_DIR)/%.o.gpu : CXXFLAGS += -xHOST -I/usr/local/cuda-6.5/include $(GPU_OPTION)
-$(OBJECT_DIR)/%.o.gpu : %.cpp
+$(OBJECT_DIR)/%.$(PREFIX).o.gpu : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(SPMV_GPU) : CXXFLAGS += -L/usr/local/cuda-6.5/lib64 -lcusparse -lcudart 

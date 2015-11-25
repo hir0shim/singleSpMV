@@ -1,5 +1,6 @@
 ### Directoies ###
 bin/spmv*
+bin/
 
 matrix/artificial/*.mtx
 matrix/natural/*.mtx
