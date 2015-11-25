@@ -56,8 +56,3 @@ void ViewVec (const Vec &v);
 
 
 
-#ifdef INDEX_64
-typedef int64_t idx_t;
-#elif INDEX_32
-typedef int idx_t;
-#endif
