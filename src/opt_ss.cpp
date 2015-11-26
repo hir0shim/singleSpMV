@@ -199,14 +199,14 @@ extern "C" {
 #pragma omp parallel for schedule(static)
         for (int i = 0; i < H; i++) {
             double* restrict val_tmp = val[i];
+#pragma ivdep
             for (int j = 0; j < W; j++) {
                 int col = col_idx[i][j];
                 double rv = xv[col];
-                val_tmp[j] *= rv;
+                val[i][j] *= rv;
             }
         }
         // Sum
-#ifdef SKIP_UNUSED_SUM
         int counter = 1<<nStep;
         for (int s = 0; s < nStep; s++) {
 #ifdef MEASURE_STEP_TIME
@@ -216,6 +216,8 @@ extern "C" {
 #pragma omp parallel for
             for (int i = 0; i < sum_segs_count[s]; i++) {
                 int h = sum_segs[s][i];
+#pragma simd
+#pragma vector aligned
                 for (int j = 0; j < W; j++) {
                     val[h-counter][j] += val[h][j];
                 }
@@ -224,26 +226,6 @@ extern "C" {
             g_step_time[s] += GetTimeBySec();
 #endif
         }
-#else //NO SKIP_UNUSED_SUM
-        int counter = 1<<nStep;
-        for (int s = 0; s < nStep; s++) {
-#ifdef MEASURE_STEP_TIME
-            g_step_time[s] -= GetTimeBySec();
-#endif
-            counter >>= 1;
-            for (int i = 0; i < H; i++) {
-                if (counter <= segment_index[i] && segment_index[i] < counter*2) {
-                    for (int j = 0; j < W; j++) {
-                        val[i-counter][j] += val[i][j];
-                        val[i][j] = 0;
-                    }
-                }
-            }
-#ifdef MEASURE_STEP_TIME
-            g_step_time[s] += GetTimeBySec();
-#endif
-        }
-#endif // SKIP_UNUSED_SUM
 
 #pragma omp parallel for
         for (int i = 0; i < nRow; i++) {
@@ -253,6 +235,7 @@ extern "C" {
             int begin_seg = begin / W;
             int end_seg = end / W;
             if (begin_seg == end_seg) {
+#pragma ivdep
                 for (int j = begin; j < end; j++) {
 #ifdef PADDING
                     yv_tmp += val[begin_seg][j&(W-1)];
