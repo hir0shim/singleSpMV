@@ -235,7 +235,7 @@ extern "C" {
             int begin_seg = begin / W;
             int end_seg = end / W;
             if (begin_seg == end_seg) {
-#pragma ivdep
+#pragma simd
                 for (int j = begin; j < end; j++) {
 #ifdef PADDING
                     yv_tmp += val[begin_seg][j&(W-1)];
@@ -245,22 +245,31 @@ extern "C" {
                 }
             } else {
                 // upper
-                for (int j = begin; (j & W-1) != 0; j++) {
+                if (begin & (W-1)) {
+                    int j_end = (begin & ~(W-1)) + W;
+#pragma simd
+                    for (int j = begin; j < j_end; j++) {
 #ifdef PADDING
-                    yv_tmp += val[begin_seg][j&(W-1)];
+                        yv_tmp += val[begin_seg][j&(W-1)];
 #else
-                    yv_tmp += *(val[0] + j);
+                        yv_tmp += *(val[0] + j);
 #endif
-                    begin++;
+                        begin++;
+                    }
                 }
                 // lower
-                for (int j = end; (j & W-1) != 0; j--) {
+                if (end & (W-1)) {
+                    int j_end = end & ~(W-1);
+#pragma simd
+                    for (int j = end; j > j_end; j--) {
+                        //for (int j = end; (j & W-1) != 0; j--) 
 #ifdef PADDING
-                    yv_tmp += val[end_seg][(j&(W-1))-1];
+                        yv_tmp += val[end_seg][(j&(W-1))-1];
 #else
-                    yv_tmp += *(val[0] + j - 1);
+                        yv_tmp += *(val[0] + j - 1);
 #endif
-                    end--;
+                        end--;
+                    }
                 }
                 // center
 #ifdef PADDING
