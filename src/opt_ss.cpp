@@ -198,7 +198,6 @@ extern "C" {
         // Mul
 #pragma omp parallel for schedule(static)
         for (int i = 0; i < H; i++) {
-            double* restrict val_tmp = val[i];
 #pragma ivdep
             for (int j = 0; j < W; j++) {
                 int col = col_idx[i][j];
@@ -206,7 +205,7 @@ extern "C" {
                 val[i][j] *= rv;
             }
         }
-        // Sum
+        // Sum 1
         int counter = 1<<nStep;
         for (int s = 0; s < nStep; s++) {
 #ifdef MEASURE_STEP_TIME
@@ -216,7 +215,7 @@ extern "C" {
 #pragma omp parallel for
             for (int i = 0; i < sum_segs_count[s]; i++) {
                 int h = sum_segs[s][i];
-#pragma simd
+#pragma ivdep
 #pragma vector aligned
                 for (int j = 0; j < W; j++) {
                     val[h-counter][j] += val[h][j];
@@ -227,6 +226,8 @@ extern "C" {
 #endif
         }
 
+        // Sum 2
+#ifndef PADDING
 #pragma omp parallel for
         for (int i = 0; i < nRow; i++) {
             double yv_tmp = 0;
@@ -235,58 +236,77 @@ extern "C" {
             int begin_seg = begin / W;
             int end_seg = end / W;
             if (begin_seg == end_seg) {
-#pragma simd
                 for (int j = begin; j < end; j++) {
-#ifdef PADDING
-                    yv_tmp += val[begin_seg][j&(W-1)];
-#else
                     yv_tmp += *(val[0] + j);
-#endif
                 }
             } else {
                 // upper
                 if (begin & (W-1)) {
                     int j_end = (begin & ~(W-1)) + W;
-#pragma simd
                     for (int j = begin; j < j_end; j++) {
-#ifdef PADDING
-                        yv_tmp += val[begin_seg][j&(W-1)];
-#else
                         yv_tmp += *(val[0] + j);
-#endif
-                        begin++;
                     }
+                    begin = (begin & ~(W-1)) + W;
                 }
                 // lower
                 if (end & (W-1)) {
                     int j_end = end & ~(W-1);
-#pragma simd
                     for (int j = end; j > j_end; j--) {
-                        //for (int j = end; (j & W-1) != 0; j--) 
-#ifdef PADDING
-                        yv_tmp += val[end_seg][(j&(W-1))-1];
-#else
                         yv_tmp += *(val[0] + j - 1);
-#endif
-                        end--;
                     }
+                    end = end & ~(W-1);
                 }
                 // center
-#ifdef PADDING
-                begin_seg = begin / W;
-#endif
                 if (begin != end) {
                     for (int j = 0; j < W; j++) {
-#ifdef PADDING
-                        yv_tmp += val[begin_seg][j&(W-1)];
-#else
                         yv_tmp += *(val[0] + begin + j);
-#endif
                     }
                 }
             }
             yv[i] = yv_tmp;
         }
+#else // PADDING
+#pragma omp parallel for
+        for (int i = 0; i < nRow; i++) {
+            double yv_tmp = 0;
+            int begin = row_ptr[i];
+            int end = row_ptr[i+1];
+            int begin_seg = begin / W;
+            int end_seg = end / W;
+            if (begin_seg == end_seg) {
+                int j_begin = begin & (W-1);
+                int j_end = end & (W-1);
+                for (int j = j_begin; j < j_end; j++) {
+                    yv_tmp += val[begin_seg][j];
+                }
+            } else {
+                // upper
+                if (begin & (W-1)) {
+                    int j_begin = begin & (W-1);
+                    for (int j = j_begin; j < W; j++) {
+                        yv_tmp += val[begin_seg][j];
+                    }
+                    begin = (begin & ~(W-1)) + W;
+                }
+                // lower
+                if (end & (W-1)) {
+                    int j_begin = end & (W-1);
+                    for (int j = j_begin; j > 0; j--) {
+                        yv_tmp += val[end_seg][j-1];
+                    }
+                    end = end & ~(W-1);
+                }
+                // center
+                begin_seg = begin / W;
+                if (begin != end) {
+                    for (int j = 0; j < W; j++) {
+                        yv_tmp += val[begin_seg][j];
+                    }
+                }
+            }
+            yv[i] = yv_tmp;
+        }
+#endif // PADDING
         //}}}
 #endif
     }
