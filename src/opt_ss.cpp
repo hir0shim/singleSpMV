@@ -198,11 +198,13 @@ extern "C" {
         // Mul
 #pragma omp parallel for schedule(static)
         for (int i = 0; i < H; i++) {
+            double* restrict val_tmp = val[i];
+            int* restrict col_tmp = col_idx[i];
 #pragma ivdep
             for (int j = 0; j < W; j++) {
-                int col = col_idx[i][j];
+                int col = col_tmp[j];
                 double rv = xv[col];
-                val[i][j] *= rv;
+                val_tmp[j] *= rv;
             }
         }
         // Sum 1
@@ -228,7 +230,7 @@ extern "C" {
 
         // Sum 2
 #ifndef PADDING
-#pragma omp parallel for
+#pragma omp parallel for schedule(guided)
         for (int i = 0; i < nRow; i++) {
             double yv_tmp = 0;
             int begin = row_ptr[i];
@@ -236,8 +238,16 @@ extern "C" {
             int begin_seg = begin / W;
             int end_seg = end / W;
             if (begin_seg == end_seg) {
+                int j_begin = begin & (W-1);
+                int j_end = end & (W-1);
+                /*
                 for (int j = begin; j < end; j++) {
                     yv_tmp += *(val[0] + j);
+                }
+                */
+                double* restrict val_tmp = val[begin_seg];
+                for (int j = j_begin; j < j_end; j++) {
+                    yv_tmp += val_tmp[j];
                 }
             } else {
                 // upper

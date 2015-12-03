@@ -3,6 +3,8 @@ todo=`cat $script_dir/todo.csv | grep -v -e '^\s*#' -e '^\s*$'`
 source $script_dir/env.sh
 cd $script_dir/../
 IFS=$'\n'
+rm bin/*
+rm obj/*
 for i in $todo
 do
     arch=`echo $i | cut -d, -f1`
@@ -13,11 +15,11 @@ do
     params="arch=$arch prefix=$prefix option=$option logfile=$logfile"
     ### CPU ### 
     if [ $arch = "cpu" ]; then
-        make cpu PREFIX=$prefix OPTION=$option
+        make cpu PREFIX=$prefix OPTION=$option -j8
         
     ### MIC ### 
     elif [ $arch = "mic" ]; then
-        make mic PREFIX=$prefix OPTION=$option
+        make mic PREFIX=$prefix OPTION=$option -j8
     fi
 done
 
