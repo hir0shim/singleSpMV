@@ -1,5 +1,5 @@
 script_dir=$(cd $(dirname $BASH_SOURCE); pwd)
-todo=`cat $script_dir/todo.csv | grep -v -e '^\s*#' -e '^\s*$'`
+todo=`cat $script_dir/todo.csv | grep -v -e '^\s*#' -e '^\s*$' | sort -R`
 source $script_dir/env.sh
 matrices=`ls $MATRIX_DIR/*.mtx | xargs -i basename {}`
 cd $script_dir/../
@@ -28,7 +28,6 @@ do
         do
             echo "CPU $matrix"
             srun -p NOEL $BINARY_DIR/$prefix-spmv.cpu $MATRIX_DIR/$matrix >> $logfile
-            break
         done
     ### MIC ### 
     elif [ $arch = "mic" ]; then
@@ -38,7 +37,6 @@ do
         do
             echo "MIC $matrix"
             srun -p KAREN mpirun-mic -m "$BINARY_DIR/$prefix-spmv.mic $MATRIX_DIR/$matrix" >> $logfile
-            break
         done
     else 
         echo "Invalid arch : $arch"
