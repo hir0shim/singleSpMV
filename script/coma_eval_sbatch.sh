@@ -25,11 +25,12 @@ do
         echo "#!/bin/sh
 #SBATCH -p mixed
 #SBATCH -N 1
+#SBATCH -t 05:00:00
 #SBATCH -o $logfile.out
 #SBATCH -e $logfile.err
 cd $script_dir/../
 matrices=\`ls $MATRIX_DIR/*.mtx | xargs -i basename {}\`
-export OMP_NUM_THREADS=24
+export OMP_NUM_THREADS=10
 for matrix in \$matrices
 do
     $BINARY_DIR/$prefix-spmv.cpu $MATRIX_DIR/\$matrix >> $logfile
@@ -42,6 +43,8 @@ done " > $batch_script
     echo "#!/bin/sh
 #SBATCH -p mixed
 #SBATCH -N 1
+#SBATCH -t 05:00:00
+#SBATCH -o $logfile.out
 #SBATCH -o $logfile.out
 #SBATCH -e $logfile.err
 cd $script_dir/../
@@ -49,7 +52,7 @@ matrices=\`ls $MATRIX_DIR/*.mtx | xargs -i basename {}\`
 export MIC_PPN=1
 export I_MPI_MIC=enable
 export OMP_NUM_THREADS=240
-#export SINK_LD_LIBRARY_PATH=/app/intel/composerxe/lib/mic
+module load intelmpi/5.1.1 intel/15.0.3 mkl/11.2.3
 for matrix in \$matrices
 do
     #micnativeloadex $BINARY_DIR/$prefix-spmv.mic -a $MATRIX_DIR/\$matrix >> $logfile
