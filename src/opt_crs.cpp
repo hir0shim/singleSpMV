@@ -57,6 +57,7 @@ extern "C" {
 #pragma omp parallel for
         for (int i = 0; i < nRow; i++) {
             double yv_tmp = 0;
+#pragma ivdep
             for (int j = ptr[i]; j < ptr[i+1]; j++) {
                 int col = idx[j];
                 double lv = val[j];

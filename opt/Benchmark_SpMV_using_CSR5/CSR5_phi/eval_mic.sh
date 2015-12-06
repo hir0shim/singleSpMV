@@ -1,5 +1,5 @@
 #!/bin/bash 
-MATRIX_DIR=../../../matrix/artificial
+MATRIX_DIR=../../../matrix/artificial/
 LOG_DIR=.
 BINARY_DIR=.
 
@@ -10,7 +10,7 @@ export OMP_NUM_THREADS=240
 for matrix in $matrices
 do
     echo "CPU $matrix"
-    srun -p KAREN -w karen01 $BINARY_DIR/spmv $MATRIX_DIR/$matrix >> $logfile
+    srun -p KAREN $BINARY_DIR/spmv $MATRIX_DIR/$matrix >> $logfile
 done
 
 

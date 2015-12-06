@@ -18,3 +18,7 @@ typedef int idx_t;
         #define PADDING_SIZE ALIGNMENT/sizeof(double)
     #endif
 #endif
+
+#ifndef N_BLOCK
+    #define N_BLOCK 1
+#endif

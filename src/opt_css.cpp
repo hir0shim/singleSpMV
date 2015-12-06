@@ -58,16 +58,15 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
 
     for (int b = 0; b < nBlock; b++) {
         int block_nNnz = blocks[b].val.size();
-        H[b] = block_nNnz/W + (block_nNnz%W?1:0);
         row_ptr[b] = (int*)_mm_malloc((nRow+1)*sizeof(int), ALIGNMENT);
         col_idx_2d[b] = (idx_t**)_mm_malloc(H[b]*sizeof(idx_t*), ALIGNMENT);
         val_2d[b] = (double**)_mm_malloc(H[b]*sizeof(double*), ALIGNMENT);
 
         int N = H[b] * W;
         /*
-        col_idx_2d[b][0] = (idx_t*)_mm_malloc(N*sizeof(idx_t), ALIGNMENT);
-        val_2d[b][0] = (double*)_mm_malloc(N*sizeof(double), ALIGNMENT);
-        */
+           col_idx_2d[b][0] = (idx_t*)_mm_malloc(N*sizeof(idx_t), ALIGNMENT);
+           val_2d[b][0] = (double*)_mm_malloc(N*sizeof(double), ALIGNMENT);
+           */
 
         for (int i = 0; i < H[b]; i++) {
             col_idx_2d[b][i] = col_idx_ptr;
@@ -93,7 +92,6 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
             }
         }
         while (cur_row <= nRow) row_ptr[b][cur_row++] = block_nNnz;
-        //cout << b << "/" << nBlock << " " << total << "/" << nNnz << " " << H[b] << "*" << W << "=" << H[b]*W << ">=" << block_nNnz << endl;
     }
 
     A_opt.nBlock = nBlock;
@@ -118,7 +116,7 @@ extern "C" {
         //------------------------------
         // Format specific 
         //------------------------------
-        const int W = SEGMENT_WIDTH; //ALIGNMENT / sizeof(double); 
+        const int W = SEGMENT_WIDTH; 
         int B = A.B;
         int nBlock = A.nBlock;
         int* restrict H = A.H;
@@ -131,8 +129,14 @@ extern "C" {
 #pragma omp parallel for
         for (int b = 0; b < nBlock; b++) {
             for (int i = 0; i < H[b]; i++) {
+                double* restrict val_tmp = val[b][i];
+                int* restrict col_tmp = col_idx[b][i];
+#pragma ivdep
                 for (int j = 0; j < W; j++) {
-                    val[b][i][j] *= xv[col_idx[b][i][j]];
+                    int col = col_tmp[j];
+                    double rv = xv[col];
+                    val_tmp[j] *= rv;
+                    //val[b][i][j] *= xv[col_idx[b][i][j]];
                 }
             }
         }
@@ -147,20 +151,32 @@ extern "C" {
                 }
             }
         }
-    }
-    //}}}
+        //}}}
 #elif OPTIMIZED
-    //{{{
-    int totalH = A.totalH;
-    for (int i = 0; i < totalH; i++) {
-        for (int j = 0; j < W; j++) {
-            *(val[0][0]+i*W+j) *= xv[*(col_idx[0][0]+i*W+j)];
+        //{{{
+        int totalH = A.totalH;
+#pragma omp parallel for
+        for (int i = 0; i < totalH; i++) {
+#pragma ivdep
+            for (int j = 0; j < W; j++) {
+                *(val[0][0]+i*W+j) *= xv[*(col_idx[0][0]+i*W+j)];
+            }
         }
-    }
-    // TODO:Summation
-    //}}}
+#pragma omp parallel for
+        for (int i = 0; i < nRow; i++) yv[i] = 0;
+        for (int b = 0; b < nBlock; b++) {
+#pragma omp parallel for
+            for (int i = 0; i < nRow; i++) {
+#pragma ivdep
+                for (int j = row_ptr[b][i]; j < row_ptr[b][i+1]; j++) {
+                    yv[i] += *(val[b][0]+j);
+                }
+            }
+        }
+        //}}}
 #endif
 
+    }
 }
 
 

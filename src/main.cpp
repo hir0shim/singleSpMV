@@ -148,6 +148,7 @@ int main (int argc, char **argv) {
 #endif
 #ifdef OPT_CSS
     printf("%25s\t%s\n", "MatrixFormat", "CSS");
+    printf("%25s\t%d\n", "N_BLOCK", N_BLOCK);
     isDefinedFormat = true;
 #endif
     assert(isDefinedFormat == true);

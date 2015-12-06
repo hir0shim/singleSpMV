@@ -180,14 +180,20 @@ extern "C" {
         // Mul
 #pragma omp parallel for 
         for (int i = 0; i < H; i++) {
+            double* restrict val_tmp = val[i];
+            int* restrict col_tmp = col_idx[i];
+#pragma ivdep
             for (int j = 0; j < W; j++) {
-                val[i][j] *= xv[col_idx[i][j]];
+                int col = col_tmp[j];
+                double rv = xv[col];
+                val_tmp[j] *= rv;
             }
         }
         // Sum
 #pragma omp parallel for
         for (int i = 0; i < nRow; i++) {
             yv[i] = 0;
+#pragma ivdep
             for (int j = row_ptr[i]; j < row_ptr[i+1]; j++) {
                 yv[i] += *(val[0] + j);
             }

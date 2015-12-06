@@ -1,4 +1,4 @@
-#!/bin/bash  -x
+#!/bin/bash 
 MATRIX_DIR=../../../matrix/artificial/
 LOG_DIR=.
 BINARY_DIR=.
