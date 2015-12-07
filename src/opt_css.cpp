@@ -12,6 +12,8 @@ struct Block {
     vector<int> col_idx;
     vector<int> row_idx;
 };
+
+extern vector<double> g_profile;
 void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_opt) {
     x_opt.size = x.size;
     x_opt.val = x.val;
@@ -126,6 +128,8 @@ extern "C" {
 
 #ifdef SIMPLE
         //{{{
+        // Mul
+        PROF_BEGIN(g_profile[0]);
 #pragma omp parallel for
         for (int b = 0; b < nBlock; b++) {
             for (int i = 0; i < H[b]; i++) {
@@ -140,7 +144,10 @@ extern "C" {
                 }
             }
         }
+        PROF_END(g_profile[0]);
 
+        // Sum
+        PROF_BEGIN(g_profile[1]);
 #pragma omp parallel for
         for (int i = 0; i < nRow; i++) yv[i] = 0;
         for (int b = 0; b < nBlock; b++) {
@@ -151,9 +158,12 @@ extern "C" {
                 }
             }
         }
+        PROF_END(g_profile[1]);
         //}}}
 #elif OPTIMIZED
         //{{{
+        // Mul
+        PROF_BEGIN(g_profile[0]);
         int totalH = A.totalH;
 #pragma omp parallel for
         for (int i = 0; i < totalH; i++) {
@@ -162,6 +172,9 @@ extern "C" {
                 *(val[0][0]+i*W+j) *= xv[*(col_idx[0][0]+i*W+j)];
             }
         }
+        PROF_END(g_profile[0]);
+        // Sum
+        PROF_BEGIN(g_profile[1]);
 #pragma omp parallel for
         for (int i = 0; i < nRow; i++) yv[i] = 0;
         for (int b = 0; b < nBlock; b++) {
@@ -173,6 +186,7 @@ extern "C" {
                 }
             }
         }
+        PROF_END(g_profile[1]);
         //}}}
 #endif
 

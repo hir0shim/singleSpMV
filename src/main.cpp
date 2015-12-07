@@ -37,7 +37,11 @@ int main (int argc, char **argv) {
     cerr << "done." << endl;
 
 
-    SpMV(A_opt, x_opt, y);
+    {
+        extern vector<double> g_profile;
+        g_profile = vector<double>(10);
+        SpMV(A_opt, x_opt, y);
+    }
     //ViewVec(y);
 #ifdef VERIFY
     cerr << "Verifying ... ";
@@ -51,6 +55,8 @@ int main (int argc, char **argv) {
     int loop = 1;
     cerr << "Calculating SpMV ... ";
     {
+        extern vector<double> g_profile;
+        g_profile = vector<double>(10);
         double elapsedTime;
         elapsedTime = -GetTimeBySec();
         do {
@@ -63,25 +69,37 @@ int main (int argc, char **argv) {
 
     double minElapsedTime;
     /*
-    __itt_domain *domain = __itt_domain_create("MySpMV.Region");
-    __itt_string_handle *handle = __itt_string_handle_create("MySpMV.Handle");
-    __itt_task_begin(domain, __itt_null, __itt_null, handle);
-    */
+       __itt_domain *domain = __itt_domain_create("MySpMV.Region");
+       __itt_string_handle *handle = __itt_string_handle_create("MySpMV.Handle");
+       __itt_task_begin(domain, __itt_null, __itt_null, handle);
+       */
+    vector<double> g_best_profile;
     {
         const int nTry = 10;
         for (int t = 0; t < nTry; t++) {
+            extern vector<double> g_profile;
+            g_profile = vector<double>(10);
             double elapsedTime = -GetTimeBySec();
             for (int i = 0; i < loop; i++) {
                 SpMV(A_opt, x_opt, y);
             }
             elapsedTime += GetTimeBySec();
             elapsedTime /= loop;
-            minElapsedTime = t ? min(minElapsedTime, elapsedTime) : elapsedTime;
+            if (t == 0) {
+                minElapsedTime = elapsedTime;
+                g_best_profile = g_profile;
+            } else {
+                if (minElapsedTime > elapsedTime) {
+                    minElapsedTime = elapsedTime;
+                    g_best_profile = g_profile;
+                }
+            }
+            //minElapsedTime = t ? min(minElapsedTime, elapsedTime) : elapsedTime;
         }
     }
     /*
-    __itt_task_end(domain);
-    */
+       __itt_task_end(domain);
+       */
     cerr << "done." << endl;
 
 
@@ -122,6 +140,15 @@ int main (int argc, char **argv) {
     printf("%25s\t%s\n", "MatrixFormat", "DIA");
     isDefinedFormat = true;
 #endif
+#ifdef OPT_MKL
+    printf("%25s\t%s\n", "MatrixFormat", "MKL");
+    isDefinedFormat = true;
+#endif
+#ifdef OPT_CUSPARSE
+    printf("%25s\t%s\n", "MatrixFormat", "CUSPARSE");
+    isDefinedFormat = true;
+#endif
+    // SS
 #ifdef OPT_SS
     printf("%25s\t%s\n", "MatrixFormat", "SS");
     extern vector<int> g_step_count;
@@ -134,23 +161,29 @@ int main (int argc, char **argv) {
     }
     printf("%25s\t%d\n", "SEGMENT_WIDTH(byte)", int(SEGMENT_WIDTH*sizeof(double)));
 #ifdef PADDING
-        printf("%25s\t%d\n", "PADDING_WIDTH(byte)", int(PADDING_SIZE*sizeof(double)));
+    printf("%25s\t%d\n", "PADDING_WIDTH(byte)", int(PADDING_SIZE*sizeof(double)));
+#endif
+#ifdef PROFILING
+    printf("%25s\t%lf\n", "MulPerf", nNnz*2/(g_best_profile[0]/loop)/1e9);
+    printf("%25s\t%lf\n", "SumPerf", nNnz*2/(g_best_profile[1]/loop)/1e9);
 #endif
     isDefinedFormat = true;
 #endif
-#ifdef OPT_MKL
-    printf("%25s\t%s\n", "MatrixFormat", "MKL");
-    isDefinedFormat = true;
-#endif
-#ifdef OPT_CUSPARSE
-    printf("%25s\t%s\n", "MatrixFormat", "CUSPARSE");
-    isDefinedFormat = true;
-#endif
+    // CSS
 #ifdef OPT_CSS
     printf("%25s\t%s\n", "MatrixFormat", "CSS");
     printf("%25s\t%d\n", "N_BLOCK", N_BLOCK);
+    printf("%25s\t%d\n", "SEGMENT_WIDTH(byte)", int(SEGMENT_WIDTH*sizeof(double)));
+#ifdef PADDING
+    printf("%25s\t%d\n", "PADDING_WIDTH(byte)", int(PADDING_SIZE*sizeof(double)));
+#endif
+#ifdef PROFILING
+    printf("%25s\t%lf\n", "MulPerf(GFLOPS)", nNnz*2/(g_best_profile[0]/loop)/1e9);
+    printf("%25s\t%lf\n", "SumPerf(GFLOPS)", nNnz*2/(g_best_profile[1]/loop)/1e9);
+#endif
     isDefinedFormat = true;
 #endif
+    // COMMON
     assert(isDefinedFormat == true);
     printf("%25s\t%s\n", "Matrix", GetBasename(matFile).c_str());
     printf("%25s\t%s\n", "MatrixPath", matFile.c_str());

@@ -56,3 +56,10 @@ void ViewVec (const Vec &v);
 
 
 
+#ifdef PROFILING
+    #define PROF_BEGIN(x) x-=GetTimeBySec();
+    #define PROF_END(x) x+=GetTimeBySec(); 
+#else
+    #define PROF_BEGIN(x) ;
+    #define PROF_END(x)   ;
+#endif

@@ -13,6 +13,10 @@
 
 using namespace std;
 
+vector<int> g_step_count;
+vector<double> g_step_time;
+vector<double> g_profile;
+
 
 double GetTimeBySec () {
     struct timeval tv;

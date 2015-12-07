@@ -8,8 +8,9 @@
 #include <iostream>
 #include <cmath>
 #include <immintrin.h>
-vector<int> g_step_count;
-vector<double> g_step_time;
+extern vector<int> g_step_count;
+extern vector<double> g_step_time;
+extern vector<double> g_profile;
 void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_opt) {
     x_opt.size = x.size;
     x_opt.val = x.val;
@@ -178,6 +179,7 @@ extern "C" {
 #if defined(SIMPLE) 
         //{{{
         // Mul
+        PROF_BEGIN(g_profile[0]);
 #pragma omp parallel for 
         for (int i = 0; i < H; i++) {
             double* restrict val_tmp = val[i];
@@ -189,7 +191,9 @@ extern "C" {
                 val_tmp[j] *= rv;
             }
         }
+        PROF_END(g_profile[0]);
         // Sum
+        PROF_BEGIN(g_profile[1]);
 #pragma omp parallel for
         for (int i = 0; i < nRow; i++) {
             yv[i] = 0;
@@ -198,10 +202,12 @@ extern "C" {
                 yv[i] += *(val[0] + j);
             }
         }
+        PROF_END(g_profile[1]);
         //}}}
 #elif defined(OPTIMIZED)
         //{{{
         // Mul
+        PROF_BEGIN(g_profile[0]);
 #pragma omp parallel for schedule(static)
         for (int i = 0; i < H; i++) {
             double* restrict val_tmp = val[i];
@@ -213,7 +219,9 @@ extern "C" {
                 val_tmp[j] *= rv;
             }
         }
+        PROF_END(g_profile[0]);
         // Sum 1
+        PROF_BEGIN(g_profile[1]);
         int counter = 1<<nStep;
         for (int s = 0; s < nStep; s++) {
 #ifdef MEASURE_STEP_TIME
@@ -276,7 +284,9 @@ extern "C" {
             }
             yv[i] = yv_tmp;
         }
+        PROF_END(g_profile[1]);
 #else // PADDING
+        PROF_BEGIN(g_profile[1]);
 #pragma omp parallel for
         for (int i = 0; i < nRow; i++) {
             double yv_tmp = 0;
@@ -317,6 +327,7 @@ extern "C" {
             }
             yv[i] = yv_tmp;
         }
+        PROF_END(g_profile[1]);
 #endif // PADDING
         //}}}
 #endif
