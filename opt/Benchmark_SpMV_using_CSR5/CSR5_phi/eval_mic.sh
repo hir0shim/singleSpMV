@@ -10,7 +10,7 @@ export OMP_NUM_THREADS=240
 for matrix in $matrices
 do
     echo "CPU $matrix"
-    srun -p KAREN $BINARY_DIR/spmv $MATRIX_DIR/$matrix >> $logfile
+    srun -p mixed $BINARY_DIR/spmv $MATRIX_DIR/$matrix >> $logfile
 done
 
 

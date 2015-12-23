@@ -21,7 +21,7 @@ GPU_OPTION = $(OPTION) -DGPU -DVERIFY -DOPT_CUSPARSE -DINDEX_32 -DALIGNMENT=32
 
 CXX = icpc
 LDFLAGS = -L$(LIBRARY_DIR) -L$(OBJECT_DIR) 
-CXXFLAGS = -std=c++11 -ipo -Wall -restrict -O3 -fopenmp -fno-inline -g
+CXXFLAGS = -std=c++11 -ipo -Wall -restrict -O3 -fopenmp #-fno-inline -g
 
 vpath %.cpp $(SOURCE_DIR)
 spmv_sources = main.cpp util.cpp opt.cpp 

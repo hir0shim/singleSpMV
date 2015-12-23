@@ -31,10 +31,13 @@ do
 cd $script_dir/../
 matrices=\`ls $MATRIX_DIR/*.mtx | xargs -i basename {}\`
 export OMP_NUM_THREADS=10
+export KMP_AFFINITY=compact
+module load intelmpi intel mkl
 for matrix in \$matrices
 do
     $BINARY_DIR/$prefix-spmv.cpu $MATRIX_DIR/\$matrix >> $logfile
-done " > $batch_script
+done 
+    " > $batch_script
         sbatch $batch_script
         
     ### MIC ### 
@@ -45,19 +48,18 @@ done " > $batch_script
 #SBATCH -N 1
 #SBATCH -t 05:00:00
 #SBATCH -o $logfile.out
-#SBATCH -o $logfile.out
 #SBATCH -e $logfile.err
 cd $script_dir/../
 matrices=\`ls $MATRIX_DIR/*.mtx | xargs -i basename {}\`
 export MIC_PPN=1
 export I_MPI_MIC=enable
 export OMP_NUM_THREADS=240
-module load intelmpi/5.1.1 intel/15.0.3 mkl/11.2.3
+export KMP_AFFINITY=compact
+module load intelmpi intel mkl
 for matrix in \$matrices
 do
     #micnativeloadex $BINARY_DIR/$prefix-spmv.mic -a $MATRIX_DIR/\$matrix >> $logfile
     /opt/slurm/default/local/bin/mpirun-mic -m \"$BINARY_DIR/$prefix-spmv.mic $MATRIX_DIR/\$matrix\" >> $logfile
-
 done
     " > $batch_script
         sbatch $batch_script
