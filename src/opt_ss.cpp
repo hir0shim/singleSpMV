@@ -35,14 +35,17 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     int **row_idx_2d = (int **)_mm_malloc(H*sizeof(int*), ALIGNMENT);
     idx_t **col_idx_2d = (idx_t **)_mm_malloc(H*sizeof(idx_t*), ALIGNMENT);
     double **val_2d = (double **)_mm_malloc(H*sizeof(double*), ALIGNMENT);
+    double **val_buf_2d = (double **)_mm_malloc(H*sizeof(double*), ALIGNMENT);
     int **index_2d = (int **)_mm_malloc(H*sizeof(int*), ALIGNMENT);
 
     row_idx_2d[0] = (int *)_mm_malloc(H*W*sizeof(int), ALIGNMENT);
     col_idx_2d[0] = (idx_t *)_mm_malloc(H*W*sizeof(idx_t), ALIGNMENT);
 #ifdef PADDING
     val_2d[0] = (double *)_mm_malloc(H*(W+pad)*sizeof(double), ALIGNMENT);
+    val_buf_2d[0] = (double *)_mm_malloc(H*(W+pad)*sizeof(double), ALIGNMENT);
 #else
     val_2d[0] = (double *)_mm_malloc(H*W*sizeof(double), ALIGNMENT);
+    val_buf_2d[0] = (double *)_mm_malloc(H*W*sizeof(double), ALIGNMENT);
 #endif
     index_2d[0] = (int *)_mm_malloc(H*W*sizeof(int), ALIGNMENT);
 
@@ -51,8 +54,10 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
         col_idx_2d[i] = col_idx_2d[i-1] + W;
 #ifdef PADDING
         val_2d[i] = val_2d[i-1] + W + pad;
+        val_buf_2d[i] = val_buf_2d[i-1] + W + pad;
 #else
         val_2d[i] = val_2d[i-1] + W;
+        val_buf_2d[i] = val_buf_2d[i-1] + W;
 #endif
         index_2d[i] = index_2d[i-1] + W;
     }
@@ -65,12 +70,14 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
                 row_idx_2d[i][j] = row_idx[p];
                 col_idx_2d[i][j] = col_idx[p];
                 val_2d[i][j] = val[p];
+                val_buf_2d[i][j] = 0;
                 int r = row_idx[p];
                 while (cur_row <= r) { row_ptr[cur_row++] = p; }
             } else {
                 row_idx_2d[i][j] = nRow;
                 col_idx_2d[i][j] = 0;
                 val_2d[i][j] = 0;
+                val_buf_2d[i][j] = 0;
                 index_2d[i][j] = 0;
             }
         }
@@ -147,6 +154,7 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     A_opt.row_idx = row_idx_2d;
     A_opt.col_idx = col_idx_2d;
     A_opt.val = val_2d;
+    A_opt.val_buf = val_buf_2d;
     A_opt.segment_index = segment_index;
 
     A_opt.nStep = nStep;
@@ -170,6 +178,7 @@ extern "C" {
         const int W = SEGMENT_WIDTH;
         idx_t** restrict col_idx = A.col_idx;
         double** restrict val = A.val;
+        double** restrict val_buf = A.val_buf;
         int* restrict row_ptr = A.row_ptr;
         int* restrict segment_index = A.segment_index;
         int nStep = A.nStep;
@@ -183,12 +192,14 @@ extern "C" {
 #pragma omp parallel for 
         for (int i = 0; i < H; i++) {
             double* restrict val_tmp = val[i];
+            double* restrict val_buf_tmp = val_buf[i];
             int* restrict col_tmp = col_idx[i];
 #pragma ivdep
             for (int j = 0; j < W; j++) {
                 int col = col_tmp[j];
                 double rv = xv[col];
-                val_tmp[j] *= rv;
+                //val_tmp[j] *= rv;
+                val_buf_tmp[j] = val_tmp[j] * rv;
             }
         }
         PROF_END(g_profile[0]);
@@ -199,7 +210,7 @@ extern "C" {
             yv[i] = 0;
 #pragma ivdep
             for (int j = row_ptr[i]; j < row_ptr[i+1]; j++) {
-                yv[i] += *(val[0] + j);
+                yv[i] += *(val_buf[0] + j);
             }
         }
         PROF_END(g_profile[1]);
@@ -211,12 +222,14 @@ extern "C" {
 #pragma omp parallel for schedule(static)
         for (int i = 0; i < H; i++) {
             double* restrict val_tmp = val[i];
+            double* restrict val_buf_tmp = val_buf[i];
             int* restrict col_tmp = col_idx[i];
 #pragma ivdep
             for (int j = 0; j < W; j++) {
                 int col = col_tmp[j];
                 double rv = xv[col];
-                val_tmp[j] *= rv;
+                //val_tmp[j] *= rv;
+                val_buf_tmp[j] = val_tmp[j] * rv;
             }
         }
         PROF_END(g_profile[0]);
@@ -234,7 +247,7 @@ extern "C" {
 #pragma ivdep
 #pragma vector aligned
                 for (int j = 0; j < W; j++) {
-                    val[h-counter][j] += val[h][j];
+                    val_buf[h-counter][j] += val_buf[h][j];
                 }
             }
 #ifdef MEASURE_STEP_TIME
@@ -254,7 +267,7 @@ extern "C" {
             if (begin_seg == end_seg) {
                 int j_begin = begin & (W-1);
                 int j_end = end & (W-1);
-                double* restrict val_tmp = val[begin_seg];
+                double* restrict val_tmp = val_buf[begin_seg];
                 for (int j = j_begin; j < j_end; j++) {
                     yv_tmp += val_tmp[j];
                 }
@@ -263,7 +276,7 @@ extern "C" {
                 if (begin & (W-1)) {
                     int j_end = (begin & ~(W-1)) + W;
                     for (int j = begin; j < j_end; j++) {
-                        yv_tmp += *(val[0] + j);
+                        yv_tmp += *(val_buf[0] + j);
                     }
                     begin = (begin & ~(W-1)) + W;
                 }
@@ -271,14 +284,14 @@ extern "C" {
                 if (end & (W-1)) {
                     int j_end = end & ~(W-1);
                     for (int j = end; j > j_end; j--) {
-                        yv_tmp += *(val[0] + j - 1);
+                        yv_tmp += *(val_buf[0] + j - 1);
                     }
                     end = end & ~(W-1);
                 }
                 // center
                 if (begin != end) {
                     for (int j = 0; j < W; j++) {
-                        yv_tmp += *(val[0] + begin + j);
+                        yv_tmp += *(val_buf[0] + begin + j);
                     }
                 }
             }
@@ -298,14 +311,14 @@ extern "C" {
                 int j_begin = begin & (W-1);
                 int j_end = end & (W-1);
                 for (int j = j_begin; j < j_end; j++) {
-                    yv_tmp += val[begin_seg][j];
+                    yv_tmp += val_buf[begin_seg][j];
                 }
             } else {
                 // upper
                 if (begin & (W-1)) {
                     int j_begin = begin & (W-1);
                     for (int j = j_begin; j < W; j++) {
-                        yv_tmp += val[begin_seg][j];
+                        yv_tmp += val_buf[begin_seg][j];
                     }
                     begin = (begin & ~(W-1)) + W;
                 }
@@ -313,7 +326,7 @@ extern "C" {
                 if (end & (W-1)) {
                     int j_begin = end & (W-1);
                     for (int j = j_begin; j > 0; j--) {
-                        yv_tmp += val[end_seg][j-1];
+                        yv_tmp += val_buf[end_seg][j-1];
                     }
                     end = end & ~(W-1);
                 }
@@ -321,7 +334,7 @@ extern "C" {
                 begin_seg = begin / W;
                 if (begin != end) {
                     for (int j = 0; j < W; j++) {
-                        yv_tmp += val[begin_seg][j];
+                        yv_tmp += val_buf[begin_seg][j];
                     }
                 }
             }

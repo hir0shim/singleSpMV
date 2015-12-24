@@ -24,6 +24,9 @@ struct SpMatOpt {
     int **sum_segs;
     int *sum_segs_count;
 
+    // for protecting matrix
+    double **val_buf;
+
 };
 struct VecOpt {
     int size;
