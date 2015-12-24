@@ -23,11 +23,23 @@ do
     echo "cpu,ss-opt-width=$i,-DOPT_SS -DOPTIMIZED -DCOEF_SEGMENT_WIDTH=$i"
 done
 
+echo "# SS-SIMPLE-PADDING"
+for ((i=1; i<=256; i*=2))
+do
+    for j in `seq 1 8`
+    do
+        echo "mic,ss-simple-width=$i-pad=$j,-DOPT_SS -DSIMPLE -DPADDING -DCOEF_PADDING_SIZE=$j -DCOEF_SEGMENT_WIDTH=$i"
+        echo "cpu,ss-simple-width=$i-pad=$j,-DOPT_SS -DSIMPLE -DPADDING -DCOEF_PADDING_SIZE=$j -DCOEF_SEGMENT_WIDTH=$i"
+    done
+done
 echo "# SS-OPT-PADDING"
 for ((i=1; i<=256; i*=2))
 do
-    echo "mic,ss-opt-width=$i-pad=1,-DOPT_SS -DOPTIMIZED -DPADDING -DCOEF_PADDING_SIZE=1 -DCOEF_SEGMENT_WIDTH=$i"
-    echo "cpu,ss-opt-width=$i-pad=1,-DOPT_SS -DOPTIMIZED -DPADDING -DCOEF_PADDING_SIZE=1 -DCOEF_SEGMENT_WIDTH=$i"
+    for j in `seq 1 8`
+    do
+        echo "mic,ss-opt-width=$i-pad=$j,-DOPT_SS -DOPTIMIZED -DPADDING -DCOEF_PADDING_SIZE=$j -DCOEF_SEGMENT_WIDTH=$i"
+        echo "cpu,ss-opt-width=$i-pad=$j,-DOPT_SS -DOPTIMIZED -DPADDING -DCOEF_PADDING_SIZE=$j -DCOEF_SEGMENT_WIDTH=$i"
+    done
 done
 
 echo "# CSS"
