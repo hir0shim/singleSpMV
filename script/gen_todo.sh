@@ -1,60 +1,47 @@
 #!/bin/bash
 
+function f () {
+    echo "mic,$1"
+    #echo "cpu,$1"
+}
 
 echo "# CRS"
-echo "mic,crs,-DOPT_CRS"
-echo "cpu,crs,-DOPT_CRS"
+f "crs,-DOPT_CRS"
 
 echo "# MKL"
-echo "mic,mkl,-DOPT_MKL"
-echo "cpu,mkl,-DOPT_MKL"
+f "mkl,-DOPT_MKL"
 
 echo "# SS-SIMPLE"
 for ((i=1; i<=256; i*=2))
 do
-    echo "mic,ss-simple-width=$i,-DOPT_SS -DSIMPLE -DCOEF_SEGMENT_WIDTH=$i"
-    echo "cpu,ss-simple-width=$i,-DOPT_SS -DSIMPLE -DCOEF_SEGMENT_WIDTH=$i"
+    f "ss-simple-width=$i,-DOPT_SS -DSIMPLE -DSEGMENT_WIDTH=$i"
 done
 
 echo "# SS-OPT"
 for ((i=1; i<=256; i*=2))
 do
-    echo "mic,ss-opt-width=$i,-DOPT_SS -DOPTIMIZED -DCOEF_SEGMENT_WIDTH=$i"
-    echo "cpu,ss-opt-width=$i,-DOPT_SS -DOPTIMIZED -DCOEF_SEGMENT_WIDTH=$i"
+    f "ss-opt-width=$i,-DOPT_SS -DOPTIMIZED -DSEGMENT_WIDTH=$i -DMEASURE_STEP_TIME"
 done
 
 echo "# SS-SIMPLE-PADDING"
 for ((i=1; i<=256; i*=2))
 do
-    for j in `seq 1 8`
+    for j in 1 2 4 8
     do
-        echo "mic,ss-simple-width=$i-pad=$j,-DOPT_SS -DSIMPLE -DPADDING -DCOEF_PADDING_SIZE=$j -DCOEF_SEGMENT_WIDTH=$i"
-        echo "cpu,ss-simple-width=$i-pad=$j,-DOPT_SS -DSIMPLE -DPADDING -DCOEF_PADDING_SIZE=$j -DCOEF_SEGMENT_WIDTH=$i"
+        f "ss-simple-width=$i-pad=$j,-DOPT_SS -DSIMPLE -DPADDING -DPADDING_SIZE=$j -DSEGMENT_WIDTH=$i"
     done
 done
 echo "# SS-OPT-PADDING"
 for ((i=1; i<=256; i*=2))
 do
-    for j in `seq 1 8`
+    for j in 1 2 4 8
     do
-        echo "mic,ss-opt-width=$i-pad=$j,-DOPT_SS -DOPTIMIZED -DPADDING -DCOEF_PADDING_SIZE=$j -DCOEF_SEGMENT_WIDTH=$i"
-        echo "cpu,ss-opt-width=$i-pad=$j,-DOPT_SS -DOPTIMIZED -DPADDING -DCOEF_PADDING_SIZE=$j -DCOEF_SEGMENT_WIDTH=$i"
+        f "ss-opt-width=$i-pad=$j,-DOPT_SS -DOPTIMIZED -DPADDING -DPADDING_SIZE=$j -DSEGMENT_WIDTH=$i -DMEASURE_STEP_TIME"
     done
 done
 
 echo "# CSS"
 for ((i=1; i<=256; i*=2))
 do
-    echo "mic,css-opt-nblock=$i,-DOPT_CSS -DOPTIMIZED -DN_BLOCK=$i -DPROFILING"
-    echo "cpu,css-opt-nblock=$i,-DOPT_CSS -DOPTIMIZED -DN_BLOCK=$i -DPROFILING"
+    f "css-opt-nblock=$i,-DOPT_CSS -DOPTIMIZED -DN_BLOCK=$i -DPROFILING"
 done
-
-
-OPTION1="-ansi-alias -opt-streaming-cache-evict=3 -opt-prefetch=3 -opt-prefetch-distance=64,8 -opt-streaming-stores always"
-echo "# SS-OPT-OPTION1"
-for ((i=1; i<=256; i*=2))
-do
-    echo "mic,ss-opt-width=$i-option1,-DOPT_SS -DOPTIMIZED -DCOEF_SEGMENT_WIDTH=$i $OPTION1"
-    echo "cpu,ss-opt-width=$i-option1,-DOPT_SS -DOPTIMIZED -DCOEF_SEGMENT_WIDTH=$i $OPTION1"
-done
-

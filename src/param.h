@@ -6,15 +6,11 @@ typedef int idx_t;
 typedef int idx_t;
 #endif
 
-#ifdef COEF_SEGMENT_WIDTH
-    #define SEGMENT_WIDTH ALIGNMENT/sizeof(double)*COEF_SEGMENT_WIDTH
-#else 
+#ifndef SEGMENT_WIDTH
     #define SEGMENT_WIDTH ALIGNMENT/sizeof(double)
 #endif 
 #ifdef PADDING 
-    #ifdef COEF_PADDING_SIZE
-        #define PADDING_SIZE ALIGNMENT/sizeof(double)*COEF_PADDING_SIZE
-    #else
+    #ifndef PADDING_SIZE
         #define PADDING_SIZE ALIGNMENT/sizeof(double)
     #endif
 #endif
@@ -22,3 +18,4 @@ typedef int idx_t;
 #ifndef N_BLOCK
     #define N_BLOCK 1
 #endif
+

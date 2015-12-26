@@ -4,7 +4,7 @@
 #SBATCH -t 05:00:00
 #SBATCH -o slurm.out
 #SBATCH -e slurm.err
-MATRIX_DIR=../../../matrix/natural/
+MATRIX_DIR=../../../matrix/boundary/
 LOG_DIR=.
 BINARY_DIR=.
 matrices=`ls $MATRIX_DIR/*.mtx | xargs -i basename {}`

@@ -153,6 +153,7 @@ int main (int argc, char **argv) {
     printf("%25s\t%s\n", "MatrixFormat", "SS");
     extern vector<int> g_step_count;
     extern vector<double> g_step_time;
+    printf("%25s\t%d\n", "nStep", int(g_step_count.size()));
     for (int i = 0; i < g_step_count.size(); i++) {
         printf("%22s-%02d\t%d\n", "StepCount", i, g_step_count[i]);
 #ifdef MEASURE_STEP_TIME

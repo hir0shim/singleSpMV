@@ -6,7 +6,7 @@ struct SpMatOpt {
     int nCol;
     int nNnz;
 
-    const int W = SEGMENT_WIDTH;
+    //const int W = SEGMENT_WIDTH;
     int H;
     int *row_ptr;
     int **row_idx;

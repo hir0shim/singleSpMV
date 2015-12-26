@@ -29,7 +29,8 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     int *col_idx = A.col_idx;
     double *val = A.val;
 
-    int W = A_opt.W;
+    //int W = A_opt.W;
+    int W = SEGMENT_WIDTH;
     int H = nNnz / W + (nNnz % W != 0);
     int *row_ptr = (int *)_mm_malloc((nRow+1)*sizeof(int), ALIGNMENT);
     int **row_idx_2d = (int **)_mm_malloc(H*sizeof(int*), ALIGNMENT);
@@ -210,7 +211,11 @@ extern "C" {
             yv[i] = 0;
 #pragma ivdep
             for (int j = row_ptr[i]; j < row_ptr[i+1]; j++) {
+#ifndef PADDING
                 yv[i] += *(val_buf[0] + j);
+#else
+                yv[i] += val_buf[j/W][j%W];
+#endif
             }
         }
         PROF_END(g_profile[1]);
@@ -245,7 +250,7 @@ extern "C" {
             for (int i = 0; i < sum_segs_count[s]; i++) {
                 int h = sum_segs[s][i];
 #pragma ivdep
-#pragma vector aligned
+//#pragma vector aligned
                 for (int j = 0; j < W; j++) {
                     val_buf[h-counter][j] += val_buf[h][j];
                 }
