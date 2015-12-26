@@ -2,7 +2,7 @@
 
 function f () {
     echo "mic,$1"
-    #echo "cpu,$1"
+    echo "cpu,$1"
 }
 
 echo "# CRS"
@@ -12,13 +12,13 @@ echo "# MKL"
 f "mkl,-DOPT_MKL"
 
 echo "# SS-SIMPLE"
-for ((i=1; i<=256; i*=2))
+for ((i=1; i<=16384; i*=4))
 do
     f "ss-simple-width=$i,-DOPT_SS -DSIMPLE -DSEGMENT_WIDTH=$i -DPROFILING"
 done
 
 echo "# SS-OPT"
-for ((i=1; i<=256; i*=2))
+for ((i=1; i<=16384; i*=4))
 do
     f "ss-opt-width=$i,-DOPT_SS -DOPTIMIZED -DSEGMENT_WIDTH=$i -DMEASURE_STEP_TIME -DPROFILING"
 done
@@ -41,7 +41,7 @@ done
 #done
 
 echo "# CSS"
-for ((i=1; i<=256; i*=2))
+for ((i=1; i<=16; i*=2))
 do
     f "css-opt-nblock=$i,-DOPT_CSS -DOPTIMIZED -DN_BLOCK=$i -DPROFILING"
 done

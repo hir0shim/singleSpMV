@@ -110,7 +110,6 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
         while (cur_row <= nRow) row_ptr[b][cur_row++] = block_nNnz;
     }
     // Segment index
-    /*
     int *nStep = new int[nBlock];
     int **sum_segs_count = (int **)_mm_malloc(nBlock*sizeof(int*), ALIGNMENT);
     int ***sum_segs = (int***)_mm_malloc(nBlock*sizeof(int**), ALIGNMENT);
@@ -121,7 +120,7 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
             bool same = true;
             if (row_idx_2d[b][i-1][0] == row_idx_2d[b][i][0]) {
                 for (int j = 1; j < W; j++) {
-                    if (row_idx_2d[i][j-1] != row_idx_2d[i][j]) same = false;
+                    if (row_idx_2d[b][i][j-1] != row_idx_2d[b][i][j]) same = false;
                 }
             } else {
                 same = false;
@@ -133,11 +132,11 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
             }
         }
         int max_index = *max_element(segment_index, segment_index + H[b]);
-        int nStep = int(ceil(log2(max_index+1)));
-        int counter = 1 << nStep;
-        sum_segs[b] = (int **)_mm_malloc(nStep*sizeof(int*), ALIGNMENT);
-        sum_segs_count[b] = (int *)_mm_malloc(nStep*sizeof(int), ALIGNMENT);
-        for (int i = 0; i < nStep; i++) {
+        nStep[b] = int(ceil(log2(max_index+1)));
+        int counter = 1 << nStep[b];
+        sum_segs[b] = (int **)_mm_malloc(nStep[b]*sizeof(int*), ALIGNMENT);
+        sum_segs_count[b] = (int *)_mm_malloc(nStep[b]*sizeof(int), ALIGNMENT);
+        for (int i = 0; i < nStep[b]; i++) {
             counter >>= 1;
             int nSeg = 0;
             for (int j = 0; j < H[b]; j++) {
@@ -159,7 +158,6 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     A_opt.nStep = nStep;
     A_opt.sum_segs_count = sum_segs_count;
     A_opt.sum_segs = sum_segs;
-    */
 
     A_opt.nBlock = nBlock;
     A_opt.nRow = nRow;
@@ -226,10 +224,80 @@ extern "C" {
         PROF_END(g_profile[1]);
         //}}}
 #elif OPTIMIZED
-
         //{{{
         // Mul
+        
         PROF_BEGIN(g_profile[0]);
+        int totalH = A.totalH;
+#pragma omp parallel for
+        for (int i = 0; i < totalH; i++) {
+#pragma ivdep
+            for (int j = 0; j < W; j++) {
+                *(val_buf[0][0] + i*W+j) = *(val[0][0]+i*W+j) * xv[*(col_idx[0][0]+i*W+j)];
+            }
+        }
+        PROF_END(g_profile[0]);
+        // Sum
+        PROF_BEGIN(g_profile[1]);
+#pragma omp parallel for
+        for (int i = 0; i < nRow; i++) yv[i] = 0;
+
+        for (int b = 0; b < nBlock; b++) {
+            int counter = 1<<nStep[b];
+            for (int s = 0; s < nStep[b]; s++) {
+                counter >>= 1;
+#pragma omp parallel for
+                for (int i = 0; i < sum_segs_count[b][s]; i++) {
+                    int h = sum_segs[b][s][i];
+#pragma ivdep
+                    //#pragma vector aligned
+                    for (int j = 0; j < W; j++) {
+                        val_buf[b][h-counter][j] += val_buf[b][h][j];
+                    }
+                }
+            }
+
+#pragma omp parallel for
+            for (int i = 0; i < nRow; i++) {
+                double yv_tmp = 0;
+                int begin = row_ptr[b][i];
+                int end = row_ptr[b][i+1];
+                int begin_seg = begin / W;
+                int end_seg = end / W;
+                if (begin_seg == end_seg) {
+                    int j_begin = begin & (W-1);
+                    int j_end = end & (W-1);
+                    double* restrict val_tmp = val_buf[b][begin_seg];
+                    for (int j = j_begin; j < j_end; j++) {
+                        yv_tmp += val_tmp[j];
+                    }
+                } else {
+                    // upper
+                    if (begin & (W-1)) {
+                        int j_end = (begin & ~(W-1)) + W;
+                        for (int j = begin; j < j_end; j++) {
+                            yv_tmp += *(val_buf[b][0] + j);
+                        }
+                        begin = (begin & ~(W-1)) + W;
+                    }
+                    // lower
+                    if (end & (W-1)) {
+                        int j_end = end & ~(W-1);
+                        for (int j = end; j > j_end; j--) {
+                            yv_tmp += *(val_buf[b][0] + j - 1);
+                        }
+                        end = end & ~(W-1);
+                    }
+                    // center
+                    if (begin != end) {
+                        for (int j = 0; j < W; j++) {
+                            yv_tmp += *(val_buf[b][0] + begin + j);
+                        }
+                    }
+                }
+                yv[i] += yv_tmp;
+            }
+        }
         PROF_END(g_profile[1]);
         //}}}
 #endif

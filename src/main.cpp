@@ -46,7 +46,7 @@ int main (int argc, char **argv) {
         }
         //ViewVec(y);
 
-        cerr << "Verifying ... ";
+        cerr << "Verifying " << i << " ... ";
         if (!VerifyResult(A, x, y)) {
             printf("*** invalid result ***\n");
             exit(1);
