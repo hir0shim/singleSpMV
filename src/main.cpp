@@ -37,19 +37,22 @@ int main (int argc, char **argv) {
     cerr << "done." << endl;
 
 
-    {
-        extern vector<double> g_profile;
-        g_profile = vector<double>(10);
-        SpMV(A_opt, x_opt, y);
-    }
-    //ViewVec(y);
 #ifdef VERIFY
-    cerr << "Verifying ... ";
-    if (!VerifyResult(A, x, y)) {
-        printf("*** invalid result ***\n");
-        exit(1);
+    for (int i = 0; i < 2; i++) {
+        {
+            extern vector<double> g_profile;
+            g_profile = vector<double>(10);
+            SpMV(A_opt, x_opt, y);
+        }
+        //ViewVec(y);
+
+        cerr << "Verifying ... ";
+        if (!VerifyResult(A, x, y)) {
+            printf("*** invalid result ***\n");
+            exit(1);
+        }
+        cerr << "done." << endl;
     }
-    cerr << "done." << endl;
 #endif
 
     int loop = 1;

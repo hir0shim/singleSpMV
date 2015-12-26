@@ -17,6 +17,16 @@ struct SpMatOpt {
 
     // for collapse
     int totalH;
+
+    // for fast reduction
+    int *nStep;
+    int **sum_segs_count;
+    int ***sum_segs;
+
+
+    // for protecting matrix
+    double ***val_buf;
+
 };
 struct VecOpt {
     int size;

@@ -29,7 +29,6 @@ void OptimizeProblem (const SpMat &A, const Vec &x, SpMatOpt &A_opt, VecOpt &x_o
     int *col_idx = A.col_idx;
     double *val = A.val;
 
-    //int W = A_opt.W;
     int W = SEGMENT_WIDTH;
     int H = nNnz / W + (nNnz % W != 0);
     int *row_ptr = (int *)_mm_malloc((nRow+1)*sizeof(int), ALIGNMENT);
