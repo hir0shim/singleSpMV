@@ -1,4 +1,4 @@
-all: visualizer generator 
+all: generator 
 visualizer: visualizer.cpp
 	icpc -std=c++11 visualizer.cpp -o visualizer
 generator: generator.cpp

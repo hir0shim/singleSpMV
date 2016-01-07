@@ -14,13 +14,13 @@ f "mkl,-DOPT_MKL"
 echo "# SS-SIMPLE"
 for ((i=1; i<=16384; i*=4))
 do
-    f "ss-simple-width=$i,-DOPT_SS -DSIMPLE -DSEGMENT_WIDTH=$i -DPROFILING"
+    f "ss-simple-width=$i,-DOPT_SS -DSIMPLE -DSEGMENT_WIDTH=$i"
 done
 
 echo "# SS-OPT"
 for ((i=1; i<=16384; i*=4))
 do
-    f "ss-opt-width=$i,-DOPT_SS -DOPTIMIZED -DSEGMENT_WIDTH=$i -DMEASURE_STEP_TIME -DPROFILING"
+    f "ss-opt-width=$i,-DOPT_SS -DOPTIMIZED -DSEGMENT_WIDTH=$i"
 done
 
 #echo "# SS-SIMPLE-PADDING"
@@ -43,5 +43,5 @@ done
 echo "# CSS"
 for ((i=1; i<=16; i*=2))
 do
-    f "css-opt-nblock=$i,-DOPT_CSS -DOPTIMIZED -DN_BLOCK=$i -DPROFILING"
+    f "css-opt-nblock=$i,-DOPT_CSS -DOPTIMIZED -DN_BLOCK=$i"
 done

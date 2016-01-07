@@ -43,7 +43,7 @@ int main (int argc, char *argv[]) {
             tmp[key] = val;
         }
     }
-    sort(data.begin(), data.end(), [&](map<string, string> a, map<string, string> b) { return atoi(a["nNnz"].c_str()) < atoi(b["nNnz"].c_str()); });
+    sort(data.begin(), data.end(), [&](map<string, string> a, map<string, string> b) {if (atoi(a["nNnz"].c_str()) == atoi(b["nNnz"].c_str())) return a["Matrix"] < b["Matrix"]; return atoi(a["nNnz"].c_str()) < atoi(b["nNnz"].c_str()); });
     for (auto it : data) {
         PrintData(it);
     }

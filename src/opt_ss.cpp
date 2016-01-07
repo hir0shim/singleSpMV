@@ -232,7 +232,7 @@ extern "C" {
             for (int j = 0; j < W; j++) {
                 int col = col_tmp[j];
                 double rv = xv[col];
-                //val_tmp[j] *= rv;
+        //        val_tmp[j] *= rv;
                 val_buf_tmp[j] = val_tmp[j] * rv;
             }
         }
